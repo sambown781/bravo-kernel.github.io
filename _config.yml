@@ -57,7 +57,7 @@ tag: 2
 ## You can customize the logger format as defined in
 ## http://www.senchalabs.org/connect/logger.html
 port: 4000
-server_ip: 10.25.83.68
+server_ip: 10.25.83.66
 logger: false
 logger_format: dev
 
