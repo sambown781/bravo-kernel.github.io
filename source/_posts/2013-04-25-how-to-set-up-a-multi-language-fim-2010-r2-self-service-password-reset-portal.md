@@ -23,7 +23,7 @@ Make sure to read this (almost) perfect [Technet Article](http://technet.microso
 
 Without going into all of the technical details of the file-contents (read the Technet article for that) create the following directory structure for a fully customized and multi-lingual portal for both Dutch and English language. Remember that you must have the language pack for your desired language installed or all will fail miserably!
 
-{% img /images/microsoft/fim-2010-r2-portal-customizations.png 'FIM 2010 R2 Portal Customizations - Directory Structure' 'Image: FIM 2010 R2 Portal Customizations - Directory Structure' %}
+{% asset_img fim-2010-r2-portal-customizations.png 'FIM 2010 R2 Portal Customizations - Directory Structure' %}
 
 ###Images:
 

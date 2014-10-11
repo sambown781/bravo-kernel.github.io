@@ -25,6 +25,6 @@ Good news one might think but:
 
 The flow below should make things very clear and might be a good starting point to convince your management to invest in a decent Mobile Device Management (MDM) solution with much needed enterprise-features like application blacklisting/whitelisting etc.
 
-{% img /images/apple/apple-file-encryption-determination-flow.png 'Apple file encryption determination flow' 'Image: Apple file encryption determination flow' %}
+{% asset_img apple-file-encryption-determination-flow.png 'Apple file encryption determination flow' %}
 
 One more thing: Apple's email and email-attachments use Data Protection by default and nowadays more and more popular apps (like iAnnotate) have implemented it as well. But however comforting this might sound one should not be tricked; a badly-written 3rd party mail/pdf reader downloaded by one of your users might not support Data Protection and in that case your sensitive data can easily end up on the streets (in the worst case along with your company's name in next morning's papers) ;)
