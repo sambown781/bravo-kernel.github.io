@@ -44,9 +44,15 @@ Create new file <em>/opt/logstash/server/patterns/nginx</em> with:
     NGUSERNAME [a-zA-Z\.\@\-\+_%]+
     NGUSER %{NGUSERNAME}
     NGINXACCESS %{IPORHOST:http_host} %{IPORHOST:clientip} \[%{HTTPDATE:timestamp}\] \"(?:%{WORD:verb} %{NOTSPACE:request}(?: HTTP/%{NUMBER:httpversion})?|%{DATA:rawrequest})\" %{NUMBER:response} (?:%{NUMBER:bytes}|-) %{QS:referrer} %{QS:agent} %{NUMBER:request_time:float} %{NUMBER:upstream_time:float}
-    NGINXACCES %{IPORHOST:http_host} %{IPORHOST:clientip} \[%{HTTPDATE:timestamp}\] \"(?:%{WORD:verb} %{NOTSPACE:request}(?: HTTP/%{NUMBER:httpversion})?|%{DATA:rawrequest})\" %{NUMBER:response} (?:%{NUMBER:bytes}|-) %{QS:referrer} %{QS:agent} %{NUMBER:request_time:float}    
+    NGINXACCESS %{IPORHOST:http_host} %{IPORHOST:clientip} \[%{HTTPDATE:timestamp}\] \"(?:%{WORD:verb} %{NOTSPACE:request}(?: HTTP/%{NUMBER:httpversion})?|%{DATA:rawrequest})\" %{NUMBER:response} (?:%{NUMBER:bytes}|-) %{QS:referrer} %{QS:agent} %{NUMBER:request_time:float}    
 
-> We create a pattern so we can keep our our logstash filters clean (simply referencing the pattern).
+**Notes:**
+
+- by creating a pattern we keep our our logstash filters clean (simply referencing the pattern)
+- the first rule catches requests that are sent upstream
+- the second rule catches all static requests (where no upstream_response_time is available)
+	
+> Pro tip: use the online [Grok Debugger](https://grokdebug.herokuapp.com) if you need to test/develop patterns.
 
 ## Create a Logstash configuration file
 
