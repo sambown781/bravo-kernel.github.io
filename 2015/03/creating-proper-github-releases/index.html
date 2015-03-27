@@ -9,9 +9,8 @@
   <meta name="description" content="Step-by-step instructions for creating Github Releases like the pros.
 Assuming:
 
-no previous releases
 a master branch
-a more-or-less stable dev branch">
+a more-or-less stable dev branch ready to be merged i">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -70,7 +69,6 @@ a more-or-less stable dev branch">
         <p>Step-by-step instructions for creating Github Releases like the pros.</p>
 <p>Assuming:</p>
 <ul>
-<li>no previous releases</li>
 <li>a <code>master</code> branch</li>
 <li>a more-or-less stable <code>dev</code> branch ready to be merged into master</li>
 <li>a <code>VERSION.txt</code> file holding release version</li>
@@ -89,8 +87,9 @@ a more-or-less stable dev branch">
 </ul>
 </li>
 </ol>
-<p>That’s all there’s too it, your first release.</p>
-<h2 id="Starting_work_on_the_next_release">Starting work on the next release</h2><p>Now that the release is out, it’s time to start work on the next one:</p>
+<p>That’s all there’s too it, your first release. </p>
+<p>**Note:: to prevent future merge conflicts caused by e.g. bugfixes… regularly merge master into dev!</p>
+<h2 id="Starting_work_on_the_next_release">Starting work on the next release</h2><p>Now that the release is out, it’s time to start work on the next one</p>
 <ol>
 <li>update <code>VERSION.txt</code> in the dev branch with the next release number (e.g. 1.0-alpha2)</li>
 <li>commit and push change to dev</li>
