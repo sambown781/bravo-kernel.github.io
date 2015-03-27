@@ -3,13 +3,20 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Archive: 2011 | Bravo Kernel</title>
+  <title>Creating proper Github releases | Bravo Kernel</title>
   <meta name="author" content="bravo-kernel">
+  
+  <meta name="description" content="Step-by-step instructions for creating Github Releases like the pros.
+Assuming:
+
+no previous releases
+a master branch
+a more-or-less stable dev branch">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  
+  <meta property="og:title" content="Creating proper Github releases"/>
   <meta property="og:site_name" content="Bravo Kernel"/>
 
   
@@ -44,44 +51,70 @@
 </nav>
 <div class="clearfix"></div></header>
   <div id="content" class="inner">
-    <div id="main-col" class="alignleft"><div id="wrapper">
-<h2 class="archive-title">2011</h2>
-
-
-  
-    <article class="post">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time datetime="2011-01-22T16:05:13.000Z"><a href="/2011/01/how-to-fix-javascript-ampersand-breaking-w3c-validation/">Jan 22 2011</a></time>
+        <time datetime="2015-03-27T19:30:00.000Z"><a href="/2015/03/creating-proper-github-releases/">Mar 27 2015</a></time>
       
       
   
-    <h1 class="title"><a href="/2011/01/how-to-fix-javascript-ampersand-breaking-w3c-validation/">How to fix Javascript ampersand breaking W3C validation</a></h1>
+    <h1 class="title">Creating proper Github releases</h1>
   
 
     </header>
     <div class="entry">
       
-        <p>If your page doesn’t pass <a href="http://validator.w3.org/" title="Markup Validation Service" target="_blank" rel="external">W3C Validation</a> because of Javascript containing:</p>
+        <p>Step-by-step instructions for creating Github Releases like the pros.</p>
+<p>Assuming:</p>
 <ul>
-<li>ampersands (&amp;)</li>
-<li>greater/lesser than (&lt; &gt;)</li>
+<li>no previous releases</li>
+<li>a <code>master</code> branch</li>
+<li>a more-or-less stable <code>dev</code> branch ready to be merged into master</li>
+<li>a <code>VERSION.txt</code> file holding release version</li>
 </ul>
-<p>Encapsulate your script inside a CDATA tag and the W3C parser will ignore it.</p>
-<pre><code><span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span>&gt;</span><span class="javascript">
-    <span class="comment">//&lt;![CDATA[</span>
-        script here
-    <span class="comment">//]]&gt;</span>
-</span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
-</code></pre>
+<p><strong>Pro Tip:</strong> keep release cycles short, release often!</p>
+<h2 id="Creating_the_release">Creating the release</h2><ol>
+<li>create <code>VERSION.txt</code> in your dev branch and fill it with the release number (e.g. 1.0-alpha1)</li>
+<li>merge the master branch into dev</li>
+<li>merge the dev branch back into master</li>
+<li>go to the Github page holding your project and:<ul>
+<li>select <em>releases</em></li>
+<li>select <em>Draft a new release</em></li>
+<li>fill in 1.0-alpha1 as the <em>Tag version</em> </li>
+<li>target the master branch</li>
+<li>doublecheck before pressing the “Publish release” button</li>
+</ul>
+</li>
+</ol>
+<p>That’s all there’s too it, your first release.</p>
+<h2 id="Starting_work_on_the_next_release">Starting work on the next release</h2><p>Now that the release is out, it’s time to start work on the next one:</p>
+<ol>
+<li>merge the master branch back into dev (to prevent conflicts)</li>
+<li>update <code>VERSION.txt</code> in the dev branch with the next release number (e.g. 1.0-alpha2)</li>
+<li>commit and push change to dev</li>
+<li>add features to your dev branch</li>
+</ol>
+<p>Once you are ready to publish a new release… simply restart <code>Creating the release</code> but skip step 1.</p>
+
       
     </div>
     <footer>
       
         
+  
+  <div class="categories">
+    <a href="/categories/git/">Git</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/git/">git</a>, <a href="/tags/github/">github</a>
+  </div>
+
         
       
       <div class="clearfix"></div>
@@ -90,14 +123,16 @@
 </article>
 
 
+<section id="comment">
+  <h1 class="title">Comments</h1>
 
   
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+  
+</section>
 
-  <nav id="pagination">
-  
-  
-  <div class="clearfix"></div>
-</nav>
 </div></div>
     <aside id="sidebar" class="alignright">
   <div class="search">
@@ -136,7 +171,7 @@ var disqus_shortname = 'bravo-kernel';
   var dsq = document.createElement('script');
   dsq.type = 'text/javascript';
   dsq.async = true;
-  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
 }());
 </script>
