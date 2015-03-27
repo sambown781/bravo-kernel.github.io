@@ -30,7 +30,7 @@ Assuming:
 
 That's all there's too it, your first release. 
 
-**Note:: to prevent future merge conflicts caused by e.g. bugfixes... regularly merge master into dev!
+**Note:** to prevent future merge conflicts caused by e.g. bugfixes... regularly merge master into dev!
 
 ## Starting work on the next release
 
