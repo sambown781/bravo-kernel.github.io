@@ -4,7 +4,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://bravo-kernel.com/"/>
-  <updated>2015-03-27T19:30:32.000Z</updated>
+  <updated>2015-03-27T19:34:33.000Z</updated>
   <id>http://bravo-kernel.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://bravo-kernel.com/2015/03/creating-proper-github-releases/"/>
     <id>http://bravo-kernel.com/2015/03/creating-proper-github-releases/</id>
     <published>2015-03-27T19:30:00.000Z</published>
-    <updated>2015-03-27T19:30:32.000Z</updated>
+    <updated>2015-03-27T19:34:33.000Z</updated>
     <content type="html"><![CDATA[<p>Step-by-step instructions for creating Github Releases like the pros.</p>
 <p>Assuming:</p>
 <ul>
@@ -28,7 +28,7 @@
 <li>a more-or-less stable <code>dev</code> branch ready to be merged into master</li>
 <li>a <code>VERSION.txt</code> file holding release version</li>
 </ul>
-<p><strong>Pro Tip:</strong> keep release cycles short, release often!</p>
+<p><strong>Pro Tip:</strong> keep release cycles short so release often, version numbers are cheap ;)</p>
 <h2 id="Creating_the_release">Creating the release</h2><ol>
 <li>create <code>VERSION.txt</code> in your dev branch and fill it with the release number (e.g. 1.0-alpha1)</li>
 <li>merge the master branch into dev</li>
@@ -45,7 +45,6 @@
 <p>That’s all there’s too it, your first release.</p>
 <h2 id="Starting_work_on_the_next_release">Starting work on the next release</h2><p>Now that the release is out, it’s time to start work on the next one:</p>
 <ol>
-<li>merge the master branch back into dev (to prevent conflicts)</li>
 <li>update <code>VERSION.txt</code> in the dev branch with the next release number (e.g. 1.0-alpha2)</li>
 <li>commit and push change to dev</li>
 <li>add features to your dev branch</li>
