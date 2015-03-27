@@ -1,0 +1,211 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Page 2 | Archive: 2014/8 | Bravo Kernel</title>
+  <meta name="author" content="bravo-kernel">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+  <meta property="og:site_name" content="Bravo Kernel"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Bravo Kernel" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Bravo Kernel</a></h1>
+  <h2><a href="/"></a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+      <li><a href="/atom.xml">Feed</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper">
+<h2 class="archive-title">2014/8</h2>
+
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2014-08-05T12:45:52.000Z"><a href="/2014/08/how-to-fix-git-commit-insufficient-permission-error/">Aug 5 2014</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/08/how-to-fix-git-commit-insufficient-permission-error/">How to fix Git commit insufficient permission error</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>When <code>git commit</code> gives this error:</p>
+<pre><code><span class="keyword">error</span>: insufficient permission <span class="keyword">for</span> adding an <span class="built_in">object</span> <span class="keyword">to</span> repository database .git/objects
+</code></pre><p>take back ownership of all Git objects by runnning:</p>
+<pre><code>cd <span class="variable">&lt;path-to-repo&gt;</span>
+cd .git/objects
+sudo chown -R <span class="variable">&lt;username&gt;</span>:<span class="variable">&lt;username&gt;</span> <span class="keyword">*</span>
+</code></pre>
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2014-08-04T09:22:47.000Z"><a href="/2014/08/how-to-maintain-your-personal-octostrap3-theme/">Aug 4 2014</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/08/how-to-maintain-your-personal-octostrap3-theme/">How to maintain your personal Octostrap3 theme</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>Make sure you have created a personal fork of the <a href="https://github.com/kAworu/octostrap3" title="Octostrap3 repository" target="_blank" rel="external">Octostrap3 repository</a>.</p>
+<h2 id="Add_theme_as_a_Git_submodule">Add theme as a Git submodule</h2><p>Add personal Octostrap3 theme as a Git submodule:</p>
+<pre><code>cd &lt;path-to-repos&gt;/octopress
+git submodule add git@github<span class="class">.com</span>:bravo-kernel/octostrap3<span class="class">.git</span> .themes/octostrap3
+git add <span class="class">.gitmodules</span>
+git commit -m <span class="string">"Adding Octostrap3 as a Git submodule"</span>
+git push origin
+</code></pre><h2 id="Update_theme">Update theme</h2><pre><code><span class="built_in">cd</span> &lt;<span class="built_in">path</span>-to-repos&gt;/octopress
+<span class="built_in">cd</span> .themes/octostrap3
+git checkout master
+</code></pre><p>Edit some files (see the <a href="http://octopress.org/docs/theme" title="Octopress documentation on themes" target="_blank" rel="external">Octopress theme documentation</a>).</p>
+<h2 id="Install_updated_theme">Install updated theme</h2><p>Install updated theme (or it will not be used when when generating new pages):</p>
+<pre><code><span class="keyword">cd</span> &lt;path-<span class="keyword">to</span>-repos&gt;/octopress
+rake <span class="string">'install[octostrap3]'</span>
+</code></pre><h2 id="Generate_pages_using_updated_theme">Generate pages using updated theme</h2><p>Generate and deploy gh-pages using the updated theme:</p>
+<pre><code>  <span class="built_in">cd</span> &lt;<span class="built_in">path</span>-to-repos&gt;/octopress
+rake generate
+rake deploy
+</code></pre><h2 id="Save_updated_theme">Save updated theme</h2><pre><code><span class="keyword">cd</span> &lt;path-<span class="keyword">to</span>-repos&gt;/octopress/.themes/octostrap3
+git <span class="built_in">add</span> .
+git commit -<span class="keyword">m</span> <span class="string">"Updating Octostrap3 theme"</span>
+git push origin
+</code></pre><h2 id="Update_Git_submodule">Update Git submodule</h2><p>Point Git theme submodule to the latest version:</p>
+<pre><code><span class="keyword">cd</span> &lt;path-<span class="keyword">to</span>-repos&gt;/octopress
+git <span class="built_in">add</span> .themes/octostrap3
+git commit -<span class="keyword">m</span> <span class="string">"Updating octostrap3 submodule"</span>
+git push origin
+</code></pre>
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+  
+
+  <nav id="pagination">
+  
+    <a href="/archives/2014/08/" class="alignleft prev">Previous</a>
+  
+  
+  <div class="clearfix"></div>
+</nav>
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:bravo-kernel.com">
+  </form>
+</div>
+
+  
+<div class="widget tagcloud">
+  <h3 class="title">Tag-Cloud</h3>
+  <div class="entry">
+    <a href="/tags/apple/" style="font-size: 10px;">apple</a><a href="/tags/cakephp/" style="font-size: 12.5px;">cakephp</a><a href="/tags/chef/" style="font-size: 10px;">chef</a><a href="/tags/chef-dk/" style="font-size: 10px;">chef-dk</a><a href="/tags/cocktails/" style="font-size: 10px;">cocktails</a><a href="/tags/composer/" style="font-size: 10px;">composer</a><a href="/tags/database/" style="font-size: 10px;">database</a><a href="/tags/debian/" style="font-size: 20px;">debian</a><a href="/tags/dns/" style="font-size: 10px;">dns</a><a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a><a href="/tags/fim/" style="font-size: 10px;">fim</a><a href="/tags/foc/" style="font-size: 10px;">foc</a><a href="/tags/git/" style="font-size: 17.5px;">git</a><a href="/tags/ipad/" style="font-size: 10px;">ipad</a><a href="/tags/iphone/" style="font-size: 10px;">iphone</a><a href="/tags/javascript/" style="font-size: 10px;">javascript</a><a href="/tags/kitchen/" style="font-size: 10px;">kitchen</a><a href="/tags/logstash/" style="font-size: 10px;">logstash</a><a href="/tags/microsoft/" style="font-size: 10px;">microsoft</a><a href="/tags/minecraft/" style="font-size: 10px;">minecraft</a><a href="/tags/misc/" style="font-size: 12.5px;">misc</a><a href="/tags/mobile/" style="font-size: 10px;">mobile</a><a href="/tags/mssql/" style="font-size: 10px;">mssql</a><a href="/tags/nginx/" style="font-size: 12.5px;">nginx</a><a href="/tags/octopress/" style="font-size: 15px;">octopress</a><a href="/tags/octostrap3/" style="font-size: 12.5px;">octostrap3</a><a href="/tags/php/" style="font-size: 10px;">php</a><a href="/tags/phpcs/" style="font-size: 10px;">phpcs</a><a href="/tags/security/" style="font-size: 10px;">security</a><a href="/tags/shellshock/" style="font-size: 10px;">shellshock</a><a href="/tags/time/" style="font-size: 10px;">time</a><a href="/tags/ubuntu/" style="font-size: 12.5px;">ubuntu</a><a href="/tags/vagrant/" style="font-size: 10px;">vagrant</a><a href="/tags/validator/" style="font-size: 10px;">validator</a><a href="/tags/wheezy/" style="font-size: 15px;">wheezy</a><a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a>
+  </div>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2015 bravo-kernel
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+<script type="text/javascript">
+var disqus_shortname = 'bravo-kernel';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

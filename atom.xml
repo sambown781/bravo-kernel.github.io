@@ -1,0 +1,794 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title><![CDATA[Bravo Kernel]]></title>
+  
+  <link href="/atom.xml" rel="self"/>
+  <link href="http://bravo-kernel.com/"/>
+  <updated>2015-03-27T17:53:36.000Z</updated>
+  <id>http://bravo-kernel.com/</id>
+  
+  <author>
+    <name><![CDATA[bravo-kernel]]></name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[Setting up Logstash 1.4.2 to forward Nginx logs to Elasticsearch]]></title>
+    <link href="http://bravo-kernel.com/2014/12/setting-up-logstash-1-4-2-to-forward-nginx-logs-to-elasticsearch/"/>
+    <id>http://bravo-kernel.com/2014/12/setting-up-logstash-1-4-2-to-forward-nginx-logs-to-elasticsearch/</id>
+    <published>2014-12-21T14:13:25.000Z</published>
+    <updated>2015-03-27T17:53:36.000Z</updated>
+    <content type="html"><![CDATA[<p>Step-by-step instructions on how to configure Logstash v1.4.2 to forward your Nginx access logs to Elasticsearch v1.4.2.</p>
+<h2 id="Create_a_custom_Nginx_log_format">Create a custom Nginx log format</h2><p>Add the following custom log_format to the <em>/etc/nginx/conf.d</em> file so it becomes available to all (virtual) Nginx hosts: </p>
+<pre><code><span class="comment"># Custom logstash format</span>
+<span class="title">log_format</span> logstash <span class="string">'<span class="variable">$http_host</span> '</span>
+                    <span class="string">'<span class="variable">$remote_addr</span> [<span class="variable">$time_local</span>] '</span>
+                    <span class="string">'"<span class="variable">$request</span>" <span class="variable">$status</span> <span class="variable">$body_bytes_sent</span> '</span>
+                    <span class="string">'"<span class="variable">$http_referer</span>" "<span class="variable">$http_user_agent</span>" '</span>
+                    <span class="string">'<span class="variable">$request_time</span> '</span>
+                    <span class="string">'<span class="variable">$upstream_response_time</span>'</span>;
+</code></pre><blockquote>
+<p>Make sure to add this <strong>above</strong> the “# virtual hosting” directive to prevent nginx failing with “unkown log format” errors.</p>
+</blockquote>
+<h2 id="Enable_the_custom_Nginx_log_format">Enable the custom Nginx log format</h2><p>Update your nginx site configuration file(s) to start logging with the new custom log_format:</p>
+<pre><code><span class="variable">#access_log</span> /<span class="built_in">var</span>/<span class="keyword">log</span>/nginx/access<span class="built_in">.</span><span class="keyword">log</span>;
+access_log /<span class="built_in">var</span>/<span class="keyword">log</span>/nginx/access<span class="built_in">.</span><span class="keyword">log</span> logstash;
+</code></pre><p>Restart nginx. </p>
+<p>Check your access log(s) and confirm that entries no longer look like the first line below (default nginx format) but look similar to second one (using our custom logstash format):</p>
+<pre><code><span class="number">10.33</span><span class="number">.10</span><span class="number">.1</span> - - [<span class="number">21</span>/<span class="keyword">Dec</span>/<span class="number">2014</span>:<span class="number">14</span>:<span class="number">36</span>:<span class="number">25</span> +<span class="number">0000</span>] <span class="string">"GET /test_126 HTTP/1.1"</span> <span class="number">404</span> <span class="number">6642</span> <span class="string">"-"</span> <span class="string">"Mozilla/5.0 (Windows NT 6.3; WOW64; rv:34.0) Gecko/20100101 Firefox/34.0"</span>
+my.app <span class="number">10.33</span><span class="number">.10</span><span class="number">.1</span> [<span class="number">21</span>/<span class="keyword">Dec</span>/<span class="number">2014</span>:<span class="number">13</span>:<span class="number">58</span>:<span class="number">48</span> +<span class="number">0000</span>] <span class="string">"GET /test_126 HTTP/1.1"</span> <span class="number">404</span> <span class="number">6641</span> <span class="string">"-"</span> <span class="string">"Mozilla/5.0 (Windows NT 6.3; WOW64; rv:34.0) Gecko/20100101 Firefox/34.0"</span> <span class="number">2.465</span> <span class="number">2.465</span>
+</code></pre><h2 id="Create_a_Logstash_nginx_pattern">Create a Logstash nginx pattern</h2><p>Create new file <em>/opt/logstash/server/patterns/nginx</em> with:</p>
+<pre><code>NGUSERNAME [a-zA-Z<span class="string">\.\@\-\+_%]+</span>
+NGUSER %{NGUSERNAME}
+NGINXACCESS %{<span class="attribute">IPORHOST</span>:http_host} %{<span class="attribute">IPORHOST</span>:clientip} <span class="string">\[%{HTTPDATE:timestamp}\]</span> <span class="string">\"(?:%{WORD:verb}</span> %{<span class="attribute">NOTSPACE</span>:request}(?: HTTP/%{<span class="attribute">NUMBER</span>:httpversion})?|%{<span class="attribute">DATA</span>:rawrequest})<span class="string">\"</span> %{<span class="attribute">NUMBER</span>:response} (?:%{<span class="attribute">NUMBER</span>:bytes}|-) %{<span class="attribute">QS</span>:referrer} %{<span class="attribute">QS</span>:agent} %{<span class="attribute">NUMBER</span>:<span class="attribute">request_time</span>:float} %{<span class="attribute">NUMBER</span>:<span class="attribute">upstream_time</span>:float}
+NGINXACCESS %{<span class="attribute">IPORHOST</span>:http_host} %{<span class="attribute">IPORHOST</span>:clientip} <span class="string">\[%{HTTPDATE:timestamp}\]</span> <span class="string">\"(?:%{WORD:verb}</span> %{<span class="attribute">NOTSPACE</span>:request}(?: HTTP/%{<span class="attribute">NUMBER</span>:httpversion})?|%{<span class="attribute">DATA</span>:rawrequest})<span class="string">\"</span> %{<span class="attribute">NUMBER</span>:response} (?:%{<span class="attribute">NUMBER</span>:bytes}|-) %{<span class="attribute">QS</span>:referrer} %{<span class="attribute">QS</span>:agent} %{<span class="attribute">NUMBER</span>:<span class="attribute">request_time</span>:float}    
+</code></pre><p><strong>Notes:</strong></p>
+<ul>
+<li>by creating a pattern we keep our our logstash filters clean (simply referencing the pattern)</li>
+<li>the first rule catches requests that are sent upstream</li>
+<li>the second rule catches all static requests (where no upstream_response_time is available)</li>
+</ul>
+<blockquote>
+<p>Pro tip: use the online <a href="https://grokdebug.herokuapp.com" target="_blank" rel="external">Grok Debugger</a> if you need to test/develop patterns.</p>
+</blockquote>
+<h2 id="Create_a_Logstash_configuration_file">Create a Logstash configuration file</h2><p>Create new file <em>/opt/logstash/server/etc/conf.d/nginx.conf</em> with:</p>
+<pre><code>input {
+  file {
+    path =&gt; <span class="string">"/var/log/nginx/*access*"</span>
+  }
+}
+
+filter {
+  mutate { replace =&gt; { <span class="string">"type"</span> =&gt; <span class="string">"nginx_access"</span> } }
+  grok {
+    <span class="keyword">match</span> =&gt; { <span class="string">"message"</span> =&gt; <span class="string">"%{NGINXACCESS}"</span> }
+  }
+  date {
+    <span class="keyword">match</span> =&gt; [ <span class="string">"timestamp"</span> , <span class="string">"dd/MMM/YYYY:HH:mm:ss Z"</span> ]
+  }
+  geoip {
+    source =&gt; <span class="string">"clientip"</span>
+  }
+}
+
+output {
+  elasticsearch {
+    host =&gt; <span class="string">"localhost"</span>
+    protocol =&gt; <span class="string">"http"</span>
+  }
+  stdout { codec =&gt; rubydebug }
+}
+</code></pre><p><strong>Notes:</strong></p>
+<ul>
+<li>we change the timestamp to use the time the request arrived at the nginx server (instead of using the default which is the time the event was written to log, which is after the request has been processed)</li>
+<li>all logentries will be indexed using Elasticsearch type “nginx_access”</li>
+<li>we do NOT use the “index” directive in our output, all logentries will use Elasticsearch index “logstash-%{+YYYY.MM.dd}”</li>
+</ul>
+<blockquote>
+<p>We MUST use the http protocol. By default Logstash will use the “node” protocol which joins Logstash as a participating node to the Elasticsearch cluster using it’s embedded ES library. Since that embedded version (1.1.1) is currently incompatible with version 1.4.2 it will cause issues all over the place like breaking Kibana due to incompatible nodes etc.</p>
+</blockquote>
+<h2 id="Start_logging_to_Elasticsearch">Start logging to Elasticsearch</h2><p>Manually test your new Logstash configuration by running:</p>
+<pre><code><span class="regexp">/opt/</span>logstash<span class="regexp">/server/</span>bin<span class="regexp">/logstash -f /</span>opt<span class="regexp">/logstash/</span>server<span class="regexp">/etc/</span>conf.d<span class="regexp">/nginx.conf</span>
+</code></pre><p>If your logs are appearing in Elasticsearch restart your logstash service. </p>
+<h2 id="Credits">Credits</h2><p>Hat-tip to <a href="http://tech.ftbpro.com/post/92330141601/getting-the-best-out-of-logstash-for-nginx" target="_blank" rel="external">FTBpro developers</a> for the inspiration and the Logstash pattern</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>Step-by-step instructions on how to configure Logstash v1.4.2 to forward your Nginx access logs to Elasticsearch v1.4.2.</p>
+<h2 id="Crea]]>
+    </summary>
+    
+      <category term="elasticsearch" scheme="http://bravo-kernel.com/tags/elasticsearch/"/>
+    
+      <category term="logstash" scheme="http://bravo-kernel.com/tags/logstash/"/>
+    
+      <category term="nginx" scheme="http://bravo-kernel.com/tags/nginx/"/>
+    
+      <category term="Sysop" scheme="http://bravo-kernel.com/categories/sysop/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Kitchen converge re-run error on Windows against Vagrant with synced folder]]></title>
+    <link href="http://bravo-kernel.com/2014/10/kitchen-converge-re-run-error-on-windows-against-vagrant-with-synced-folder/"/>
+    <id>http://bravo-kernel.com/2014/10/kitchen-converge-re-run-error-on-windows-against-vagrant-with-synced-folder/</id>
+    <published>2014-10-15T20:26:33.000Z</published>
+    <updated>2015-03-27T17:53:36.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="The_case">The case</h2><p>Running <code>kitchen converge</code> on Windows using Chef-DK against a .kitchen.yml vagrant server with a synced folder:</p>
+<ul>
+<li>succeeds the first time</li>
+<li>fails every following attempt stating there is <em>“No such file or directory”</em></li>
+</ul>
+<p>Strangely enough:</p>
+<ul>
+<li>the mentioned file does exist (both locally and remote)</li>
+<li>manually deleting the mounted folder solves the problem</li>
+</ul>
+<h2 id="The_error">The error</h2><p>Where <code>kitchen converge</code> would normally display <em>“Removing non-cookbook files before transfer”</em> it now produces the following errors.</p>
+<p><strong>On screen:</strong></p>
+<pre><code>-----&gt; Starting Kitchen (v1.2.1)
+-----&gt; Converging &lt;default-ubuntu-<span class="number">1404</span>&gt;<span class="keyword">...</span>
+       Preparing files <span class="keyword">for</span> transfer
+       Resolving cookbook dependencies with Berkshelf <span class="number">3.1</span><span class="number">.5</span><span class="keyword">...</span>
+&gt;&gt;&gt;&gt;&gt;&gt; ------Exception-------
+&gt;&gt;&gt;&gt;&gt;&gt; Class: Kitchen::ActionFailed
+&gt;&gt;&gt;&gt;&gt;&gt; Message: Failed to complete <span class="comment">#converge action: [No such file or directory - C:/Users/bravo-kernel/AppData/Local/Temp/default-ubuntu-1404-sandbox-20141014-5236-n5f95k/cookbooks/vagrant-hexo/blogs/default-ubuntu-1404/demo/node_modules/hexo-renderer-stylus/node_modules/nib/node_modules/stylus/node_modules/glob/node_modules/inherits/inherits_browser.js]</span>
+&gt;&gt;&gt;&gt;&gt;&gt; ----------------------
+&gt;&gt;&gt;&gt;&gt;&gt; Please see .kitchen/logs/kitchen.log <span class="keyword">for</span> more details
+&gt;&gt;&gt;&gt;&gt;&gt; Also <span class="keyword">try</span> running `kitchen diagnose --all` <span class="keyword">for</span> configuration
+</code></pre><p><strong>.kitchen/logs/kitchen.log:</strong></p>
+<pre><code>I, [<span class="number">2014</span>-<span class="number">10</span>-<span class="number">14</span>T18:<span class="number">09</span>:<span class="number">33.513287</span> <span class="hexcolor">#523</span>6]  INFO -- Kitchen: -----&gt; Starting Kitchen (v1.<span class="number">2.1</span>)
+I, [<span class="number">2014</span>-<span class="number">10</span>-<span class="number">14</span>T18:<span class="number">09</span>:<span class="number">37.866034</span> <span class="hexcolor">#523</span>6]  INFO -- Kitchen: -----&gt; Converging &lt;default-ubuntu-<span class="number">1404</span>&gt;...
+E, [<span class="number">2014</span>-<span class="number">10</span>-<span class="number">14</span>T18:<span class="number">09</span>:<span class="number">44.489123</span> <span class="hexcolor">#523</span>6] ERROR -- Kitchen: ------Exception-------
+E, [<span class="number">2014</span>-<span class="number">10</span>-<span class="number">14</span>T18:<span class="number">09</span>:<span class="number">44.489123</span> <span class="hexcolor">#523</span>6] ERROR -- Kitchen: Class: Kitchen::ActionFailed
+E, [<span class="number">2014</span>-<span class="number">10</span>-<span class="number">14</span>T18:<span class="number">09</span>:<span class="number">44.489123</span> <span class="hexcolor">#523</span>6] ERROR -- Kitchen: Message: Failed to complete <span class="id">#converge</span> action: [No such file or directory - C:/Users/bravo-kernel/AppData/Local/Temp/default-ubuntu-<span class="number">1404</span>-sandbox-<span class="number">20141014</span>-<span class="number">5236</span>-n5f95k/cookbooks/vagrant-hexo/blogs/default-ubuntu-<span class="number">1404</span>/demo/node_modules/hexo-renderer-stylus/node_modules/nib/node_modules/stylus/node_modules/glob/node_modules/inherits/inherits_browser.js]
+E, [<span class="number">2014</span>-<span class="number">10</span>-<span class="number">14</span>T18:<span class="number">09</span>:<span class="number">44.489123</span> <span class="hexcolor">#523</span>6] ERROR -- Kitchen: ---Nested Exception---
+E, [<span class="number">2014</span>-<span class="number">10</span>-<span class="number">14</span>T18:<span class="number">09</span>:<span class="number">44.489123</span> <span class="hexcolor">#523</span>6] ERROR -- Kitchen: Class: Errno::ENOENT
+E, [<span class="number">2014</span>-<span class="number">10</span>-<span class="number">14</span>T18:<span class="number">09</span>:<span class="number">44.489123</span> <span class="hexcolor">#523</span>6] ERROR -- Kitchen: Message: No such file or directory - C:/Users/bravo-kernel/AppData/Local/Temp/default-ubuntu-<span class="number">1404</span>-sandbox-<span class="number">20141014</span>-<span class="number">5236</span>-n5f95k/cookbooks/vagrant-hexo/blogs/default-ubuntu-<span class="number">1404</span>/demo/node_modules/hexo-renderer-stylus/node_modules/nib/node_modules/stylus/node_modules/glob/node_modules/inherits/inherits_browser<span class="class">.js</span>
+E, [<span class="number">2014</span>-<span class="number">10</span>-<span class="number">14</span>T18:<span class="number">09</span>:<span class="number">44.489123</span> <span class="hexcolor">#523</span>6] ERROR -- Kitchen: ------Backtrace-------
+</code></pre><h2 id="The_cause">The cause</h2><p>The reason is so obvious one might never consider it at all:</p>
+<blockquote>
+<p>The path to the non-cookbook file to be deleted exceeds the maximum of 255 characters supported by the Windows platform causing the kitchen delete command to fail.</p>
+</blockquote>
+<h2 id="The_solution">The solution</h2><p>Since there does not seem to be a solid solution (yet) resort to one of the following workarounds:</p>
+<ul>
+<li>shortening the path by moving the user’s sandbox directory to a higher level (e.g. directly unde    r C:)</li>
+<li>shortening the path by changing the directory structure on the remote node</li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="The_case">The case</h2><p>Running <code>kitchen converge</code> on Windows using Chef-DK against a .kitchen.yml vagrant server with ]]>
+    </summary>
+    
+      <category term="chef-dk" scheme="http://bravo-kernel.com/tags/chef-dk/"/>
+    
+      <category term="kitchen" scheme="http://bravo-kernel.com/tags/kitchen/"/>
+    
+      <category term="vagrant" scheme="http://bravo-kernel.com/tags/vagrant/"/>
+    
+      <category term="Sysop" scheme="http://bravo-kernel.com/categories/sysop/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[How to fix Shellshock Bash Vulnerability using Chef]]></title>
+    <link href="http://bravo-kernel.com/2014/09/how-to-fix-shellshock-bash-vulnerability-using-chef/"/>
+    <id>http://bravo-kernel.com/2014/09/how-to-fix-shellshock-bash-vulnerability-using-chef/</id>
+    <published>2014-09-28T20:07:09.000Z</published>
+    <updated>2015-03-27T17:53:36.000Z</updated>
+    <content type="html"><![CDATA[<p>Two copy-paste solutions for your recipes that will:</p>
+<ul>
+<li>make your Chef deployed servers <a href="http://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2014-6271" target="_blank" rel="external">Shellshock</a> proof</li>
+<li>display <code>shellshock-fix</code> during provisioning to make you look good as a bonus</li>
+</ul>
+<h2 id="Using_package">Using package</h2><p>Place anywhere after your <code>apt-get update</code> action.</p>
+<pre><code>package <span class="string">'shellshock-fix'</span> <span class="keyword">do</span>
+  package_name <span class="string">'bash'</span>
+  action <span class="symbol">:upgrade</span>
+<span class="keyword">end</span>
+</code></pre><h2 id="Using_execute">Using execute</h2><p>Place anywhere.</p>
+<pre><code>execute <span class="string">"shellshock-fix"</span> <span class="built_in">do</span>
+  <span class="command"><span class="keyword">command</span> <span class="string">'apt-get update &amp;&amp; sudo apt-get install --only-upgrade bash'</span></span>
+  action :run
+<span class="function"><span class="keyword">end</span></span>
+</code></pre>]]></content>
+    <summary type="html">
+    <![CDATA[<p>Two copy-paste solutions for your recipes that will:</p>
+<ul>
+<li>make your Chef deployed servers <a href="http://web.nvd.nist.gov/view/v]]>
+    </summary>
+    
+      <category term="chef" scheme="http://bravo-kernel.com/tags/chef/"/>
+    
+      <category term="shellshock" scheme="http://bravo-kernel.com/tags/shellshock/"/>
+    
+      <category term="Sysop" scheme="http://bravo-kernel.com/categories/sysop/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[How to set up PHPCS with CakePHP coding standard on Ubuntu]]></title>
+    <link href="http://bravo-kernel.com/2014/09/how-to-set-up-phpcs-with-cakephp-coding-standard-on-ubuntu/"/>
+    <id>http://bravo-kernel.com/2014/09/how-to-set-up-phpcs-with-cakephp-coding-standard-on-ubuntu/</id>
+    <published>2014-09-01T08:41:23.000Z</published>
+    <updated>2015-03-27T17:53:36.000Z</updated>
+    <content type="html"><![CDATA[<p>Install required package</p>
+<pre><code>sudo apt-<span class="keyword">get</span> install php-codesniffer
+</code></pre><p>Install the <a href="https://github.com/cakephp/cakephp-codesniffer" title="CakePHP Coding Standard" target="_blank" rel="external">CakePHP Coding Standard</a></p>
+<pre><code>$ sudo pear channel-discover pear<span class="class">.cakephp</span><span class="class">.org</span>
+$ sudo pear install cakephp/CakePHP_CodeSniffer
+</code></pre><h3 id="Usage">Usage</h3><pre><code>$ cd /<span class="built_in">var</span>/repos
+$ cd <span class="subst">&lt;</span>your<span class="attribute">-repo</span><span class="subst">&gt;</span>
+$ phpcs app <span class="attribute">-p</span> <span class="subst">--</span>extensions<span class="subst">=</span>php <span class="subst">--</span>standard<span class="subst">=</span>CakePHP
+<span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span>
+</code></pre>]]></content>
+    <summary type="html">
+    <![CDATA[<p>Install required package</p>
+<pre><code>sudo apt-<span class="keyword">get</span> install php-codesniffer
+</code></pre><p>Install the <a ]]>
+    </summary>
+    
+      <category term="cakephp" scheme="http://bravo-kernel.com/tags/cakephp/"/>
+    
+      <category term="phpcs" scheme="http://bravo-kernel.com/tags/phpcs/"/>
+    
+      <category term="ubuntu" scheme="http://bravo-kernel.com/tags/ubuntu/"/>
+    
+      <category term="Web" scheme="http://bravo-kernel.com/categories/web/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[How to set up Xdebug for PHP5-FPM on Ubuntu]]></title>
+    <link href="http://bravo-kernel.com/2014/09/how-to-set-up-xdebug-for-php5-fpm-on-ubuntu/"/>
+    <id>http://bravo-kernel.com/2014/09/how-to-set-up-xdebug-for-php5-fpm-on-ubuntu/</id>
+    <published>2014-09-01T08:36:52.000Z</published>
+    <updated>2015-03-27T17:53:36.000Z</updated>
+    <content type="html"><![CDATA[<p>Install required packages:</p>
+<pre><code>$ sudo apt-get <span class="keyword">install</span> php5-dev php-pear
+$ sudo pecl <span class="keyword">install</span> xdebug
+</code></pre><p>Open file <code>/etc/php5/fpm/php.ini</code> and add the following line to the “Dynamic Extensions” section:</p>
+<pre><code><span class="setting">zend_extension=<span class="value"><span class="string">"/usr/lib/php5/20121212/xdebug.so"</span></span></span>
+</code></pre><p>Restart PHP:</p>
+<pre><code>$ sudo <span class="keyword">service</span> php5-fpm <span class="literal">restart</span>
+</code></pre>]]></content>
+    <summary type="html">
+    <![CDATA[<p>Install required packages:</p>
+<pre><code>$ sudo apt-get <span class="keyword">install</span> php5-dev php-pear
+$ sudo pecl <span class="]]>
+    </summary>
+    
+      <category term="php" scheme="http://bravo-kernel.com/tags/php/"/>
+    
+      <category term="ubuntu" scheme="http://bravo-kernel.com/tags/ubuntu/"/>
+    
+      <category term="xdebug" scheme="http://bravo-kernel.com/tags/xdebug/"/>
+    
+      <category term="Web" scheme="http://bravo-kernel.com/categories/web/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[How to use variables in MSSQL]]></title>
+    <link href="http://bravo-kernel.com/2014/08/how-to-use-variables-in-mssql/"/>
+    <id>http://bravo-kernel.com/2014/08/how-to-use-variables-in-mssql/</id>
+    <published>2014-08-18T18:41:31.000Z</published>
+    <updated>2015-03-27T17:53:36.000Z</updated>
+    <content type="html"><![CDATA[<p>To use variables in MSSQL queries simply declare and set them before using:</p>
+<pre><code><span class="bullet">--
+</span><span class="header">-- Declare and set variables
+--</span>
+DECLARE @migrationDate VARCHAR(100), @groupName VARCHAR(100)
+SET @migrationDate = <span class="emphasis">'2014-08-15'</span>
+SET @groupName = <span class="emphasis">'SOME-GROUP-NAME'</span>
+
+<span class="bullet">--
+</span><span class="header">-- Execute query using variables
+--</span>
+SELECT DISTINCT [username]
+<span class="code">  ,[groupname]</span>
+<span class="code">  ,[migrationdate]</span>
+FROM [MYDB].[dbo].[vw<span class="emphasis">_my_</span>special<span class="emphasis">_view]
+WHERE [groupname] LIKE @groupName
+AND [migrationdate] LIKE @migrationDate</span>
+</code></pre>]]></content>
+    <summary type="html">
+    <![CDATA[<p>To use variables in MSSQL queries simply declare and set them before using:</p>
+<pre><code><span class="bullet">--
+</span><span class="he]]>
+    </summary>
+    
+      <category term="database" scheme="http://bravo-kernel.com/tags/database/"/>
+    
+      <category term="mssql" scheme="http://bravo-kernel.com/tags/mssql/"/>
+    
+      <category term="Database" scheme="http://bravo-kernel.com/categories/database/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[How to reinstall Octopress with Octostrap3 theme on Debian]]></title>
+    <link href="http://bravo-kernel.com/2014/08/how-to-reinstall-octopress-with-octostrap3-theme-on-debian/"/>
+    <id>http://bravo-kernel.com/2014/08/how-to-reinstall-octopress-with-octostrap3-theme-on-debian/</id>
+    <published>2014-08-14T15:44:33.000Z</published>
+    <updated>2015-03-27T17:53:36.000Z</updated>
+    <content type="html"><![CDATA[<h3 id="Reinstall_Octopress">Reinstall Octopress</h3><pre><code><span class="variable">$ </span>cd [path-to-repos]
+<span class="variable">$ </span>git clone git<span class="variable">@github</span>.<span class="symbol">com:</span>[your-github-pages-repo.git] octopress
+<span class="variable">$ </span>cd octopress
+<span class="variable">$ </span>git checkout source
+<span class="variable">$ </span>rake setup_github_pages
+</code></pre><h3 id="Re-enable_theme_submodule">Re-enable theme submodule</h3><pre><code><span class="variable">$ </span>git submodule init
+<span class="variable">$ </span>git submodule update
+<span class="variable">$ </span>cd .themes/octostrap3
+<span class="variable">$ </span>git checkout master
+</code></pre>]]></content>
+    <summary type="html">
+    <![CDATA[<h3 id="Reinstall_Octopress">Reinstall Octopress</h3><pre><code><span class="variable">$ </span>cd [path-to-repos]
+<span class="variable">$ ]]>
+    </summary>
+    
+      <category term="debian" scheme="http://bravo-kernel.com/tags/debian/"/>
+    
+      <category term="octopress" scheme="http://bravo-kernel.com/tags/octopress/"/>
+    
+      <category term="octostrap3" scheme="http://bravo-kernel.com/tags/octostrap3/"/>
+    
+      <category term="Web" scheme="http://bravo-kernel.com/categories/web/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[How to set up time, date and timezone on Debian]]></title>
+    <link href="http://bravo-kernel.com/2014/08/how-to-set-up-time-date-and-timezone-on-debian/"/>
+    <id>http://bravo-kernel.com/2014/08/how-to-set-up-time-date-and-timezone-on-debian/</id>
+    <published>2014-08-10T11:48:16.000Z</published>
+    <updated>2015-03-27T17:53:36.000Z</updated>
+    <content type="html"><![CDATA[<h3 id="Display_(incorrect)_time,_date_and_timezone">Display (incorrect) time, date and timezone</h3><pre><code>$ <span class="tag">date</span>
+<span class="tag">Wed</span> <span class="tag">Aug</span> 13 23<span class="pseudo">:50</span><span class="pseudo">:50</span> <span class="tag">MSK</span> 2014
+</code></pre><h3 id="Show_active_timezone">Show active timezone</h3><pre><code>$ diff -s <span class="regexp">/etc/</span>localtime <span class="regexp">/usr/</span>share<span class="regexp">/zoneinfo/</span>`cat <span class="regexp">/etc/</span>timezone`
+Files <span class="regexp">/etc/</span>localtime and <span class="regexp">/usr/</span>share<span class="regexp">/zoneinfo/</span>Europe<span class="regexp">/Moscow are identical</span>
+</code></pre><h3 id="Fix_incorrect_timezone">Fix incorrect timezone</h3><pre><code>$ echo -e <span class="string">"Europe/Amsterdam"</span> | sudo tee <span class="regexp">/etc/</span>timezone
+$ sudo cp <span class="regexp">/usr/</span>share<span class="regexp">/zoneinfo/</span>Europe<span class="regexp">/Amsterdam /</span>etc<span class="regexp">/localtime</span>
+</code></pre><h3 id="Install_ntp_client">Install ntp client</h3><pre><code>$ sudo apt-get install ntp
+Setting up ntp (<span class="number">1</span>:<span class="number">4.2</span><span class="number">.6</span>.p5+dfsg-<span class="number">2</span>) <span class="keyword">...</span>
+[ ok ] Starting NTP server: ntpd.
+</code></pre><h3 id="View_corrected_time,_date_and_timezone">View corrected time, date and timezone</h3><pre><code>$ <span class="tag">date</span>
+<span class="tag">Thu</span> <span class="tag">Aug</span> 14 21<span class="pseudo">:55</span><span class="pseudo">:03</span> <span class="tag">CEST</span> 2014
+</code></pre>]]></content>
+    <summary type="html">
+    <![CDATA[<h3 id="Display_(incorrect)_time,_date_and_timezone">Display (incorrect) time, date and timezone</h3><pre><code>$ <span class="tag">date</sp]]>
+    </summary>
+    
+      <category term="debian" scheme="http://bravo-kernel.com/tags/debian/"/>
+    
+      <category term="time" scheme="http://bravo-kernel.com/tags/time/"/>
+    
+      <category term="wheezy" scheme="http://bravo-kernel.com/tags/wheezy/"/>
+    
+      <category term="Linux" scheme="http://bravo-kernel.com/categories/linux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[How to create a new CakePHP application using FriendsOfCake app-template]]></title>
+    <link href="http://bravo-kernel.com/2014/08/how-to-create-a-new-cakephp-application-using-friendsofcake-app-template/"/>
+    <id>http://bravo-kernel.com/2014/08/how-to-create-a-new-cakephp-application-using-friendsofcake-app-template/</id>
+    <published>2014-08-10T07:31:56.000Z</published>
+    <updated>2015-03-27T17:53:36.000Z</updated>
+    <content type="html"><![CDATA[<p>This will create a new CakePHP application using the awesome <a href="https://github.com/FriendsOfCake/app-template" title="FriendsOfCake app-template" target="_blank" rel="external">FriendsOfCake app-template</a>.</p>
+<p>Make sure you have:</p>
+<ul>
+<li>installed Composer (see <a href="/blog/2014/08/how-to-install-composer-on-debian/" title="How to install Composer on Debian">“How to install Composer on Debian”</a>)</li>
+<li>created an empty Github repository (we’ll call it Debby)</li>
+</ul>
+<h3 id="Install_app-template">Install app-template</h3><pre><code>$ cd [path-to-repos]
+$ sudo apt-get install php5-mcrypt
+$ git clone https://github.com/<span class="type">FriendsOfCake</span>/app-<span class="keyword">template</span>.git friendsofcake/app-<span class="keyword">template</span>
+</code></pre><h3 id="Generate_app">Generate app</h3><pre><code>$ composer -sdev create-project friendsofcake/app-<span class="keyword">template</span> debby
+</code></pre><h3 id="Save_app">Save app</h3><pre><code><span class="char">$ </span>cd debby
+<span class="char">$ </span>git init
+<span class="char">$ </span>git add .
+<span class="char">$ </span>git add tmp/ -f
+<span class="char">$ </span>git commit -m <span class="comment">"Initial FriendsOfCake app-template"</span>
+<span class="char">$ </span>git remote add origin git@github.<span class="method">com:</span>&lt;gh-username&gt;/debby.git
+<span class="char">$ </span>git push -u origin master
+</code></pre>]]></content>
+    <summary type="html">
+    <![CDATA[<p>This will create a new CakePHP application using the awesome <a href="https://github.com/FriendsOfCake/app-template" title="FriendsOfCake]]>
+    </summary>
+    
+      <category term="cakephp" scheme="http://bravo-kernel.com/tags/cakephp/"/>
+    
+      <category term="foc" scheme="http://bravo-kernel.com/tags/foc/"/>
+    
+      <category term="Web" scheme="http://bravo-kernel.com/categories/web/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[How to install Composer on Debian]]></title>
+    <link href="http://bravo-kernel.com/2014/08/how-to-install-composer-on-debian/"/>
+    <id>http://bravo-kernel.com/2014/08/how-to-install-composer-on-debian/</id>
+    <published>2014-08-10T07:27:48.000Z</published>
+    <updated>2015-03-27T17:53:36.000Z</updated>
+    <content type="html"><![CDATA[<p>To make Composer (globally) available on Debian:</p>
+<pre><code><span class="variable">$ </span>cd /usr/src
+<span class="variable">$ </span>sudo apt-get install curl php5-cli
+<span class="variable">$ </span>curl -sS <span class="symbol">https:</span>/<span class="regexp">/getcomposer.org/installer</span> | sudo php
+<span class="variable">$ </span>sudo mv composer.phar /usr/bin/composer
+</code></pre><p>Verify installation:</p>
+<pre><code>$ composer <span class="comment">--version</span>
+Composer <span class="property">version</span> <span class="number">4</span>ecdbf89c4a3d1e5dfe73c57e3202a5e2a18c87e <span class="number">2014</span>-<span class="number">07</span>-<span class="number">28</span> <span class="number">20</span>:<span class="number">12</span>:<span class="number">27</span>
+</code></pre>]]></content>
+    <summary type="html">
+    <![CDATA[<p>To make Composer (globally) available on Debian:</p>
+<pre><code><span class="variable">$ </span>cd /usr/src
+<span class="variable">$ </sp]]>
+    </summary>
+    
+      <category term="composer" scheme="http://bravo-kernel.com/tags/composer/"/>
+    
+      <category term="debian" scheme="http://bravo-kernel.com/tags/debian/"/>
+    
+      <category term="wheezy" scheme="http://bravo-kernel.com/tags/wheezy/"/>
+    
+      <category term="Web" scheme="http://bravo-kernel.com/categories/web/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[How to install a Debian LEMP server]]></title>
+    <link href="http://bravo-kernel.com/2014/08/how-to-install-a-debian-lemp-server/"/>
+    <id>http://bravo-kernel.com/2014/08/how-to-install-a-debian-lemp-server/</id>
+    <published>2014-08-10T07:26:05.000Z</published>
+    <updated>2015-03-27T17:53:36.000Z</updated>
+    <content type="html"><![CDATA[<p>This will install a LEMP server with nginx, MySQL and PHP-fpm on Debian Wheezy in 5 minutes.</p>
+<h3 id="Install_required_packages">Install required packages</h3><pre><code>$ sudo apt-get <span class="operator"><span class="keyword">update</span>
+$ sudo apt-<span class="keyword">get</span> <span class="keyword">install</span> mysql-<span class="keyword">server</span> php5-mysql nginx php5-fpm</span>
+</code></pre><h3 id="Enable_PHP">Enable PHP</h3><p>Open file <code>/etc/nginx/sites-available/default</code> as root and replace line</p>
+<pre><code><span class="keyword">index</span> <span class="keyword">index</span>.html <span class="keyword">index</span>.htm;
+</code></pre><p>with :</p>
+<pre><code><span class="keyword">index</span> <span class="keyword">index</span>.php <span class="keyword">index</span>.html <span class="keyword">index</span>.htm;
+</code></pre><p>In the same file, replace the <code>php$</code> section with:</p>
+<pre><code><span class="title">location</span> <span class="regexp">~ \.php$</span> {
+    <span class="title">try_files</span> <span class="variable">$uri</span> =<span class="number">404</span>;
+    <span class="title">fastcgi_pass</span> <span class="url">unix:/var/run/php5-fpm.sock</span>;
+    <span class="title">fastcgi_index</span> index.php;
+    <span class="title">fastcgi_param</span>  SCRIPT_FILENAME  <span class="variable">$document_root</span><span class="variable">$fastcgi_script_name</span>;
+    <span class="title">include</span> /etc/nginx/fastcgi_params;
+}
+</code></pre><h3 id="Round_up">Round up</h3><p>Create a simple index.php:</p>
+<pre><code>$ <span class="built_in">echo</span> <span class="operator">-e</span> <span class="string">'&amp;lt;?php echo "PHP index"; ?&amp;gt;'</span> | sudo tee /usr/share/nginx/www/index.php
+</code></pre><p>Restart nginx:</p>
+<pre><code><span class="variable">$ </span>sudo /etc/init.d/nginx restart
+</code></pre><h3 id="All_done">All done</h3><p>Browse to your server, it should display <code>PHP index</code>.</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>This will install a LEMP server with nginx, MySQL and PHP-fpm on Debian Wheezy in 5 minutes.</p>
+<h3 id="Install_required_packages">Insta]]>
+    </summary>
+    
+      <category term="debian" scheme="http://bravo-kernel.com/tags/debian/"/>
+    
+      <category term="nginx" scheme="http://bravo-kernel.com/tags/nginx/"/>
+    
+      <category term="wheezy" scheme="http://bravo-kernel.com/tags/wheezy/"/>
+    
+      <category term="Linux" scheme="http://bravo-kernel.com/categories/linux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[How to fix Octopress build warning Layout nil requested]]></title>
+    <link href="http://bravo-kernel.com/2014/08/how-to-fix-octopress-build-warning-layout-nil-requested/"/>
+    <id>http://bravo-kernel.com/2014/08/how-to-fix-octopress-build-warning-layout-nil-requested/</id>
+    <published>2014-08-09T08:18:57.000Z</published>
+    <updated>2015-03-27T17:53:36.000Z</updated>
+    <content type="html"><![CDATA[<p>When rake_generate produces errors like this:</p>
+<pre><code>Build <span class="string">Warning:</span> Layout <span class="string">'nil'</span> requested <span class="keyword">in</span> blog<span class="regexp">/tags/</span>git/atom.xml does not exist.
+</code></pre><p>Fix by replacing:</p>
+<pre><code><span class="attribute">layout</span>: <span class="string">nil</span>
+</code></pre><p>with:</p>
+<pre><code><span class="string">layout:</span> <span class="literal">null</span>
+</code></pre><p>in files:</p>
+<ul>
+<li><code>source/atom.xml</code></li>
+<li><code>source/robots.txt</code></li>
+<li><code>source/_includes/custom/category_feed.xml</code></li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>When rake_generate produces errors like this:</p>
+<pre><code>Build <span class="string">Warning:</span> Layout <span class="string">'nil']]>
+    </summary>
+    
+      <category term="octopress" scheme="http://bravo-kernel.com/tags/octopress/"/>
+    
+      <category term="Web" scheme="http://bravo-kernel.com/categories/web/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[How to install Octopress with GSL on Debian]]></title>
+    <link href="http://bravo-kernel.com/2014/08/how-to-install-octopress-with-gsl-on-debian/"/>
+    <id>http://bravo-kernel.com/2014/08/how-to-install-octopress-with-gsl-on-debian/</id>
+    <published>2014-08-09T07:25:23.000Z</published>
+    <updated>2015-03-27T17:53:36.000Z</updated>
+    <content type="html"><![CDATA[<p>This will install Octopress with GSL (for 10x faster LSI support) on Debian Wheezy in 5 minutes.</p>
+<p>Make sure you have created a <a href="https://pages.github.com/" target="_blank" rel="external">Github-pages</a> repository first.</p>
+<h2 id="Install_required_packages">Install required packages</h2><pre><code>sudo apt-<span class="built_in">get</span> <span class="keyword">update</span>
+sudo apt-<span class="built_in">get</span> install <span class="keyword">ruby</span> <span class="keyword">ruby</span>-dev <span class="keyword">ruby</span>-gsl build-essential
+</code></pre><h2 id="Install_GSL">Install GSL</h2><p>We enable GSL to speed up page generation and remove this annoying <code>rake_generate</code> warning:</p>
+<pre><code><span class="string">Notice:</span> <span class="keyword">for</span> <span class="number">10</span>x faster LSI support, please install <span class="string">http:</span><span class="comment">//rb-gsl.rubyforge.org/</span>
+</code></pre><p>Compile by running:</p>
+<pre><code>cd /usr/src
+sudo wget http:<span class="comment">//ftp.gnu.org/gnu/gsl/gsl-1.14.tar.gz</span>
+sudo tar xvf gsl-<span class="number">1.14</span><span class="class">.tar</span><span class="class">.gz</span>
+sudo gsl-<span class="number">1.14</span>/configure
+sudo make
+sudo make install
+</code></pre><p>Running this command should return <code>1.14</code>:</p>
+<pre><code>gsl-config <span class="comment">--version</span>
+</code></pre><h2 id="Install_Octopress">Install Octopress</h2><pre><code><span class="keyword">cd</span> /&lt;path-<span class="keyword">to</span>-repos&gt;
+git clone gi<span class="variable">t:</span>//github.<span class="keyword">com</span>/imathis/octopress.git octopress
+<span class="keyword">cd</span> octopress
+</code></pre><p>Open file <code>_config.yml</code> and add the following line:</p>
+<pre><code><span class="string">lsi:</span> <span class="literal">true</span>
+</code></pre><p>Prevent build warnings caused by missing ‘nil’ layout:</p>
+<pre><code>touch <span class="keyword">source</span><span class="regexp">/_layouts/</span>nil.html
+</code></pre><h2 id="Install_gems">Install gems</h2><p>Open file <code>Gemfile</code> and add the following lines to the development group:</p>
+<pre><code><span class="title">gem</span> <span class="string">'execjs'</span>
+gem <span class="string">'therubyracer'</span>
+gem <span class="string">'gsl'</span>
+</code></pre><p>Install gems by running:</p>
+<pre><code>sudo gem <span class="keyword">install</span> bundler
+bundle <span class="keyword">install</span>
+</code></pre><h2 id="Install_Rake">Install Rake</h2><p>Open file <code>Rakefile</code> and replace line 256:</p>
+<pre><code>Bundler.with_clean_env { <span class="keyword">system</span> <span class="string">"git pull"</span> }
+</code></pre><p>with:</p>
+<pre><code>Bundler.with_clean_env { system <span class="string">"git pull origin <span class="subst">#{deploy_branch}</span>"</span> }
+</code></pre><p>Set up Rake by running:</p>
+<pre><code>rake <span class="keyword">install</span>
+rake setup_github_pages
+</code></pre><h2 id="All_done">All done</h2><p>That’s all there’s to it. You are now</p>
+<ul>
+<li>in Git branch <code>source</code> (never work in <code>master</code>!)</li>
+<li>ready to create your first post</li>
+</ul>
+<h2 id="Reinstalling?">Reinstalling?</h2><p>See <a href="/blog/2014/08/how-to-reinstall-octopress-with-octostrap3-theme-on-debian" title="How to reinstall Octopress with Octostrap3 theme on Debian">“How to reinstall Octopress with Octostrap3 theme on Debian”</a></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>This will install Octopress with GSL (for 10x faster LSI support) on Debian Wheezy in 5 minutes.</p>
+<p>Make sure you have created a <a h]]>
+    </summary>
+    
+      <category term="debian" scheme="http://bravo-kernel.com/tags/debian/"/>
+    
+      <category term="octopress" scheme="http://bravo-kernel.com/tags/octopress/"/>
+    
+      <category term="wheezy" scheme="http://bravo-kernel.com/tags/wheezy/"/>
+    
+      <category term="Linux" scheme="http://bravo-kernel.com/categories/linux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[How to set up sudo on Debian]]></title>
+    <link href="http://bravo-kernel.com/2014/08/how-to-set-up-sudo-on-debian/"/>
+    <id>http://bravo-kernel.com/2014/08/how-to-set-up-sudo-on-debian/</id>
+    <published>2014-08-09T07:24:40.000Z</published>
+    <updated>2015-03-27T17:53:36.000Z</updated>
+    <content type="html"><![CDATA[<p>To install sudo and add <username\> to the sudoers group run:</username\></p>
+<pre><code>apt-<span class="keyword">get</span> install sudo
+adduser &lt;username&gt; sudo
+</code></pre><p><strong>Note:</strong> <username\> must logout and login to effectuate new group membership (and thus sudo).</username\></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>To install sudo and add <username\> to the sudoers group run:</username\></p>
+<pre><code>apt-<span class="keyword">get</span> install sud]]>
+    </summary>
+    
+      <category term="debian" scheme="http://bravo-kernel.com/tags/debian/"/>
+    
+      <category term="Linux" scheme="http://bravo-kernel.com/categories/linux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[How to configure Git private email]]></title>
+    <link href="http://bravo-kernel.com/2014/08/how-to-configure-git-private-email/"/>
+    <id>http://bravo-kernel.com/2014/08/how-to-configure-git-private-email/</id>
+    <published>2014-08-09T07:24:14.000Z</published>
+    <updated>2015-03-27T17:53:36.000Z</updated>
+    <content type="html"><![CDATA[<p>This will keep your email address private:</p>
+<pre><code>git config --global user<span class="class">.name</span> <span class="string">"username"</span>
+git config --global user<span class="class">.email</span> <span class="string">"username@users.noreply.github.com"</span>
+</code></pre>]]></content>
+    <summary type="html">
+    <![CDATA[<p>This will keep your email address private:</p>
+<pre><code>git config --global user<span class="class">.name</span> <span class="string">"]]>
+    </summary>
+    
+      <category term="git" scheme="http://bravo-kernel.com/tags/git/"/>
+    
+      <category term="Git" scheme="http://bravo-kernel.com/categories/git/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[How to fix Git commit insufficient permission error]]></title>
+    <link href="http://bravo-kernel.com/2014/08/how-to-fix-git-commit-insufficient-permission-error/"/>
+    <id>http://bravo-kernel.com/2014/08/how-to-fix-git-commit-insufficient-permission-error/</id>
+    <published>2014-08-05T12:45:52.000Z</published>
+    <updated>2015-03-27T17:53:36.000Z</updated>
+    <content type="html"><![CDATA[<p>When <code>git commit</code> gives this error:</p>
+<pre><code><span class="keyword">error</span>: insufficient permission <span class="keyword">for</span> adding an <span class="built_in">object</span> <span class="keyword">to</span> repository database .git/objects
+</code></pre><p>take back ownership of all Git objects by runnning:</p>
+<pre><code>cd <span class="variable">&lt;path-to-repo&gt;</span>
+cd .git/objects
+sudo chown -R <span class="variable">&lt;username&gt;</span>:<span class="variable">&lt;username&gt;</span> <span class="keyword">*</span>
+</code></pre>]]></content>
+    <summary type="html">
+    <![CDATA[<p>When <code>git commit</code> gives this error:</p>
+<pre><code><span class="keyword">error</span>: insufficient permission <span class="ke]]>
+    </summary>
+    
+      <category term="git" scheme="http://bravo-kernel.com/tags/git/"/>
+    
+      <category term="Git" scheme="http://bravo-kernel.com/categories/git/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[How to maintain your personal Octostrap3 theme]]></title>
+    <link href="http://bravo-kernel.com/2014/08/how-to-maintain-your-personal-octostrap3-theme/"/>
+    <id>http://bravo-kernel.com/2014/08/how-to-maintain-your-personal-octostrap3-theme/</id>
+    <published>2014-08-04T09:22:47.000Z</published>
+    <updated>2015-03-27T17:53:36.000Z</updated>
+    <content type="html"><![CDATA[<p>Make sure you have created a personal fork of the <a href="https://github.com/kAworu/octostrap3" title="Octostrap3 repository" target="_blank" rel="external">Octostrap3 repository</a>.</p>
+<h2 id="Add_theme_as_a_Git_submodule">Add theme as a Git submodule</h2><p>Add personal Octostrap3 theme as a Git submodule:</p>
+<pre><code>cd &lt;path-to-repos&gt;/octopress
+git submodule add git@github<span class="class">.com</span>:bravo-kernel/octostrap3<span class="class">.git</span> .themes/octostrap3
+git add <span class="class">.gitmodules</span>
+git commit -m <span class="string">"Adding Octostrap3 as a Git submodule"</span>
+git push origin
+</code></pre><h2 id="Update_theme">Update theme</h2><pre><code><span class="built_in">cd</span> &lt;<span class="built_in">path</span>-to-repos&gt;/octopress
+<span class="built_in">cd</span> .themes/octostrap3
+git checkout master
+</code></pre><p>Edit some files (see the <a href="http://octopress.org/docs/theme" title="Octopress documentation on themes" target="_blank" rel="external">Octopress theme documentation</a>).</p>
+<h2 id="Install_updated_theme">Install updated theme</h2><p>Install updated theme (or it will not be used when when generating new pages):</p>
+<pre><code><span class="keyword">cd</span> &lt;path-<span class="keyword">to</span>-repos&gt;/octopress
+rake <span class="string">'install[octostrap3]'</span>
+</code></pre><h2 id="Generate_pages_using_updated_theme">Generate pages using updated theme</h2><p>Generate and deploy gh-pages using the updated theme:</p>
+<pre><code>  <span class="built_in">cd</span> &lt;<span class="built_in">path</span>-to-repos&gt;/octopress
+rake generate
+rake deploy
+</code></pre><h2 id="Save_updated_theme">Save updated theme</h2><pre><code><span class="keyword">cd</span> &lt;path-<span class="keyword">to</span>-repos&gt;/octopress/.themes/octostrap3
+git <span class="built_in">add</span> .
+git commit -<span class="keyword">m</span> <span class="string">"Updating Octostrap3 theme"</span>
+git push origin
+</code></pre><h2 id="Update_Git_submodule">Update Git submodule</h2><p>Point Git theme submodule to the latest version:</p>
+<pre><code><span class="keyword">cd</span> &lt;path-<span class="keyword">to</span>-repos&gt;/octopress
+git <span class="built_in">add</span> .themes/octostrap3
+git commit -<span class="keyword">m</span> <span class="string">"Updating octostrap3 submodule"</span>
+git push origin
+</code></pre>]]></content>
+    <summary type="html">
+    <![CDATA[<p>Make sure you have created a personal fork of the <a href="https://github.com/kAworu/octostrap3" title="Octostrap3 repository" target="_b]]>
+    </summary>
+    
+      <category term="octopress" scheme="http://bravo-kernel.com/tags/octopress/"/>
+    
+      <category term="octostrap3" scheme="http://bravo-kernel.com/tags/octostrap3/"/>
+    
+      <category term="web" scheme="http://bravo-kernel.com/categories/web/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[How to stop mpt raid status change emails on Debian 6/VPS]]></title>
+    <link href="http://bravo-kernel.com/2013/04/how-to-stop-mpt-raid-status-change-emails-on-debian-6-slash-vps/"/>
+    <id>http://bravo-kernel.com/2013/04/how-to-stop-mpt-raid-status-change-emails-on-debian-6-slash-vps/</id>
+    <published>2013-04-26T11:47:32.000Z</published>
+    <updated>2015-03-27T17:53:36.000Z</updated>
+    <content type="html"><![CDATA[<p>I was getting flooded with error emails on my Debian 6 server running on a hosted VPS:</p>
+<pre><code>Subject: info: mpt raid status <span class="operator"><span class="keyword">change</span> <span class="keyword">on</span> dev01
+
+This <span class="keyword">is</span> a RAID <span class="keyword">status</span> <span class="keyword">update</span> <span class="keyword">from</span> mpt-statusd.  The mpt-<span class="keyword">status</span> program reports that one <span class="keyword">of</span> the RAIDs <span class="keyword">changed</span> state:</span>
+</code></pre><p>Since I’m not using RAID… running this as root will stop the emails:</p>
+<pre><code># <span class="regexp">/etc/</span>init.d/mpt-statusd stop
+ # echo RUNDAEMON=no &gt; <span class="regexp">/etc/</span><span class="keyword">default</span>/mpt-statusd
+</code></pre><p>As an alternative to step 2: use package rcconf  to deactivate this service on startup in all runlevel.</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>I was getting flooded with error emails on my Debian 6 server running on a hosted VPS:</p>
+<pre><code>Subject: info: mpt raid status <spa]]>
+    </summary>
+    
+      <category term="debian" scheme="http://bravo-kernel.com/tags/debian/"/>
+    
+      <category term="Linux" scheme="http://bravo-kernel.com/categories/linux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[How to set up a multi-language FIM 2010 R2 Self Service Password Reset portal]]></title>
+    <link href="http://bravo-kernel.com/2013/04/how-to-set-up-a-multi-language-fim-2010-r2-self-service-password-reset-portal/"/>
+    <id>http://bravo-kernel.com/2013/04/how-to-set-up-a-multi-language-fim-2010-r2-self-service-password-reset-portal/</id>
+    <published>2013-04-25T13:30:34.000Z</published>
+    <updated>2015-03-27T17:53:36.000Z</updated>
+    <content type="html"><![CDATA[<p>The 2010 R2 release for Microsoft Forefront Identity Manager (FIM) contains a huge overhaul of the password-registration and password-reset web (SSPR) portals.</p>
+<p>Besides the fact that they now function properly (duh!) much attention has been put into adding multi-lingual support which is great if you want to display different customized languages  based on your clients browser preferences.</p>
+<p>Make sure to read this (almost) perfect <a href="http://technet.microsoft.com/en-us/library/jj134312%28v=ws.10%29.aspx" title="FIM 2010 R2 Portal Customization" target="_blank" rel="external">Technet Article</a> that describes most customizations in details.</p>
+<p><strong>Important:</strong></p>
+<ul>
+<li>Do not use <em>Strings.language-culture.resources</em> when naming your language file (e.g. Strings.nl-nl.resources)</li>
+<li>Use <em>Strings.culture.resources</em> instead (e.g. Strings.nl.resources)</li>
+</ul>
+<h2 id="An_example_multi-language_setup:">An example multi-language setup:</h2><p>Without going into all of the technical details of the file-contents (read the Technet article for that) create the following directory structure for a fully customized and multi-lingual portal for both Dutch and English language. Remember that you must have the language pack for your desired language installed or all will fail miserably!</p>
+<img src="/2013/04/how-to-set-up-a-multi-language-fim-2010-r2-self-service-password-reset-portal/fim-2010-r2-portal-customizations.png">
+<h3 id="Images:">Images:</h3><p>Create 3 banners using your (company) logo</p>
+<ul>
+<li>my-fimlogo.png: horizontal image used for normal portal access with transparent background</li>
+<li>my-fimlogo-ie6.png: horizontal image used for IE6 portal access with non-transparent background</li>
+<li>my-fimlogo-portrait.png: vertical image used for mobile portal access</li>
+</ul>
+<h3 id="Custom_stylesheet:">Custom stylesheet:</h3><p>FIM always loads it’s own core.css stylesheet but will overload them with values found in Styles.css. This is ofcourse very useful because we can keep your customizations stylesheet very small. The following example leaves all markup found in core.css intact except for replacing the banner images.</p>
+<pre><code><span class="class">.title-block</span> <span class="rules">{
+  <span class="rule"><span class="attribute">background</span>:<span class="value"> <span class="function">url</span>(<span class="string">"../Customizations/my-fimlogo.png"</span>) no-repeat scroll <span class="number">0</span> <span class="number">0</span> transparent</span></span>;
+<span class="rule">}</span></span>
+
+<span class="class">.ie6</span> <span class="class">.title-block</span> <span class="rules">{
+  <span class="rule"><span class="attribute">background-image</span>:<span class="value"> <span class="function">url</span>(../Customizations/my-fimlogo-ie6.png)</span></span>;
+<span class="rule">}</span></span>
+<span class="at_rule">@<span class="keyword">media</span> only screen and (max-width: <span class="number">480px</span>) </span>{
+  <span class="class">.title-block</span> <span class="rules">{
+    <span class="rule"><span class="attribute">background</span>:<span class="value"> <span class="function">url</span>(<span class="string">"../Customizations/my-fimlogo-portrait.png"</span>) no-repeat scroll <span class="number">0</span> <span class="number">0</span> transparent</span></span>;
+  <span class="rule">}</span></span>
+}
+</code></pre><h3 id="Language_files">Language files</h3><p>As with the stylesheet FIM always loads all translations found in the language pack first before overloading them with any custom translation found in your resources file. Good news again because we can keep our translation files very small as well.</p>
+<ul>
+<li><strong>Strings.resources:</strong> custom strings placed in this file will always be used regardless of the browser language-setting. Good use for this file would be the “ExampleReset1” and “ExampleReset2” keys which represent the language-agnostic values “contoso\mmeyers” and “mmeyers@contoso.com”</li>
+<li><strong>Strings.nl.resources:</strong> specify key/value pairs you want to show to users with browser language preference set to “nl-nl”</li>
+<li><strong>Strings.en.resources:</strong> specify key/value pairs you want to show to users with browser language preference set to “en-us” or “en-uk”</li>
+</ul>
+<p>All in all a pretty good job by Microsoft with some good though put into the customization scheme.</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>The 2010 R2 release for Microsoft Forefront Identity Manager (FIM) contains a huge overhaul of the password-registration and password-res]]>
+    </summary>
+    
+      <category term="fim" scheme="http://bravo-kernel.com/tags/fim/"/>
+    
+      <category term="microsoft" scheme="http://bravo-kernel.com/tags/microsoft/"/>
+    
+      <category term="Microsoft" scheme="http://bravo-kernel.com/categories/microsoft/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[How to set up a Minecraft SRV record using TransIP]]></title>
+    <link href="http://bravo-kernel.com/2013/04/how-to-set-up-a-minecraft-srv-record-using-transip/"/>
+    <id>http://bravo-kernel.com/2013/04/how-to-set-up-a-minecraft-srv-record-using-transip/</id>
+    <published>2013-04-22T11:30:04.000Z</published>
+    <updated>2015-03-27T17:53:36.000Z</updated>
+    <content type="html"><![CDATA[<p>Create the following records to connect to a hosted Minecraft server using <strong>minecraft.bravo-kernel.com</strong> instead of 86.95.212.98:27032</p>
+<pre><code>mc                           <span class="number">1</span>day    A      <span class="number">86.95</span>.<span class="number">212.98</span>
+_minecraft._tcp<span class="class">.minecraft</span>    <span class="number">1</span>day    SRV    <span class="number">0</span> <span class="number">5</span> <span class="number">27032</span> mc<span class="class">.bravo-kernel</span><span class="class">.com</span>.
+</code></pre>]]></content>
+    <summary type="html">
+    <![CDATA[<p>Create the following records to connect to a hosted Minecraft server using <strong>minecraft.bravo-kernel.com</strong> instead of 86.95.2]]>
+    </summary>
+    
+      <category term="dns" scheme="http://bravo-kernel.com/tags/dns/"/>
+    
+      <category term="minecraft" scheme="http://bravo-kernel.com/tags/minecraft/"/>
+    
+      <category term="misc" scheme="http://bravo-kernel.com/tags/misc/"/>
+    
+      <category term="Misc" scheme="http://bravo-kernel.com/categories/misc/"/>
+    
+  </entry>
+  
+</feed>
