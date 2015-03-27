@@ -1,6 +1,7 @@
 menu:
   Home: /
   Archives: /archives
+  Feed: /atom.xml
 
 widgets:
 - search

@@ -8,7 +8,7 @@ subtitle:
 description:
 author: bravo-kernel
 email:
-language:
+language: en
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
@@ -76,15 +76,23 @@ pagination_dir: page
 # Disqus
 disqus_shortname: bravo-kernel
 
-# Extensions
-## Plugins: https://github.com/hexojs/hexo/wiki/Plugins
 ## Themes: https://github.com/hexojs/hexo/wiki/Themes
 theme: light
+
+# Deployment: http://hexo.io/docs/deployment.html
+deploy:
+  type: git
+  repo: git@github.com:bravo-kernel/bravo-kernel.github.io.git
+
+# Plugin: https://github.com/hexojs/hexo-generator-feed
+feed:
+  type: atom
+  path: atom.xml
+  limit: 20
+  
+# Plugin: exclude generator
 exclude_generator:
 - index
 
-# Deployment
-## Docs: http://hexo.io/docs/deployment.html
-deploy:
-  type: github
-  repo: git@github.com:bravo-kernel/bravo-kernel.github.io.git
+
+
