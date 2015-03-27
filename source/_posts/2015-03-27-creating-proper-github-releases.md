@@ -35,10 +35,9 @@ That's all there's too it, your first release.
 
 Now that the release is out, it's time to start work on the next one:
 
-1. merge the master branch back into dev (to prevent conflicts)
-2. update ``VERSION.txt`` in the dev branch with the next release number (e.g. 1.0-alpha2)
-3. commit and push change to dev
-4. add features to your dev branch
+1. update ``VERSION.txt`` in the dev branch with the next release number (e.g. 1.0-alpha2)
+2. commit and push change to dev
+3. add features to your dev branch
 
 Once you are ready to publish a new release... simply restart ``Creating the release`` but skip step 1.
 
