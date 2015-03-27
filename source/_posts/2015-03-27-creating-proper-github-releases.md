@@ -10,7 +10,6 @@ Step-by-step instructions for creating Github Releases like the pros.
 
 Assuming:
 
-- no previous releases
 - a ``master`` branch
 - a more-or-less stable ``dev`` branch ready to be merged into master
 - a ``VERSION.txt`` file holding release version
@@ -29,11 +28,13 @@ Assuming:
     - target the master branch
     - doublecheck before pressing the "Publish release" button
 
-That's all there's too it, your first release.
+That's all there's too it, your first release. 
+
+**Note:: to prevent future merge conflicts caused by e.g. bugfixes... regularly merge master into dev!
 
 ## Starting work on the next release
 
-Now that the release is out, it's time to start work on the next one:
+Now that the release is out, it's time to start work on the next one
 
 1. update ``VERSION.txt`` in the dev branch with the next release number (e.g. 1.0-alpha2)
 2. commit and push change to dev
