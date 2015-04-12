@@ -55,6 +55,224 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2015-04-12T13:10:24.000Z"><a href="/2015/04/how-to-use-a-cakephp-3-rest-api/">Apr 12 2015</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2015/04/how-to-use-a-cakephp-3-rest-api/">How to use a CakePHP 3 REST API</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>In this follow-up post to <a href="/2015/04/how-to-build-a-cakephp-3-rest-api-in-minutes/">How to build a CakePHP 3 REST API in minutes</a> we explore the inner workings of our new API by:</p>
+<ol>
+<li>Adding some tasty cocktail data to our application (already listening at <code>http://cake3api.app</code>)</li>
+<li>Learning how to access our API resources using:<ul>
+<li>index action (GET)</li>
+<li>view action (GET)</li>
+<li>add action (POST)</li>
+<li>edit/update action (PUT)</li>
+<li>delete action (DELETE)</li>
+</ul>
+</li>
+<li>Configuring Pagination</li>
+<li>Testing Querystring Parameters</li>
+</ol>
+<blockquote>
+<p>Application sources available <a href="https://github.com/bravo-kernel/examples/tree/master/blog-how-to-use-a-cakephp3-rest-api" target="_blank" rel="external">here</a>.</p>
+</blockquote>
+<h2 id="1-_Adding_The_Cocktails">1. Adding The Cocktails</h2><h3 id="Populate_the_database">Populate the database</h3><p>Download this CakePHP <a href="https://github.com/bravo-kernel/examples/blob/master/blog-how-to-use-a-cakephp3-rest-api/config/Migrations/20150411161731_initial.php" target="_blank" rel="external">database migration file</a> to your <code>config/Migrations</code> directory.</p>
+<p>Create and popuplate the <code>cocktails</code> table by running the following command inside your application’s root directory:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/cake migrations migrate</span><br></pre></td></tr></table></figure>
+<h3 id="Create_the_controller">Create the controller</h3><p>Create new file <code>src/Controller/cocktailsController.php</code> with the following content:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">&lt;?php</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">App</span>\<span class="title">Controller</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">App</span>\<span class="title">Controller</span>\<span class="title">AppController</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CocktailsController</span> <span class="keyword">extends</span> <span class="title">AppController</span></span><br><span class="line"></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Create_models_and_views">Create models and views</h3><p>Generate some basic models and views by running the following commands inside your application’s root directory:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bin/cake bake model Cocktails</span><br><span class="line">bin/cake bake template Cocktails</span><br></pre></td></tr></table></figure>
+<h3 id="Confirm">Confirm</h3><p>You are ready to start testing your API if browsing to <code>http://cake3api.app/cocktails</code> looks similar to:<br><br></p>
+<img src="/2015/04/how-to-use-a-cakephp-3-rest-api/browser-cocktails-index.png">
+<h2 id="2-_Accessing_API_Resources">2. Accessing API Resources</h2><p>Your API supports accessing resources with or without the .json/.xml extensions and we will test both where applicable.</p>
+<p>If you don’t have a client capable of testing Request Headers you might consider using:</p>
+<ul>
+<li>the <a href="https://addons.mozilla.org/nl/firefox/addon/restclient/" target="_blank" rel="external">RESTClient</a> plugin for Firefox</li>
+<li>the <a href="https://chrome.google.com/webstore/detail/postman-rest-client/fdmmgilgnpjigdojojpjoooidkmcomcm" target="_blank" rel="external">Postman</a> plugin for Chrome</li>
+</ul>
+<blockquote>
+<p><strong>Note:</strong> we will only be testing JSON for brevity.</p>
+</blockquote>
+<h3 id="Index_action_(GET)">Index action (GET)</h3><p>Retrieve a JSON list of cocktails from your API by either:</p>
+<ul>
+<li>retrieving directly from <code>http://cake3api.app/cocktails.json</code></li>
+<li>querying <code>http://cake3api.app/cocktails</code> using:<ul>
+<li><strong>HTTP Method</strong> <code>GET</code></li>
+<li><strong>Accept-Header</strong> <code>application/json</code></li>
+</ul>
+</li>
+</ul>
+<p>Will return Status Code 200 (Success) on success.</p>
+<p><br></p>
+<img src="/2015/04/how-to-use-a-cakephp-3-rest-api/api-request-headers-index.png">
+<h3 id="View_action_(GET)">View action (GET)</h3><p>Retrieve JSON details for a single cocktail from your API by either:</p>
+<ul>
+<li>retrieving directly from <code>http://cake3api.app/cocktails/5.json</code></li>
+<li>querying <code>http://cake3api.app/cocktails/5</code> using:<ul>
+<li><strong>HTTP Method</strong> <code>GET</code></li>
+<li><strong>Accept-Header</strong> <code>application/json</code></li>
+</ul>
+</li>
+</ul>
+<p>Will return Status Code 200 (Success) on success.</p>
+<p><br></p>
+<img src="/2015/04/how-to-use-a-cakephp-3-rest-api/api-request-headers-view.png">
+<h3 id="Add_action_(POST)">Add action (POST)</h3><p>Add a new cocktail by posting JSON data to your API using:</p>
+<ul>
+<li>The index URL <code>http://cake3api.app/cocktails</code></li>
+<li><strong>HTTP Method</strong> <code>POST</code></li>
+<li><strong>Accept-Header</strong> <code>application/json</code></li>
+<li><strong>Content-Type</strong> <code>application/json</code></li>
+<li>Body data in (absolutely) correct JSON format</li>
+</ul>
+<p>Will return Status Code 201 (Created) on success as well as the <strong>id of the created cocktail</strong> in the response body.</p>
+<p><br></p>
+<img src="/2015/04/how-to-use-a-cakephp-3-rest-api/api-request-headers-add.png">
+<h3 id="Edit/Update_action_(PUT)">Edit/Update action (PUT)</h3><p>Change an existing cocktail by posting JSON data to our API using:</p>
+<ul>
+<li>The view URL for the specific recipe <code>http://cake3api.app/cocktails/5</code></li>
+<li><strong>HTTP Method</strong> <code>PUT</code></li>
+<li><strong>Accept-Header</strong> <code>application/json</code></li>
+<li><strong>Content-Type</strong> <code>application/json</code></li>
+<li>Partial or full body data in (absolutely) correct JSON format</li>
+</ul>
+<p>Will return Status Code 200 (Success) on success.</p>
+<p><br></p>
+<img src="/2015/04/how-to-use-a-cakephp-3-rest-api/api-request-headers-edit.png">
+<h3 id="Delete_action_(DELETE)">Delete action (DELETE)</h3><p>Delete an existing cocktail using your API by using:</p>
+<ul>
+<li>The view URL for the specific cocktail, e.g. <code>http://cake3api.app/cocktails/5</code></li>
+<li><strong>HTTP Method</strong> <code>DELETE</code></li>
+<li><strong>Accept-Header</strong> <code>application/json</code></li>
+</ul>
+<p>Will return Status Code 200 (Success) on success.</p>
+<p><br></p>
+<img src="/2015/04/how-to-use-a-cakephp-3-rest-api/api-request-headers-delete.png">
+<h2 id="3-_Configuring_Pagination">3. Configuring Pagination</h2><p>Let’s change some of the PaginatorComponent settings in <code>src/Controller/AppController.php</code> used by your API in preparation for querystring parameter testing.</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">'Paginator'</span> =&gt; [</span><br><span class="line">    <span class="string">'page'</span> =&gt; <span class="number">1</span>,</span><br><span class="line">    <span class="string">'limit'</span> =&gt; <span class="number">10</span>,</span><br><span class="line">    <span class="string">'maxLimit'</span> =&gt; <span class="number">100</span>,</span><br><span class="line">    <span class="string">'sortWhitelist'</span> =&gt; [</span><br><span class="line">        <span class="string">'id'</span>, <span class="string">'name'</span>, <span class="string">'description'</span></span><br><span class="line">    ]</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<h3 id="Show_less_cocktails_per_page">Show less cocktails per page</h3><p>Show only show 5 cocktails per page by changing <code>limit =&gt; 10</code> to <code>limit =&gt; 5</code>.</p>
+<h3 id="Set_maximum_number_of_cocktails_per_page">Set maximum number of cocktails per page</h3><p>Never show more than 15 cocktails by changing <code>&#39;maxLimit&#39; =&gt; 100</code> to <code>&#39;maxLimit&#39; =&gt; 15</code>.</p>
+<h3 id="Prevent_sorting_by_description">Prevent sorting by description</h3><p>Prevent users from sorting by the description field by removing <code>description</code> from the <code>sortWhitelist</code> array.</p>
+<h3 id="Default_page">Default page</h3><p>Do NOT change the default <code>page</code> used for the index resultset to prevent frustrating further tests.</p>
+<h2 id="4-_Testing_Querystring_Parameters">4. Testing Querystring Parameters</h2><p>Your API comes with support for querystring parameters that clients can use to manipulate the output produced by your API.</p>
+<h3 id="Limiting_results">Limiting results</h3><p>Clients can use the <code>limit</code> parameter to manipulate the number of records returned by your API.</p>
+<p>To verify the parameter works as expected query <code>http://cake3api.app/cocktails.json?limit=3</code>.</p>
+<p>The result should list three cocktails instead of (the now default) five.</p>
+<h3 id="Rate_limiting">Rate limiting</h3><p>To verify your API is respecting the <code>maxLimit</code> Paginator setting query <code>http://cake3api.app/cocktails.json?limit=20</code>.</p>
+<p>The result should only list 15 cocktails.</p>
+<h3 id="Sorting_by_field">Sorting by field</h3><p>Clients can use the <code>sort</code> parameter to specify which field should be used to sort the results produced by your API. </p>
+<p>To verify the parameter is working as expected query <code>http://cake3api.app/cocktails.json?sort=name</code>.</p>
+<p>The results should be sorted by cocktail name.</p>
+<h3 id="Sorting_ascending/descending">Sorting ascending/descending</h3><p>Clients can use the <code>direction</code> parameter in combination with the <code>sort</code> parameter to manipulate the way results are sorted by your API (either <code>asc</code> or <code>desc</code>). </p>
+<p>To verify the parameter is working as expected query <code>http://cake3api.app/cocktails.json?sort=name&amp;direction=desc</code>.</p>
+<p>The results should be reverse-sorted by cocktail name.</p>
+<h3 id="Sort_whitelist">Sort whitelist</h3><p>To verify your API is respecting the <code>sortWhitelist</code> Paginator setting query <code>http://cake3api.app/cocktails.json?sort=description</code>.</p>
+<p>The result should show the default (non-sorted) index results since we removed <code>description</code> from the sortWhitelist array.</p>
+<h2 id="Additional_reading">Additional reading</h2><ul>
+<li><a href="http://book.cakephp.org/3.0/en/controllers/components/pagination.html" target="_blank" rel="external">CakePHP 3 Pagination</a></li>
+<li><a href="https://github.com/ADmad/cakephp-jwt-auth" target="_blank" rel="external">Securing your API using JWT authentication</a></li>
+</ul>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2015-04-12T11:22:21.000Z"><a href="/2015/04/how-to-build-a-cakephp-3-rest-api-in-minutes/">Apr 12 2015</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2015/04/how-to-build-a-cakephp-3-rest-api-in-minutes/">How to build a CakePHP 3 REST API in minutes</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>Step-by-step instructions for creating a full featured REST API using CakePHP 3.</p>
+<h2 id="1-_Create_The_Application">1. Create The Application</h2><p>For this tutorial (and the follow-up posts) we will create a fresh CakePHP 3 application for our API:</p>
+<ul>
+<li>named <code>cake3api.app</code></li>
+<li>connected to a database named <code>cake3api_app</code></li>
+<li>exposed using virtualhost <code>http://cake3api.app</code></li>
+</ul>
+<p>If you need help with the installation either:</p>
+<ul>
+<li>follow the detailed installation instructions of <a href="http://book.cakephp.org/3.0/en/tutorials-and-examples/blog/blog.html#blog-tutorial" target="_blank" rel="external">the CakePHP Blog Tutorial</a></li>
+<li>install <a href="https://github.com/alt3/cakebox" target="_blank" rel="external">cakebox</a> and run <code>cakebox application add cake3api.app</code> to set up the application, database and virtual host</li>
+</ul>
+<h2 id="2-_Update_Composer">2. Update Composer</h2><p>Use Composer to add the <a href="https://github.com/FriendsOfCake/crud" target="_blank" rel="external">CRUD plugin</a> to your application so your API will benefit of additional functionality like pagination, thin controllers and DRY best practices.</p>
+<h3 id="Automatic_Installation">Automatic Installation</h3><p>To install the plugin automatically run the following command inside your application’s root directory:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer require friendsofcake/crud:dev-cake3</span><br></pre></td></tr></table></figure>
+<h3 id="Manual_installation">Manual installation</h3><p>To install the plugin manually, first extend your composer.json file with:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">        "<span class="attribute">require</span>" : <span class="value">&#123;</span><br><span class="line">                "<span class="attribute">FriendsOfCake/crud</span>": <span class="value"><span class="string">"dev-cake3"</span></span><br><span class="line">        </span>&#125;</span><br><span class="line"></span>&#125;</span><br></pre></td></tr></table></figure>
+<p>Then run the following command inside your application’s root directory:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer update</span><br></pre></td></tr></table></figure>
+<h2 id="3-_Enable_the_API">3. Enable the API</h2><h3 id="a)_Load_the_CRUD_plugin">a) Load the CRUD plugin</h3><p>Make sure your application can use the CRUD plugin by adding the following line <strong>directly below</strong> <code>Plugin::load(&#39;Migrations&#39;);</code> in your <code>config/bootstrap.php</code> file:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Plugin::load(<span class="string">'Crud'</span>);</span><br></pre></td></tr></table></figure>
+<h3 id="b)_Enable_extensions">b) Enable extensions</h3><p>Allow access to your API resources using the .json and .xml extensions by adding the following line <strong>directly above</strong> the / scope definition in your <code>config/routes.php</code> file:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Router::extensions([<span class="string">'json'</span>, <span class="string">'xml'</span>]);</span><br></pre></td></tr></table></figure>
+<h3 id="c)_Enable_Request_Headers">c) Enable Request Headers</h3><p>Allow access to your API resources using Request Headers by adding the following line as the <strong>first line inside</strong> the / scope definition in your <code>config/routes.php</code> file:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$routes</span>-&gt;resources(<span class="string">'Cocktails'</span>);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>TODO:</strong> Cocktails needs to be replaced with a filesystem foreach loop going over all files in src/Controller here … IMO also the big weak point. Feedback needed!</p>
+</blockquote>
+<h3 id="d)_Enable_the_API">d) Enable the API</h3><p>Allow API access to all controllers in your application by replacing the content of your <code>src/Controller/AppController.php</code> file with:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">&lt;?php</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">App</span>\<span class="title">Controller</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">Cake</span>\<span class="title">Controller</span>\<span class="title">Controller</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AppController</span> <span class="keyword">extends</span> <span class="title">Controller</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">use</span> \<span class="title">Crud</span>\<span class="title">Controller</span>\<span class="title">ControllerTrait</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$components</span> = [</span><br><span class="line">        <span class="string">'RequestHandler'</span>,</span><br><span class="line">        <span class="string">'Crud.Crud'</span> =&gt; [</span><br><span class="line">            <span class="string">'actions'</span> =&gt; [</span><br><span class="line">                <span class="string">'Crud.Index'</span>,</span><br><span class="line">                <span class="string">'Crud.View'</span>,</span><br><span class="line">                <span class="string">'Crud.Add'</span>,</span><br><span class="line">                <span class="string">'Crud.Edit'</span>,</span><br><span class="line">                <span class="string">'Crud.Delete'</span></span><br><span class="line">            ],</span><br><span class="line">            <span class="string">'listeners'</span> =&gt; [</span><br><span class="line">                <span class="string">'Crud.Api'</span>,</span><br><span class="line">                <span class="string">'Crud.ApiPagination'</span>,</span><br><span class="line">                <span class="string">'Crud.ApiQueryLog'</span></span><br><span class="line">            ]</span><br><span class="line">        ],</span><br><span class="line">        <span class="string">'Paginator'</span> =&gt; [</span><br><span class="line">            <span class="string">'page'</span> =&gt; <span class="number">1</span>,</span><br><span class="line">            <span class="string">'limit'</span> =&gt; <span class="number">10</span>,</span><br><span class="line">            <span class="string">'maxLimit'</span> =&gt; <span class="number">100</span>,</span><br><span class="line">            <span class="string">'sortWhitelist'</span> =&gt; [</span><br><span class="line">                <span class="string">'id'</span>, <span class="string">'name'</span>, <span class="string">'description'</span></span><br><span class="line">            ]</span><br><span class="line">        ]</span><br><span class="line">    ];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Stop_The_Clock!">Stop The Clock!</h2><p>That’s all, you should now be able to browse to <code>http://cake3api.app/index.json</code> and be presented with your API’s first JSON (error) response.</p>
+<p>Quite impressive but in all fairness… even though you now have a (very) cool API that only took minutes to create it is still pretty useless without any meaninful data to serve so this might be a good moment to dive straight into this follow-up post:</p>
+<blockquote>
+<p><a href="/2015/04/how-to-use-a-cakephp-3-rest-api/">How to use a CakePHP3 REST API</a></p>
+</blockquote>
+<h2 id="Additional_reading">Additional reading</h2><ul>
+<li><a href="http://crud.readthedocs.org" target="_blank" rel="external">CRUD plugin documentation</a></li>
+<li><a href="https://github.com/ADmad/cakephp-jwt-auth" target="_blank" rel="external">Securing your API using JWT authentication</a></li>
+<li><a href="http://book.cakephp.org/3.0/en/development/routing.html#prefix-routing" target="_blank" rel="external">Limiting API access to an /api prefixed route</a></li>
+</ul>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2015-03-27T19:30:00.000Z"><a href="/2015/03/creating-proper-github-releases/">Mar 27 2015</a></time>
       
       
@@ -506,98 +724,6 @@ AND [migrationdate] LIKE @migrationDate</span>
 
 
   
-    <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2014-08-10T11:48:16.000Z"><a href="/2014/08/how-to-set-up-time-date-and-timezone-on-debian/">Aug 10 2014</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2014/08/how-to-set-up-time-date-and-timezone-on-debian/">How to set up time, date and timezone on Debian</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h3 id="Display_(incorrect)_time,_date_and_timezone">Display (incorrect) time, date and timezone</h3><pre><code>$ <span class="tag">date</span>
-<span class="tag">Wed</span> <span class="tag">Aug</span> 13 23<span class="pseudo">:50</span><span class="pseudo">:50</span> <span class="tag">MSK</span> 2014
-</code></pre><h3 id="Show_active_timezone">Show active timezone</h3><pre><code>$ diff -s <span class="regexp">/etc/</span>localtime <span class="regexp">/usr/</span>share<span class="regexp">/zoneinfo/</span>`cat <span class="regexp">/etc/</span>timezone`
-Files <span class="regexp">/etc/</span>localtime and <span class="regexp">/usr/</span>share<span class="regexp">/zoneinfo/</span>Europe<span class="regexp">/Moscow are identical</span>
-</code></pre><h3 id="Fix_incorrect_timezone">Fix incorrect timezone</h3><pre><code>$ echo -e <span class="string">"Europe/Amsterdam"</span> | sudo tee <span class="regexp">/etc/</span>timezone
-$ sudo cp <span class="regexp">/usr/</span>share<span class="regexp">/zoneinfo/</span>Europe<span class="regexp">/Amsterdam /</span>etc<span class="regexp">/localtime</span>
-</code></pre><h3 id="Install_ntp_client">Install ntp client</h3><pre><code>$ sudo apt-get install ntp
-Setting up ntp (<span class="number">1</span>:<span class="number">4.2</span><span class="number">.6</span>.p5+dfsg-<span class="number">2</span>) <span class="keyword">...</span>
-[ ok ] Starting NTP server: ntpd.
-</code></pre><h3 id="View_corrected_time,_date_and_timezone">View corrected time, date and timezone</h3><pre><code>$ <span class="tag">date</span>
-<span class="tag">Thu</span> <span class="tag">Aug</span> 14 21<span class="pseudo">:55</span><span class="pseudo">:03</span> <span class="tag">CEST</span> 2014
-</code></pre>
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-  
-    <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2014-08-10T07:31:56.000Z"><a href="/2014/08/how-to-create-a-new-cakephp-application-using-friendsofcake-app-template/">Aug 10 2014</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2014/08/how-to-create-a-new-cakephp-application-using-friendsofcake-app-template/">How to create a new CakePHP application using FriendsOfCake app-template</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>This will create a new CakePHP application using the awesome <a href="https://github.com/FriendsOfCake/app-template" title="FriendsOfCake app-template" target="_blank" rel="external">FriendsOfCake app-template</a>.</p>
-<p>Make sure you have:</p>
-<ul>
-<li>installed Composer (see <a href="/blog/2014/08/how-to-install-composer-on-debian/" title="How to install Composer on Debian">“How to install Composer on Debian”</a>)</li>
-<li>created an empty Github repository (we’ll call it Debby)</li>
-</ul>
-<h3 id="Install_app-template">Install app-template</h3><pre><code>$ cd [path-to-repos]
-$ sudo apt-get install php5-mcrypt
-$ git clone https://github.com/<span class="type">FriendsOfCake</span>/app-<span class="keyword">template</span>.git friendsofcake/app-<span class="keyword">template</span>
-</code></pre><h3 id="Generate_app">Generate app</h3><pre><code>$ composer -sdev create-project friendsofcake/app-<span class="keyword">template</span> debby
-</code></pre><h3 id="Save_app">Save app</h3><pre><code><span class="char">$ </span>cd debby
-<span class="char">$ </span>git init
-<span class="char">$ </span>git add .
-<span class="char">$ </span>git add tmp/ -f
-<span class="char">$ </span>git commit -m <span class="comment">"Initial FriendsOfCake app-template"</span>
-<span class="char">$ </span>git remote add origin git@github.<span class="method">com:</span>&lt;gh-username&gt;/debby.git
-<span class="char">$ </span>git push -u origin master
-</code></pre>
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-  
 
   <nav id="pagination">
   
@@ -619,7 +745,7 @@ $ git clone https://github.com/<span class="type">FriendsOfCake</span>/app-<span
 <div class="widget tagcloud">
   <h3 class="title">Tag Cloud</h3>
   <div class="entry">
-    <a href="/tags/apple/" style="font-size: 10px;">apple</a><a href="/tags/cakephp/" style="font-size: 13.33px;">cakephp</a><a href="/tags/chef/" style="font-size: 10px;">chef</a><a href="/tags/chef-dk/" style="font-size: 10px;">chef-dk</a><a href="/tags/cocktails/" style="font-size: 10px;">cocktails</a><a href="/tags/composer/" style="font-size: 10px;">composer</a><a href="/tags/database/" style="font-size: 10px;">database</a><a href="/tags/debian/" style="font-size: 20px;">debian</a><a href="/tags/dns/" style="font-size: 10px;">dns</a><a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a><a href="/tags/fim/" style="font-size: 10px;">fim</a><a href="/tags/foc/" style="font-size: 10px;">foc</a><a href="/tags/git/" style="font-size: 20px;">git</a><a href="/tags/github/" style="font-size: 10px;">github</a><a href="/tags/ipad/" style="font-size: 10px;">ipad</a><a href="/tags/iphone/" style="font-size: 10px;">iphone</a><a href="/tags/javascript/" style="font-size: 10px;">javascript</a><a href="/tags/kitchen/" style="font-size: 10px;">kitchen</a><a href="/tags/logstash/" style="font-size: 10px;">logstash</a><a href="/tags/microsoft/" style="font-size: 10px;">microsoft</a><a href="/tags/minecraft/" style="font-size: 10px;">minecraft</a><a href="/tags/misc/" style="font-size: 13.33px;">misc</a><a href="/tags/mobile/" style="font-size: 10px;">mobile</a><a href="/tags/mssql/" style="font-size: 10px;">mssql</a><a href="/tags/nginx/" style="font-size: 13.33px;">nginx</a><a href="/tags/octopress/" style="font-size: 16.67px;">octopress</a><a href="/tags/octostrap3/" style="font-size: 13.33px;">octostrap3</a><a href="/tags/php/" style="font-size: 10px;">php</a><a href="/tags/phpcs/" style="font-size: 10px;">phpcs</a><a href="/tags/security/" style="font-size: 10px;">security</a><a href="/tags/shellshock/" style="font-size: 10px;">shellshock</a><a href="/tags/time/" style="font-size: 10px;">time</a><a href="/tags/ubuntu/" style="font-size: 13.33px;">ubuntu</a><a href="/tags/vagrant/" style="font-size: 10px;">vagrant</a><a href="/tags/validator/" style="font-size: 10px;">validator</a><a href="/tags/wheezy/" style="font-size: 16.67px;">wheezy</a><a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a>
+    <a href="/tags/api/" style="font-size: 13.33px;">api</a><a href="/tags/apple/" style="font-size: 10px;">apple</a><a href="/tags/cakephp/" style="font-size: 16.67px;">cakephp</a><a href="/tags/cakephp3/" style="font-size: 13.33px;">cakephp3</a><a href="/tags/chef/" style="font-size: 10px;">chef</a><a href="/tags/chef-dk/" style="font-size: 10px;">chef-dk</a><a href="/tags/cocktails/" style="font-size: 10px;">cocktails</a><a href="/tags/composer/" style="font-size: 10px;">composer</a><a href="/tags/database/" style="font-size: 10px;">database</a><a href="/tags/debian/" style="font-size: 20px;">debian</a><a href="/tags/dns/" style="font-size: 10px;">dns</a><a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a><a href="/tags/fim/" style="font-size: 10px;">fim</a><a href="/tags/foc/" style="font-size: 10px;">foc</a><a href="/tags/git/" style="font-size: 20px;">git</a><a href="/tags/github/" style="font-size: 10px;">github</a><a href="/tags/ipad/" style="font-size: 10px;">ipad</a><a href="/tags/iphone/" style="font-size: 10px;">iphone</a><a href="/tags/javascript/" style="font-size: 10px;">javascript</a><a href="/tags/kitchen/" style="font-size: 10px;">kitchen</a><a href="/tags/logstash/" style="font-size: 10px;">logstash</a><a href="/tags/microsoft/" style="font-size: 10px;">microsoft</a><a href="/tags/minecraft/" style="font-size: 10px;">minecraft</a><a href="/tags/misc/" style="font-size: 13.33px;">misc</a><a href="/tags/mobile/" style="font-size: 10px;">mobile</a><a href="/tags/mssql/" style="font-size: 10px;">mssql</a><a href="/tags/nginx/" style="font-size: 13.33px;">nginx</a><a href="/tags/octopress/" style="font-size: 16.67px;">octopress</a><a href="/tags/octostrap3/" style="font-size: 13.33px;">octostrap3</a><a href="/tags/php/" style="font-size: 10px;">php</a><a href="/tags/phpcs/" style="font-size: 10px;">phpcs</a><a href="/tags/rest/" style="font-size: 13.33px;">rest</a><a href="/tags/security/" style="font-size: 10px;">security</a><a href="/tags/shellshock/" style="font-size: 10px;">shellshock</a><a href="/tags/time/" style="font-size: 10px;">time</a><a href="/tags/ubuntu/" style="font-size: 13.33px;">ubuntu</a><a href="/tags/vagrant/" style="font-size: 10px;">vagrant</a><a href="/tags/validator/" style="font-size: 10px;">validator</a><a href="/tags/wheezy/" style="font-size: 16.67px;">wheezy</a><a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a>
   </div>
 </div>
 
