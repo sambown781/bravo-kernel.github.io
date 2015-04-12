@@ -78,9 +78,7 @@ Adding some tasty cocktail da">
 <li>Configuring Pagination</li>
 <li>Testing Querystring Parameters</li>
 </ol>
-<blockquote>
-<p>Application sources available <a href="https://github.com/bravo-kernel/examples/tree/master/blog-how-to-use-a-cakephp3-rest-api" target="_blank" rel="external">here</a>.</p>
-</blockquote>
+<p><em>Application sources available <a href="https://github.com/bravo-kernel/examples/tree/master/blog-how-to-use-a-cakephp3-rest-api" target="_blank" rel="external">here</a>.</em></p>
 <h2 id="1-_Adding_The_Cocktails">1. Adding The Cocktails</h2><h3 id="Populate_the_database">Populate the database</h3><p>Download this CakePHP <a href="https://github.com/bravo-kernel/examples/blob/master/blog-how-to-use-a-cakephp3-rest-api/config/Migrations/20150411161731_initial.php" target="_blank" rel="external">database migration file</a> to your <code>config/Migrations</code> directory.</p>
 <p>Create and popuplate the <code>cocktails</code> table by running the following command inside your application’s root directory:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/cake migrations migrate</span><br></pre></td></tr></table></figure>
@@ -169,7 +167,7 @@ Adding some tasty cocktail da">
 <h3 id="Sorting_by_field">Sorting by field</h3><p>Clients can use the <code>sort</code> parameter to specify which field should be used to sort the results produced by your API. </p>
 <p>To verify the parameter is working as expected query <code>http://cake3api.app/cocktails.json?sort=name</code>.</p>
 <p>The results should be sorted by cocktail name.</p>
-<h3 id="Sorting_ascending/descending">Sorting ascending/descending</h3><p>Clients can use the <code>direction</code> parameter in combination with the <code>sort</code> parameter to manipulate the way results are sorted by your API (either <code>asc</code> or <code>desc</code>). </p>
+<h3 id="Sorting_ascending/descending">Sorting ascending/descending</h3><p>Clients can use the <code>direction</code> parameter <strong>in combination</strong> with the <code>sort</code> parameter to specify the direction in which results are sorted by your API (either <code>asc</code> or <code>desc</code>). </p>
 <p>To verify the parameter is working as expected query <code>http://cake3api.app/cocktails.json?sort=name&amp;direction=desc</code>.</p>
 <p>The results should be reverse-sorted by cocktail name.</p>
 <h3 id="Sort_whitelist">Sort whitelist</h3><p>To verify your API is respecting the <code>sortWhitelist</code> Paginator setting query <code>http://cake3api.app/cocktails.json?sort=description</code>.</p>
