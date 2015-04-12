@@ -220,7 +220,7 @@
 <h2 id="2-_Add_the_CRUD_plugin">2. Add the CRUD plugin</h2><p>Add the <a href="https://github.com/FriendsOfCake/crud" target="_blank" rel="external">CRUD plugin</a> to your application so your API will benefit of additional functionality like pagination, thin controllers and DRY best practices.</p>
 <p>Run the following command inside your application’s root directory to Composer install the plugin:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer require friendsofcake/crud:dev-cake3</span><br></pre></td></tr></table></figure>
-<p>Now run the following command to make sure your application will use the plugin:</p>
+<p>Now run the following command to make your application use the plugin:</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/cake plugin load Crud</span><br></pre></td></tr></table></figure>
 <h2 id="3-_Enable_the_API">3. Enable the API</h2><h3 id="a)_Expose_one_or_more_controllers">a) Expose one or more controllers</h3><p>Only controllers explicitly enabled for API use will be accessible through your API. </p>
 <p>Enable controllers using the <code>resources()</code> method <strong>inside</strong> the / scope definition in your <code>config/routes.php</code> file like this:</p>
