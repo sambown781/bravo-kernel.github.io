@@ -4,7 +4,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://bravo-kernel.com/"/>
-  <updated>2015-04-12T21:41:01.000Z</updated>
+  <updated>2015-04-12T21:43:37.000Z</updated>
   <id>http://bravo-kernel.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://bravo-kernel.com/2015/04/how-to-use-a-cakephp-3-rest-api/"/>
     <id>http://bravo-kernel.com/2015/04/how-to-use-a-cakephp-3-rest-api/</id>
     <published>2015-04-12T13:10:24.000Z</published>
-    <updated>2015-04-12T21:41:01.000Z</updated>
+    <updated>2015-04-12T21:43:37.000Z</updated>
     <content type="html"><![CDATA[<p>In this follow-up post to <a href="/2015/04/how-to-build-a-cakephp-3-rest-api-in-minutes/">How to build a CakePHP 3 REST API in minutes</a> we explore the inner workings of our new API by:</p>
 <ol>
 <li>Adding some tasty cocktail data to our application (already listening at <code>http://cake3api.app</code>)</li>
@@ -137,7 +137,7 @@
 <li><a href="http://book.cakephp.org/3.0/en/controllers/components/pagination.html" target="_blank" rel="external">CakePHP 3 Pagination</a></li>
 <li><a href="https://github.com/ADmad/cakephp-jwt-auth" target="_blank" rel="external">Securing your API using JWT authentication</a></li>
 </ul>
-<p><em>Hat tip to CakePHP Core Developers <a href="https://github.com/lorenzo" target="_blank" rel="external">jose_zap</a> and <a href="https://github.com/admad" target="_blank" rel="external">ADmad</a> for their input while creating this post.</em></p>
+<p><em>Hat tip to CakePHP Core Developers <a href="https://github.com/lorenzo" target="_blank" rel="external">jose_zap</a> and <a href="https://github.com/admad" target="_blank" rel="external">ADmad</a> for helping creating this post.</em></p>
 ]]></content>
     <summary type="html">
     <![CDATA[<p>In this follow-up post to <a href="/2015/04/how-to-build-a-cakephp-3-rest-api-in-minutes/">How to build a CakePHP 3 REST API in minutes</]]>
@@ -160,7 +160,7 @@
     <link href="http://bravo-kernel.com/2015/04/how-to-build-a-cakephp-3-rest-api-in-minutes/"/>
     <id>http://bravo-kernel.com/2015/04/how-to-build-a-cakephp-3-rest-api-in-minutes/</id>
     <published>2015-04-12T11:22:21.000Z</published>
-    <updated>2015-04-12T21:39:26.000Z</updated>
+    <updated>2015-04-12T21:43:23.000Z</updated>
     <content type="html"><![CDATA[<p>Step-by-step instructions for creating a full featured RESTful API using CakePHP 3.</p>
 <h2 id="1-_Create_The_Application">1. Create The Application</h2><p>For this tutorial (and the follow-up posts) we will create a fresh CakePHP 3 application for our API:</p>
 <ul>
@@ -198,7 +198,7 @@
 <li><a href="http://book.cakephp.org/3.0/en/development/routing.html#prefix-routing" target="_blank" rel="external">Limiting API access to an /api prefixed route</a></li>
 <li><a href="http://book.cakephp.org/3.0/en/controllers/components/pagination.html" target="_blank" rel="external">CakePHP 3 Pagination</a></li>
 </ul>
-<p><em>Hat tip to CakePHP Core Developers <a href="https://github.com/lorenzo" target="_blank" rel="external">jose_zap</a> and <a href="https://github.com/admad" target="_blank" rel="external">ADmad</a> for their input while creating this post.</em></p>
+<p><em>Hat tip to CakePHP Core Developers <a href="https://github.com/lorenzo" target="_blank" rel="external">jose_zap</a> and <a href="https://github.com/admad" target="_blank" rel="external">ADmad</a> for their helping create this post.</em></p>
 ]]></content>
     <summary type="html">
     <![CDATA[<p>Step-by-step instructions for creating a full featured RESTful API using CakePHP 3.</p>
