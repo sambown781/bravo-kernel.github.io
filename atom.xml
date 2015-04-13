@@ -631,7 +631,7 @@ Setting up ntp (<span class="number">1</span>:<span class="number">4.2</span><sp
     <link href="http://bravo-kernel.com/2014/08/how-to-create-a-new-cakephp-application-using-friendsofcake-app-template/"/>
     <id>http://bravo-kernel.com/2014/08/how-to-create-a-new-cakephp-application-using-friendsofcake-app-template/</id>
     <published>2014-08-10T07:31:56.000Z</published>
-    <updated>2015-03-27T17:53:36.000Z</updated>
+    <updated>2015-04-13T11:41:38.000Z</updated>
     <content type="html"><![CDATA[<p>This will create a new CakePHP application using the awesome <a href="https://github.com/FriendsOfCake/app-template" title="FriendsOfCake app-template" target="_blank" rel="external">FriendsOfCake app-template</a>.</p>
 <p>Make sure you have:</p>
 <ul>
@@ -656,9 +656,11 @@ $ git clone https://github.com/<span class="type">FriendsOfCake</span>/app-<span
     
       <category term="cakephp" scheme="http://bravo-kernel.com/tags/cakephp/"/>
     
+      <category term="composer" scheme="http://bravo-kernel.com/tags/composer/"/>
+    
       <category term="foc" scheme="http://bravo-kernel.com/tags/foc/"/>
     
-      <category term="Web" scheme="http://bravo-kernel.com/categories/web/"/>
+      <category term="CakePHP" scheme="http://bravo-kernel.com/categories/cakephp/"/>
     
   </entry>
   

@@ -50,7 +50,6 @@
 
   
     <article class="post">
-  
   <div class="post-content">
     <header>
       
@@ -63,28 +62,22 @@
   
 
     </header>
-    <div class="entry">
-      
-        <h3 id="Display_(incorrect)_time,_date_and_timezone">Display (incorrect) time, date and timezone</h3><pre><code>$ <span class="tag">date</span>
-<span class="tag">Wed</span> <span class="tag">Aug</span> 13 23<span class="pseudo">:50</span><span class="pseudo">:50</span> <span class="tag">MSK</span> 2014
-</code></pre><h3 id="Show_active_timezone">Show active timezone</h3><pre><code>$ diff -s <span class="regexp">/etc/</span>localtime <span class="regexp">/usr/</span>share<span class="regexp">/zoneinfo/</span>`cat <span class="regexp">/etc/</span>timezone`
-Files <span class="regexp">/etc/</span>localtime and <span class="regexp">/usr/</span>share<span class="regexp">/zoneinfo/</span>Europe<span class="regexp">/Moscow are identical</span>
-</code></pre><h3 id="Fix_incorrect_timezone">Fix incorrect timezone</h3><pre><code>$ echo -e <span class="string">"Europe/Amsterdam"</span> | sudo tee <span class="regexp">/etc/</span>timezone
-$ sudo cp <span class="regexp">/usr/</span>share<span class="regexp">/zoneinfo/</span>Europe<span class="regexp">/Amsterdam /</span>etc<span class="regexp">/localtime</span>
-</code></pre><h3 id="Install_ntp_client">Install ntp client</h3><pre><code>$ sudo apt-get install ntp
-Setting up ntp (<span class="number">1</span>:<span class="number">4.2</span><span class="number">.6</span>.p5+dfsg-<span class="number">2</span>) <span class="keyword">...</span>
-[ ok ] Starting NTP server: ntpd.
-</code></pre><h3 id="View_corrected_time,_date_and_timezone">View corrected time, date and timezone</h3><pre><code>$ <span class="tag">date</span>
-<span class="tag">Thu</span> <span class="tag">Aug</span> 14 21<span class="pseudo">:55</span><span class="pseudo">:03</span> <span class="tag">CEST</span> 2014
-</code></pre>
-      
-    </div>
     <footer>
-      
+		
         
+  
+  <div class="categories">
+    <a href="/categories/linux/">Linux</a>
+  </div>
+
         
-      
-      <div class="clearfix"></div>
+  
+  <div class="tags">
+    <a href="/tags/debian/">debian</a>, <a href="/tags/time/">time</a>, <a href="/tags/wheezy/">wheezy</a>
+  </div>
+
+        
+		<div class="clearfix"></div>
     </footer>
   </div>
 </article>
@@ -93,7 +86,6 @@ Setting up ntp (<span class="number">1</span>:<span class="number">4.2</span><sp
 
   
     <article class="post">
-  
   <div class="post-content">
     <header>
       
@@ -106,25 +98,22 @@ Setting up ntp (<span class="number">1</span>:<span class="number">4.2</span><sp
   
 
     </header>
-    <div class="entry">
-      
-        <p>To make Composer (globally) available on Debian:</p>
-<pre><code><span class="variable">$ </span>cd /usr/src
-<span class="variable">$ </span>sudo apt-get install curl php5-cli
-<span class="variable">$ </span>curl -sS <span class="symbol">https:</span>/<span class="regexp">/getcomposer.org/installer</span> | sudo php
-<span class="variable">$ </span>sudo mv composer.phar /usr/bin/composer
-</code></pre><p>Verify installation:</p>
-<pre><code>$ composer <span class="comment">--version</span>
-Composer <span class="property">version</span> <span class="number">4</span>ecdbf89c4a3d1e5dfe73c57e3202a5e2a18c87e <span class="number">2014</span>-<span class="number">07</span>-<span class="number">28</span> <span class="number">20</span>:<span class="number">12</span>:<span class="number">27</span>
-</code></pre>
-      
-    </div>
     <footer>
-      
+		
         
+  
+  <div class="categories">
+    <a href="/categories/web/">Web</a>
+  </div>
+
         
-      
-      <div class="clearfix"></div>
+  
+  <div class="tags">
+    <a href="/tags/composer/">composer</a>, <a href="/tags/debian/">debian</a>, <a href="/tags/wheezy/">wheezy</a>
+  </div>
+
+        
+		<div class="clearfix"></div>
     </footer>
   </div>
 </article>
@@ -133,7 +122,6 @@ Composer <span class="property">version</span> <span class="number">4</span>ecdb
 
   
     <article class="post">
-  
   <div class="post-content">
     <header>
       
@@ -146,37 +134,22 @@ Composer <span class="property">version</span> <span class="number">4</span>ecdb
   
 
     </header>
-    <div class="entry">
-      
-        <p>This will install a LEMP server with nginx, MySQL and PHP-fpm on Debian Wheezy in 5 minutes.</p>
-<h3 id="Install_required_packages">Install required packages</h3><pre><code>$ sudo apt-get <span class="operator"><span class="keyword">update</span>
-$ sudo apt-<span class="keyword">get</span> <span class="keyword">install</span> mysql-<span class="keyword">server</span> php5-mysql nginx php5-fpm</span>
-</code></pre><h3 id="Enable_PHP">Enable PHP</h3><p>Open file <code>/etc/nginx/sites-available/default</code> as root and replace line</p>
-<pre><code><span class="keyword">index</span> <span class="keyword">index</span>.html <span class="keyword">index</span>.htm;
-</code></pre><p>with :</p>
-<pre><code><span class="keyword">index</span> <span class="keyword">index</span>.php <span class="keyword">index</span>.html <span class="keyword">index</span>.htm;
-</code></pre><p>In the same file, replace the <code>php$</code> section with:</p>
-<pre><code><span class="title">location</span> <span class="regexp">~ \.php$</span> {
-    <span class="title">try_files</span> <span class="variable">$uri</span> =<span class="number">404</span>;
-    <span class="title">fastcgi_pass</span> <span class="url">unix:/var/run/php5-fpm.sock</span>;
-    <span class="title">fastcgi_index</span> index.php;
-    <span class="title">fastcgi_param</span>  SCRIPT_FILENAME  <span class="variable">$document_root</span><span class="variable">$fastcgi_script_name</span>;
-    <span class="title">include</span> /etc/nginx/fastcgi_params;
-}
-</code></pre><h3 id="Round_up">Round up</h3><p>Create a simple index.php:</p>
-<pre><code>$ <span class="built_in">echo</span> <span class="operator">-e</span> <span class="string">'&amp;lt;?php echo "PHP index"; ?&amp;gt;'</span> | sudo tee /usr/share/nginx/www/index.php
-</code></pre><p>Restart nginx:</p>
-<pre><code><span class="variable">$ </span>sudo /etc/init.d/nginx restart
-</code></pre><h3 id="All_done">All done</h3><p>Browse to your server, it should display <code>PHP index</code>.</p>
-
-      
-    </div>
     <footer>
-      
+		
         
+  
+  <div class="categories">
+    <a href="/categories/linux/">Linux</a>
+  </div>
+
         
-      
-      <div class="clearfix"></div>
+  
+  <div class="tags">
+    <a href="/tags/debian/">debian</a>, <a href="/tags/nginx/">nginx</a>, <a href="/tags/wheezy/">wheezy</a>
+  </div>
+
+        
+		<div class="clearfix"></div>
     </footer>
   </div>
 </article>
@@ -185,7 +158,6 @@ $ sudo apt-<span class="keyword">get</span> <span class="keyword">install</span>
 
   
     <article class="post">
-  
   <div class="post-content">
     <header>
       
@@ -198,59 +170,22 @@ $ sudo apt-<span class="keyword">get</span> <span class="keyword">install</span>
   
 
     </header>
-    <div class="entry">
-      
-        <p>This will install Octopress with GSL (for 10x faster LSI support) on Debian Wheezy in 5 minutes.</p>
-<p>Make sure you have created a <a href="https://pages.github.com/" target="_blank" rel="external">Github-pages</a> repository first.</p>
-<h2 id="Install_required_packages">Install required packages</h2><pre><code>sudo apt-<span class="built_in">get</span> <span class="keyword">update</span>
-sudo apt-<span class="built_in">get</span> install <span class="keyword">ruby</span> <span class="keyword">ruby</span>-dev <span class="keyword">ruby</span>-gsl build-essential
-</code></pre><h2 id="Install_GSL">Install GSL</h2><p>We enable GSL to speed up page generation and remove this annoying <code>rake_generate</code> warning:</p>
-<pre><code><span class="string">Notice:</span> <span class="keyword">for</span> <span class="number">10</span>x faster LSI support, please install <span class="string">http:</span><span class="comment">//rb-gsl.rubyforge.org/</span>
-</code></pre><p>Compile by running:</p>
-<pre><code>cd /usr/src
-sudo wget http:<span class="comment">//ftp.gnu.org/gnu/gsl/gsl-1.14.tar.gz</span>
-sudo tar xvf gsl-<span class="number">1.14</span><span class="class">.tar</span><span class="class">.gz</span>
-sudo gsl-<span class="number">1.14</span>/configure
-sudo make
-sudo make install
-</code></pre><p>Running this command should return <code>1.14</code>:</p>
-<pre><code>gsl-config <span class="comment">--version</span>
-</code></pre><h2 id="Install_Octopress">Install Octopress</h2><pre><code><span class="keyword">cd</span> /&lt;path-<span class="keyword">to</span>-repos&gt;
-git clone gi<span class="variable">t:</span>//github.<span class="keyword">com</span>/imathis/octopress.git octopress
-<span class="keyword">cd</span> octopress
-</code></pre><p>Open file <code>_config.yml</code> and add the following line:</p>
-<pre><code><span class="string">lsi:</span> <span class="literal">true</span>
-</code></pre><p>Prevent build warnings caused by missing ‘nil’ layout:</p>
-<pre><code>touch <span class="keyword">source</span><span class="regexp">/_layouts/</span>nil.html
-</code></pre><h2 id="Install_gems">Install gems</h2><p>Open file <code>Gemfile</code> and add the following lines to the development group:</p>
-<pre><code><span class="title">gem</span> <span class="string">'execjs'</span>
-gem <span class="string">'therubyracer'</span>
-gem <span class="string">'gsl'</span>
-</code></pre><p>Install gems by running:</p>
-<pre><code>sudo gem <span class="keyword">install</span> bundler
-bundle <span class="keyword">install</span>
-</code></pre><h2 id="Install_Rake">Install Rake</h2><p>Open file <code>Rakefile</code> and replace line 256:</p>
-<pre><code>Bundler.with_clean_env { <span class="keyword">system</span> <span class="string">"git pull"</span> }
-</code></pre><p>with:</p>
-<pre><code>Bundler.with_clean_env { system <span class="string">"git pull origin <span class="subst">#{deploy_branch}</span>"</span> }
-</code></pre><p>Set up Rake by running:</p>
-<pre><code>rake <span class="keyword">install</span>
-rake setup_github_pages
-</code></pre><h2 id="All_done">All done</h2><p>That’s all there’s to it. You are now</p>
-<ul>
-<li>in Git branch <code>source</code> (never work in <code>master</code>!)</li>
-<li>ready to create your first post</li>
-</ul>
-<h2 id="Reinstalling?">Reinstalling?</h2><p>See <a href="/blog/2014/08/how-to-reinstall-octopress-with-octostrap3-theme-on-debian" title="How to reinstall Octopress with Octostrap3 theme on Debian">“How to reinstall Octopress with Octostrap3 theme on Debian”</a></p>
-
-      
-    </div>
     <footer>
-      
+		
         
+  
+  <div class="categories">
+    <a href="/categories/linux/">Linux</a>
+  </div>
+
         
-      
-      <div class="clearfix"></div>
+  
+  <div class="tags">
+    <a href="/tags/debian/">debian</a>, <a href="/tags/octopress/">octopress</a>, <a href="/tags/wheezy/">wheezy</a>
+  </div>
+
+        
+		<div class="clearfix"></div>
     </footer>
   </div>
 </article>
@@ -277,7 +212,7 @@ rake setup_github_pages
 <div class="widget tagcloud">
   <h3 class="title">Tag Cloud</h3>
   <div class="entry">
-    <a href="/tags/api/" style="font-size: 13.33px;">api</a><a href="/tags/apple/" style="font-size: 10px;">apple</a><a href="/tags/cakephp/" style="font-size: 16.67px;">cakephp</a><a href="/tags/cakephp3/" style="font-size: 13.33px;">cakephp3</a><a href="/tags/chef/" style="font-size: 10px;">chef</a><a href="/tags/chef-dk/" style="font-size: 10px;">chef-dk</a><a href="/tags/cocktails/" style="font-size: 10px;">cocktails</a><a href="/tags/composer/" style="font-size: 10px;">composer</a><a href="/tags/database/" style="font-size: 10px;">database</a><a href="/tags/debian/" style="font-size: 20px;">debian</a><a href="/tags/dns/" style="font-size: 10px;">dns</a><a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a><a href="/tags/fim/" style="font-size: 10px;">fim</a><a href="/tags/foc/" style="font-size: 10px;">foc</a><a href="/tags/git/" style="font-size: 20px;">git</a><a href="/tags/github/" style="font-size: 10px;">github</a><a href="/tags/ipad/" style="font-size: 10px;">ipad</a><a href="/tags/iphone/" style="font-size: 10px;">iphone</a><a href="/tags/javascript/" style="font-size: 10px;">javascript</a><a href="/tags/kitchen/" style="font-size: 10px;">kitchen</a><a href="/tags/logstash/" style="font-size: 10px;">logstash</a><a href="/tags/microsoft/" style="font-size: 10px;">microsoft</a><a href="/tags/minecraft/" style="font-size: 10px;">minecraft</a><a href="/tags/misc/" style="font-size: 13.33px;">misc</a><a href="/tags/mobile/" style="font-size: 10px;">mobile</a><a href="/tags/mssql/" style="font-size: 10px;">mssql</a><a href="/tags/nginx/" style="font-size: 13.33px;">nginx</a><a href="/tags/octopress/" style="font-size: 16.67px;">octopress</a><a href="/tags/octostrap3/" style="font-size: 13.33px;">octostrap3</a><a href="/tags/php/" style="font-size: 10px;">php</a><a href="/tags/phpcs/" style="font-size: 10px;">phpcs</a><a href="/tags/rest/" style="font-size: 13.33px;">rest</a><a href="/tags/security/" style="font-size: 10px;">security</a><a href="/tags/shellshock/" style="font-size: 10px;">shellshock</a><a href="/tags/time/" style="font-size: 10px;">time</a><a href="/tags/ubuntu/" style="font-size: 13.33px;">ubuntu</a><a href="/tags/vagrant/" style="font-size: 10px;">vagrant</a><a href="/tags/validator/" style="font-size: 10px;">validator</a><a href="/tags/wheezy/" style="font-size: 16.67px;">wheezy</a><a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a>
+    <a href="/tags/api/" style="font-size: 13.33px;">api</a><a href="/tags/apple/" style="font-size: 10px;">apple</a><a href="/tags/cakephp/" style="font-size: 16.67px;">cakephp</a><a href="/tags/cakephp3/" style="font-size: 13.33px;">cakephp3</a><a href="/tags/chef/" style="font-size: 10px;">chef</a><a href="/tags/chef-dk/" style="font-size: 10px;">chef-dk</a><a href="/tags/cocktails/" style="font-size: 10px;">cocktails</a><a href="/tags/composer/" style="font-size: 13.33px;">composer</a><a href="/tags/database/" style="font-size: 10px;">database</a><a href="/tags/debian/" style="font-size: 20px;">debian</a><a href="/tags/dns/" style="font-size: 10px;">dns</a><a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a><a href="/tags/fim/" style="font-size: 10px;">fim</a><a href="/tags/foc/" style="font-size: 10px;">foc</a><a href="/tags/git/" style="font-size: 20px;">git</a><a href="/tags/github/" style="font-size: 10px;">github</a><a href="/tags/ipad/" style="font-size: 10px;">ipad</a><a href="/tags/iphone/" style="font-size: 10px;">iphone</a><a href="/tags/javascript/" style="font-size: 10px;">javascript</a><a href="/tags/kitchen/" style="font-size: 10px;">kitchen</a><a href="/tags/logstash/" style="font-size: 10px;">logstash</a><a href="/tags/microsoft/" style="font-size: 10px;">microsoft</a><a href="/tags/minecraft/" style="font-size: 10px;">minecraft</a><a href="/tags/misc/" style="font-size: 13.33px;">misc</a><a href="/tags/mobile/" style="font-size: 10px;">mobile</a><a href="/tags/mssql/" style="font-size: 10px;">mssql</a><a href="/tags/nginx/" style="font-size: 13.33px;">nginx</a><a href="/tags/octopress/" style="font-size: 16.67px;">octopress</a><a href="/tags/octostrap3/" style="font-size: 13.33px;">octostrap3</a><a href="/tags/php/" style="font-size: 10px;">php</a><a href="/tags/phpcs/" style="font-size: 10px;">phpcs</a><a href="/tags/rest/" style="font-size: 13.33px;">rest</a><a href="/tags/security/" style="font-size: 10px;">security</a><a href="/tags/shellshock/" style="font-size: 10px;">shellshock</a><a href="/tags/time/" style="font-size: 10px;">time</a><a href="/tags/ubuntu/" style="font-size: 13.33px;">ubuntu</a><a href="/tags/vagrant/" style="font-size: 10px;">vagrant</a><a href="/tags/validator/" style="font-size: 10px;">validator</a><a href="/tags/wheezy/" style="font-size: 16.67px;">wheezy</a><a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a>
   </div>
 </div>
 

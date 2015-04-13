@@ -50,7 +50,6 @@
 
   
     <article class="post">
-  
   <div class="post-content">
     <header>
       
@@ -63,135 +62,22 @@
   
 
     </header>
-    <div class="entry">
-      
-        <p>In this follow-up post to <a href="/2015/04/how-to-build-a-cakephp-3-rest-api-in-minutes/">How to build a CakePHP 3 REST API in minutes</a> we explore the inner workings of our new API by:</p>
-<ol>
-<li>Adding some tasty cocktail data to our application (already listening at <code>http://cake3api.app</code>)</li>
-<li>Accessing the cocktail resources through our API using the:<ul>
-<li>index action (GET)</li>
-<li>view action (GET)</li>
-<li>add action (POST)</li>
-<li>edit/update action (PUT)</li>
-<li>delete action (DELETE)</li>
-</ul>
-</li>
-<li>Configuring Pagination</li>
-<li>Testing Querystring Parameters</li>
-</ol>
-<p><em>Application sources <a href="https://github.com/bravo-kernel/examples/tree/master/blog-how-to-use-a-cakephp3-rest-api" target="_blank" rel="external">available here</a>.</em></p>
-<h2 id="1-_Adding_The_Cocktails">1. Adding The Cocktails</h2><h3 id="Populate_the_database">Populate the database</h3><p>Download this CakePHP <a href="https://github.com/bravo-kernel/examples/blob/master/blog-how-to-use-a-cakephp3-rest-api/config/Migrations/20150411161731_initial.php" target="_blank" rel="external">database migration file</a> to your <code>config/Migrations</code> directory.</p>
-<p>Now run the following command inside your application’s root directory to create and popuplate the <code>cocktails</code> table:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/cake migrations migrate</span><br></pre></td></tr></table></figure>
-<h3 id="Create_the_controller">Create the controller</h3><p>Create a new file named <code>src/Controller/CocktailsController.php</code> with the following content:</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">&lt;?php</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">App</span>\<span class="title">Controller</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">App</span>\<span class="title">Controller</span>\<span class="title">AppController</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CocktailsController</span> <span class="keyword">extends</span> <span class="title">AppController</span></span><br><span class="line"></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="Create_the_entity_and_table">Create the entity and table</h3><p>Generate the required entity and model by running the following command inside your application’s root directory:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/cake bake model Cocktails</span><br></pre></td></tr></table></figure>
-<h3 id="Optionally_create_html_views">Optionally create html views</h3><p>Even though <strong>your API does not use views</strong> to output JSON and XML you might want to generate some html views for easy browsing the cocktails by running the following command inside your application’s root directory:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/cake bake template Cocktails</span><br></pre></td></tr></table></figure>
-<p>If things went well browsing to <code>http://cake3api.app/cocktails</code> should display something similar to:<br><br></p>
-<img src="/2015/04/how-to-use-a-cakephp-3-rest-api/browser-cocktails-index.png">
-<h2 id="2-_Accessing_API_Resources">2. Accessing API Resources</h2><p>Your API supports accessing resources with or without extensions and we will test both where applicable.</p>
-<p>If you don’t have a client capable of testing Request Headers you might consider using:</p>
-<ul>
-<li>the <a href="https://addons.mozilla.org/nl/firefox/addon/restclient/" target="_blank" rel="external">RESTClient</a> plugin for Firefox</li>
-<li>the <a href="https://chrome.google.com/webstore/detail/postman-rest-client/fdmmgilgnpjigdojojpjoooidkmcomcm" target="_blank" rel="external">Postman</a> plugin for Chrome</li>
-</ul>
-<blockquote>
-<p><strong>Note:</strong> for brevity we will only test JSON responses.</p>
-</blockquote>
-<h3 id="Index_action_(GET)">Index action (GET)</h3><p>Retrieve the first JSON page with cocktails from your API by either:</p>
-<ul>
-<li>retrieving directly from <code>http://cake3api.app/cocktails.json</code></li>
-<li>querying <code>http://cake3api.app/cocktails</code> using:<ul>
-<li><strong>HTTP Method</strong> <code>GET</code></li>
-<li><strong>Accept Header</strong> <code>application/json</code></li>
-</ul>
-</li>
-</ul>
-<img src="/2015/04/how-to-use-a-cakephp-3-rest-api/api-request-headers-index.png">
-<p>Should return Status Code 200 (Success) with a JSON response body similar to:</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    "<span class="attribute">success</span>": <span class="value"><span class="literal">true</span></span>,</span><br><span class="line">    "<span class="attribute">data</span>": <span class="value">[</span><br><span class="line">        &#123;</span><br><span class="line">            "<span class="attribute">id</span>": <span class="value"><span class="number">1</span></span>,</span><br><span class="line">            "<span class="attribute">name</span>": <span class="value"><span class="string">"Cosmopolitan"</span></span>,</span><br><span class="line">            "<span class="attribute">description</span>": <span class="value"><span class="string">"Vodka based"</span></span><br><span class="line">        </span>&#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            "<span class="attribute">id</span>": <span class="value"><span class="number">2</span></span>,</span><br><span class="line">            "<span class="attribute">name</span>": <span class="value"><span class="string">"Margarita"</span></span>,</span><br><span class="line">            "<span class="attribute">description</span>": <span class="value"><span class="string">"Tequila based"</span></span><br><span class="line">        </span>&#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            "<span class="attribute">id</span>": <span class="value"><span class="number">3</span></span>,</span><br><span class="line">            "<span class="attribute">name</span>": <span class="value"><span class="string">"Mojito"</span></span>,</span><br><span class="line">            "<span class="attribute">description</span>": <span class="value"><span class="string">"Rum based"</span></span><br><span class="line">        </span>&#125;</span><br><span class="line">    ]</span>,</span><br><span class="line">    "<span class="attribute">pagination</span>": <span class="value">&#123;</span><br><span class="line">        "<span class="attribute">page_count</span>": <span class="value"><span class="number">5</span></span>,</span><br><span class="line">        "<span class="attribute">current_page</span>": <span class="value"><span class="number">1</span></span>,</span><br><span class="line">        "<span class="attribute">has_next_page</span>": <span class="value"><span class="literal">true</span></span>,</span><br><span class="line">        "<span class="attribute">has_prev_page</span>": <span class="value"><span class="literal">false</span></span>,</span><br><span class="line">        "<span class="attribute">count</span>": <span class="value"><span class="number">21</span></span>,</span><br><span class="line">        "<span class="attribute">limit</span>": <span class="value"><span class="literal">null</span></span><br><span class="line">    </span>&#125;</span><br><span class="line"></span>&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="View_action_(GET)">View action (GET)</h3><p>Specify a record id to retrieve JSON details for a single cocktail by either:</p>
-<ul>
-<li>retrieving directly from e.g. <code>http://cake3api.app/cocktails/5.json</code></li>
-<li>querying <code>http://cake3api.app/cocktails/5</code> using:<ul>
-<li><strong>HTTP Method</strong> <code>GET</code></li>
-<li><strong>Accept Header</strong> <code>application/json</code></li>
-</ul>
-</li>
-</ul>
-<img src="/2015/04/how-to-use-a-cakephp-3-rest-api/api-request-headers-view.png">
-<p>Should return Status Code 200 (Success) with a JSON response body similar to:</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    "<span class="attribute">success</span>": <span class="value"><span class="literal">true</span></span>,</span><br><span class="line">    "<span class="attribute">data</span>": <span class="value">&#123;</span><br><span class="line">        "<span class="attribute">id</span>": <span class="value"><span class="number">5</span></span>,</span><br><span class="line">        "<span class="attribute">name</span>": <span class="value"><span class="string">"Caipirinha"</span></span>,</span><br><span class="line">        "<span class="attribute">description</span>": <span class="value"><span class="string">"Rum based"</span></span>,</span><br><span class="line">        "<span class="attribute">created</span>": <span class="value"><span class="string">"2015-04-11T09:33:37+0000"</span></span>,</span><br><span class="line">        "<span class="attribute">modified</span>": <span class="value"><span class="literal">null</span></span><br><span class="line">    </span>&#125;</span><br><span class="line"></span>&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="Add_action_(POST)">Add action (POST)</h3><p>Create a new cocktail record by posting JSON data to your API using:</p>
-<ul>
-<li>The index URL <code>http://cake3api.app/cocktails</code></li>
-<li><strong>HTTP Method</strong> <code>POST</code></li>
-<li><strong>Accept Header</strong> <code>application/json</code></li>
-<li><strong>Content-Type Header</strong> <code>application/json</code></li>
-<li>Body data in (absolutely) correct JSON format</li>
-</ul>
-<img src="/2015/04/how-to-use-a-cakephp-3-rest-api/api-request-headers-add.png">
-<p>Should return Status Code 201 (Created) with a JSON response body containing the <strong>id of the created cocktail</strong> similar to:</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    "<span class="attribute">success</span>": <span class="value"><span class="literal">true</span></span>,</span><br><span class="line">    "<span class="attribute">data</span>": <span class="value">&#123;</span><br><span class="line">        "<span class="attribute">id</span>": <span class="value"><span class="number">22</span></span><br><span class="line">    </span>&#125;</span><br><span class="line"></span>&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="Edit/Update_action_(PUT)">Edit/Update action (PUT)</h3><p>Change an existing cocktail by posting JSON data to our API using:</p>
-<ul>
-<li>The view URL for the specific recipe, e.g. <code>http://cake3api.app/cocktails/5</code></li>
-<li><strong>HTTP Method</strong> <code>PUT</code></li>
-<li><strong>Accept Header</strong> <code>application/json</code></li>
-<li><strong>Content-Type Header</strong> <code>application/json</code></li>
-<li>Partial or full body data in (absolutely) correct JSON format</li>
-</ul>
-<img src="/2015/04/how-to-use-a-cakephp-3-rest-api/api-request-headers-edit.png">
-<p>Should return Status Code 200 (Success) with a JSON response body similar to:</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    "<span class="attribute">success</span>": <span class="value"><span class="literal">true</span></span>,</span><br><span class="line">    "<span class="attribute">data</span>": <span class="value">[]</span><br><span class="line"></span>&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="Delete_action_(DELETE)">Delete action (DELETE)</h3><p>Delete an existing cocktail through your API by using:</p>
-<ul>
-<li>The view URL for the specific cocktail, e.g. <code>http://cake3api.app/cocktails/5</code></li>
-<li><strong>HTTP Method</strong> <code>DELETE</code></li>
-<li><strong>Accept Header</strong> <code>application/json</code></li>
-</ul>
-<img src="/2015/04/how-to-use-a-cakephp-3-rest-api/api-request-headers-delete.png">
-<p>Should return Status Code 200 (Success) on success with a JSON response body similar to:</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    "<span class="attribute">success</span>": <span class="value"><span class="literal">true</span></span>,</span><br><span class="line">    "<span class="attribute">data</span>": <span class="value">[]</span><br><span class="line"></span>&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="3-_Configuring_Pagination">3. Configuring Pagination</h2><p>Let’s change some of the PaginatorComponent settings in <code>src/Controller/AppController.php</code> used by your API in preparation for querystring parameter testing.</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">'Paginator'</span> =&gt; [</span><br><span class="line">    <span class="string">'page'</span> =&gt; <span class="number">1</span>,</span><br><span class="line">    <span class="string">'limit'</span> =&gt; <span class="number">10</span>,</span><br><span class="line">    <span class="string">'maxLimit'</span> =&gt; <span class="number">100</span>,</span><br><span class="line">    <span class="string">'fields'</span> =&gt; [</span><br><span class="line">        <span class="string">'id'</span>, <span class="string">'name'</span>, <span class="string">'description'</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="string">'sortWhitelist'</span> =&gt; [</span><br><span class="line">        <span class="string">'id'</span>, <span class="string">'name'</span>, <span class="string">'description'</span></span><br><span class="line">    ]</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-<h3 id="Show_all_cocktail_details/fields">Show all cocktail details/fields</h3><p>Show all record details by removing the <code>fields</code> array (used earlier to keep the JSON output examples readable).</p>
-<p>Querying <code>http://cake3api.cocktails?limit=2</code> should now produce JSON similar to:</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    "<span class="attribute">success</span>": <span class="value"><span class="literal">true</span></span>,</span><br><span class="line">    "<span class="attribute">data</span>": <span class="value">[</span><br><span class="line">        &#123;</span><br><span class="line">            "<span class="attribute">id</span>": <span class="value"><span class="number">1</span></span>,</span><br><span class="line">            "<span class="attribute">name</span>": <span class="value"><span class="string">"Cosmopolitan"</span></span>,</span><br><span class="line">            "<span class="attribute">description</span>": <span class="value"><span class="string">"Vodka based"</span></span>,</span><br><span class="line">            "<span class="attribute">created</span>": <span class="value"><span class="string">"2015-04-10T15:56:23+0000"</span></span>,</span><br><span class="line">            "<span class="attribute">modified</span>": <span class="value"><span class="literal">null</span></span><br><span class="line">        </span>&#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            "<span class="attribute">id</span>": <span class="value"><span class="number">2</span></span>,</span><br><span class="line">            "<span class="attribute">name</span>": <span class="value"><span class="string">"Margarita"</span></span>,</span><br><span class="line">            "<span class="attribute">description</span>": <span class="value"><span class="string">"Tequila based"</span></span>,</span><br><span class="line">            "<span class="attribute">created</span>": <span class="value"><span class="string">"2015-04-10T15:59:39+0000"</span></span>,</span><br><span class="line">            "<span class="attribute">modified</span>": <span class="value"><span class="literal">null</span></span><br><span class="line">        </span>&#125;</span><br><span class="line">    ]</span>,</span><br><span class="line">    "<span class="attribute">pagination</span>": <span class="value">&#123;</span><br><span class="line">        "<span class="attribute">page_count</span>": <span class="value"><span class="number">11</span></span>,</span><br><span class="line">        "<span class="attribute">current_page</span>": <span class="value"><span class="number">1</span></span>,</span><br><span class="line">        "<span class="attribute">has_next_page</span>": <span class="value"><span class="literal">true</span></span>,</span><br><span class="line">        "<span class="attribute">has_prev_page</span>": <span class="value"><span class="literal">false</span></span>,</span><br><span class="line">        "<span class="attribute">count</span>": <span class="value"><span class="number">21</span></span>,</span><br><span class="line">        "<span class="attribute">limit</span>": <span class="value"><span class="number">2</span></span><br><span class="line">    </span>&#125;</span><br><span class="line"></span>&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="Show_less_cocktails_per_page">Show less cocktails per page</h3><p>Show only show 5 cocktails per page by changing <code>limit =&gt; 10</code> to <code>limit =&gt; 5</code>.</p>
-<h3 id="Set_maximum_number_of_cocktails_per_page">Set maximum number of cocktails per page</h3><p>Never show more than 15 cocktails by changing <code>&#39;maxLimit&#39; =&gt; 100</code> to <code>&#39;maxLimit&#39; =&gt; 15</code>.</p>
-<h3 id="Prevent_sorting_by_description">Prevent sorting by description</h3><p>Prevent users from sorting by the description field by removing <code>description</code> from the <code>sortWhitelist</code> array.</p>
-<h3 id="Default_page">Default page</h3><p>Do NOT change the default <code>page</code> used for the index resultset to prevent frustrating further tests.</p>
-<h2 id="4-_Testing_Querystring_Parameters">4. Testing Querystring Parameters</h2><p>Your API comes with support for querystring parameters that clients can use to manipulate the output produced by your API.</p>
-<h3 id="Limiting_results">Limiting results</h3><p>Clients can use the <code>limit</code> parameter to manipulate the number of records returned by your API.</p>
-<p>To verify the parameter works as expected query <code>http://cake3api.app/cocktails.json?limit=3</code>.</p>
-<p>The result should list three cocktails instead of (the now default) five.</p>
-<h3 id="Rate_limiting">Rate limiting</h3><p>To verify your API is respecting the <code>maxLimit</code> Paginator setting query <code>http://cake3api.app/cocktails.json?limit=20</code>.</p>
-<p>The result should only list 15 cocktails.</p>
-<h3 id="Sorting_by_field">Sorting by field</h3><p>Clients can use the <code>sort</code> parameter to specify which field should be used to sort the results produced by your API. </p>
-<p>To verify the parameter is working as expected query <code>http://cake3api.app/cocktails.json?sort=name</code>.</p>
-<p>The results should be sorted by cocktail name.</p>
-<h3 id="Sorting_ascending/descending">Sorting ascending/descending</h3><p>Clients can use the <code>direction</code> parameter <strong>in combination</strong> with the <code>sort</code> parameter to specify the direction in which results are sorted by your API (either <code>asc</code> or <code>desc</code>). </p>
-<p>To verify the parameter is working as expected query <code>http://cake3api.app/cocktails.json?sort=name&amp;direction=desc</code>.</p>
-<p>The results should be reverse-sorted by cocktail name.</p>
-<h3 id="Sort_whitelist">Sort whitelist</h3><p>To verify your API is respecting the <code>sortWhitelist</code> Paginator setting query <code>http://cake3api.app/cocktails.json?sort=description</code>.</p>
-<p>The result should show the default (non-sorted) index results since we removed <code>description</code> from the sortWhitelist array.</p>
-<h2 id="Additional_reading">Additional reading</h2><ul>
-<li><a href="http://book.cakephp.org/3.0/en/controllers/components/pagination.html" target="_blank" rel="external">CakePHP 3 Pagination</a></li>
-<li><a href="https://github.com/ADmad/cakephp-jwt-auth" target="_blank" rel="external">Securing your API using JWT authentication</a></li>
-</ul>
-<p><em>Hat tip to CakePHP Core Developers <a href="https://github.com/lorenzo" target="_blank" rel="external">jose_zap</a> and <a href="https://github.com/admad" target="_blank" rel="external">ADmad</a> for helping create this post.</em></p>
-
-      
-    </div>
     <footer>
-      
+		
         
+  
+  <div class="categories">
+    <a href="/categories/cakephp/">CakePHP</a>
+  </div>
+
         
-      
-      <div class="clearfix"></div>
+  
+  <div class="tags">
+    <a href="/tags/api/">api</a>, <a href="/tags/cakephp/">cakephp</a>, <a href="/tags/cakephp3/">cakephp3</a>, <a href="/tags/rest/">rest</a>
+  </div>
+
+        
+		<div class="clearfix"></div>
     </footer>
   </div>
 </article>
@@ -200,7 +86,6 @@
 
   
     <article class="post">
-  
   <div class="post-content">
     <header>
       
@@ -213,55 +98,22 @@
   
 
     </header>
-    <div class="entry">
-      
-        <p>Step-by-step instructions for creating a full featured RESTful API using CakePHP 3.</p>
-<h2 id="1-_Create_The_Application">1. Create The Application</h2><p>For this tutorial (and the follow-up posts) we will create a fresh CakePHP 3 application for our API:</p>
-<ul>
-<li>named <code>cake3api.app</code></li>
-<li>connected to a database named <code>cake3api_app</code></li>
-<li>exposed using virtualhost <code>http://cake3api.app</code></li>
-</ul>
-<p>If you need help with the installation either:</p>
-<ul>
-<li>follow the detailed installation instructions of <a href="http://book.cakephp.org/3.0/en/tutorials-and-examples/blog/blog.html#blog-tutorial" target="_blank" rel="external">the CakePHP Blog Tutorial</a></li>
-<li>install <a href="https://github.com/alt3/cakebox" target="_blank" rel="external">cakebox</a> and run <code>cakebox application add cake3api.app</code> to set up the application, database and virtual host</li>
-</ul>
-<h2 id="2-_Add_the_CRUD_plugin">2. Add the CRUD plugin</h2><p>Add the <a href="https://github.com/FriendsOfCake/crud" target="_blank" rel="external">CRUD plugin</a> to your application so your API will benefit of additional functionality like pagination, thin controllers and DRY best practices.</p>
-<p>Run the following command inside your application’s root directory to Composer install the plugin:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer require friendsofcake/crud:dev-cake3</span><br></pre></td></tr></table></figure>
-<p>Now run the following command to make your application use the plugin:</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/cake plugin load Crud</span><br></pre></td></tr></table></figure>
-<h2 id="3-_Enable_the_API">3. Enable the API</h2><h3 id="a)_Expose_one_or_more_controllers">a) Expose one or more controllers</h3><p>Only controllers explicitly enabled for API use will be accessible through your API. </p>
-<p>Enable controllers using the <code>resources()</code> method <strong>inside</strong> the / scope definition in your <code>config/routes.php</code> file like this:</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Router::scope(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span> <span class="params">(<span class="variable">$routes</span>)</span> </span>&#123;</span><br><span class="line">	<span class="variable">$routes</span>-&gt;resources(<span class="string">'Users'</span>);</span><br><span class="line">	<span class="variable">$routes</span>-&gt;resources(<span class="string">'Cocktails'</span>);</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="b)_Configure_the_API">b) Configure the API</h3><p>Make the default API configuration available to all controllers in your application by replacing the content of your <code>src/Controller/AppController.php</code> file with:</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">&lt;?php</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">App</span>\<span class="title">Controller</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">Cake</span>\<span class="title">Controller</span>\<span class="title">Controller</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AppController</span> <span class="keyword">extends</span> <span class="title">Controller</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">use</span> \<span class="title">Crud</span>\<span class="title">Controller</span>\<span class="title">ControllerTrait</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$components</span> = [</span><br><span class="line">        <span class="string">'RequestHandler'</span>,</span><br><span class="line">        <span class="string">'Crud.Crud'</span> =&gt; [</span><br><span class="line">            <span class="string">'actions'</span> =&gt; [</span><br><span class="line">                <span class="string">'Crud.Index'</span>,</span><br><span class="line">                <span class="string">'Crud.View'</span>,</span><br><span class="line">                <span class="string">'Crud.Add'</span>,</span><br><span class="line">                <span class="string">'Crud.Edit'</span>,</span><br><span class="line">                <span class="string">'Crud.Delete'</span></span><br><span class="line">            ],</span><br><span class="line">            <span class="string">'listeners'</span> =&gt; [</span><br><span class="line">                <span class="string">'Crud.Api'</span>,</span><br><span class="line">                <span class="string">'Crud.ApiPagination'</span>,</span><br><span class="line">                <span class="string">'Crud.ApiQueryLog'</span></span><br><span class="line">            ]</span><br><span class="line">        ],</span><br><span class="line">        <span class="string">'Paginator'</span> =&gt; [</span><br><span class="line">            <span class="string">'page'</span> =&gt; <span class="number">1</span>,</span><br><span class="line">            <span class="string">'limit'</span> =&gt; <span class="number">10</span>,</span><br><span class="line">            <span class="string">'maxLimit'</span> =&gt; <span class="number">100</span>,</span><br><span class="line">            <span class="string">'fields'</span> =&gt; [</span><br><span class="line">                <span class="string">'id'</span>, <span class="string">'name'</span>, <span class="string">'description'</span></span><br><span class="line">            ],			</span><br><span class="line">            <span class="string">'sortWhitelist'</span> =&gt; [</span><br><span class="line">                <span class="string">'id'</span>, <span class="string">'name'</span>, <span class="string">'description'</span></span><br><span class="line">            ]</span><br><span class="line">        ]</span><br><span class="line">    ];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="c)_Optionally_enable_extensions">c) Optionally enable extensions</h3><p>Exposing your API resources <strong>requires no additional configuration</strong>, they are already fully accessible using Request Headers.</p>
-<p>However… if you want to additionally allow access to your API resources using the <a href="http://book.cakephp.org/3.0/en/development/routing.html#routing-file-extensions" target="_blank" rel="external">.json and .xml extensions</a> open your <code>config/routes.php</code> file and add the following line directly above the / scope definition:</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Router::extensions([<span class="string">'json'</span>, <span class="string">'xml'</span>]);</span><br></pre></td></tr></table></figure>
-<h2 id="Stop_The_Clock!">Stop The Clock!</h2><p>That’s all, you should now be able to browse to <code>http://cake3api.app/index.json</code> and be presented with your API’s first JSON (error) response looking like this:</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    "<span class="attribute">message</span>": <span class="value"><span class="string">"Controller class Index could not be found."</span></span>,</span><br><span class="line">    "<span class="attribute">url</span>": <span class="value"><span class="string">"\/index.json"</span></span>,</span><br><span class="line">    "<span class="attribute">code</span>": <span class="value"><span class="number">404</span></span><br><span class="line"></span>&#125;</span><br></pre></td></tr></table></figure>
-<p>Quite impressive but in all fairness… even though you now have a (very) cool API that only took minutes to create it is still pretty useless without any meaningful data to serve so this might be a good moment to dive straight into this follow-up post:</p>
-<blockquote>
-<p><a href="/2015/04/how-to-use-a-cakephp-3-rest-api/">How to use a CakePHP3 REST API</a></p>
-</blockquote>
-<h2 id="Additional_reading">Additional reading</h2><ul>
-<li><a href="http://crud.readthedocs.org" target="_blank" rel="external">CRUD plugin documentation</a></li>
-<li><a href="https://github.com/ADmad/cakephp-jwt-auth" target="_blank" rel="external">Securing your CakePHP 3 API using JWT authentication</a></li>
-<li><a href="http://book.cakephp.org/3.0/en/development/routing.html#prefix-routing" target="_blank" rel="external">Limiting API access to an /api prefixed route</a></li>
-<li><a href="http://book.cakephp.org/3.0/en/controllers/components/pagination.html" target="_blank" rel="external">CakePHP 3 Pagination</a></li>
-</ul>
-<p><em>Hat tip to CakePHP Core Developers <a href="https://github.com/lorenzo" target="_blank" rel="external">jose_zap</a> and <a href="https://github.com/admad" target="_blank" rel="external">ADmad</a> for helping create this post.</em></p>
-
-      
-    </div>
     <footer>
-      
+		
         
+  
+  <div class="categories">
+    <a href="/categories/cakephp/">CakePHP</a>
+  </div>
+
         
-      
-      <div class="clearfix"></div>
+  
+  <div class="tags">
+    <a href="/tags/api/">api</a>, <a href="/tags/cakephp/">cakephp</a>, <a href="/tags/cakephp3/">cakephp3</a>, <a href="/tags/rest/">rest</a>
+  </div>
+
+        
+		<div class="clearfix"></div>
     </footer>
   </div>
 </article>
@@ -270,7 +122,6 @@
 
   
     <article class="post">
-  
   <div class="post-content">
     <header>
       
@@ -283,47 +134,22 @@
   
 
     </header>
-    <div class="entry">
-      
-        <p>Step-by-step instructions for creating Github Releases like the pros.</p>
-<p>Assuming:</p>
-<ul>
-<li>a <code>master</code> branch</li>
-<li>a more-or-less stable <code>dev</code> branch ready to be merged into master</li>
-<li>a <code>VERSION.txt</code> file holding release version</li>
-</ul>
-<p><strong>Pro Tip:</strong> keep release cycles short, release often!</p>
-<h2 id="Creating_the_release">Creating the release</h2><ol>
-<li>create <code>VERSION.txt</code> in your dev branch and fill it with the release number (e.g. 1.0-alpha1)</li>
-<li>merge the master branch into dev</li>
-<li>merge the dev branch back into master</li>
-<li>go to the Github page holding your project and:<ul>
-<li>select <em>releases</em></li>
-<li>select <em>Draft a new release</em></li>
-<li>fill in 1.0-alpha1 as the <em>Tag version</em> </li>
-<li>target the master branch</li>
-<li>doublecheck before pressing the “Publish release” button</li>
-</ul>
-</li>
-</ol>
-<p>That’s all there’s too it, your first release. </p>
-<p><strong>Note:</strong> to prevent future merge conflicts caused by e.g. bugfixes… regularly merge master into dev!</p>
-<h2 id="Starting_work_on_the_next_release">Starting work on the next release</h2><p>Now that the release is out, it’s time to start work on the next one</p>
-<ol>
-<li>update <code>VERSION.txt</code> in the dev branch with the next release number (e.g. 1.0-alpha2)</li>
-<li>commit and push change to dev</li>
-<li>add features to your dev branch</li>
-</ol>
-<p>Once you are ready to publish a new release… simply restart <code>Creating the release</code> but skip step 1.</p>
-
-      
-    </div>
     <footer>
-      
+		
         
+  
+  <div class="categories">
+    <a href="/categories/git/">Git</a>
+  </div>
+
         
-      
-      <div class="clearfix"></div>
+  
+  <div class="tags">
+    <a href="/tags/git/">git</a>, <a href="/tags/github/">github</a>
+  </div>
+
+        
+		<div class="clearfix"></div>
     </footer>
   </div>
 </article>
@@ -332,7 +158,6 @@
 
   
     <article class="post">
-  
   <div class="post-content">
     <header>
       
@@ -345,90 +170,22 @@
   
 
     </header>
-    <div class="entry">
-      
-        <p>Step-by-step instructions on how to configure Logstash v1.4.2 to forward your Nginx access logs to Elasticsearch v1.4.2.</p>
-<h2 id="Create_a_custom_Nginx_log_format">Create a custom Nginx log format</h2><p>Add the following custom log_format to the <em>/etc/nginx/conf.d</em> file so it becomes available to all (virtual) Nginx hosts: </p>
-<pre><code><span class="comment"># Custom logstash format</span>
-<span class="title">log_format</span> logstash <span class="string">'<span class="variable">$http_host</span> '</span>
-                    <span class="string">'<span class="variable">$remote_addr</span> [<span class="variable">$time_local</span>] '</span>
-                    <span class="string">'"<span class="variable">$request</span>" <span class="variable">$status</span> <span class="variable">$body_bytes_sent</span> '</span>
-                    <span class="string">'"<span class="variable">$http_referer</span>" "<span class="variable">$http_user_agent</span>" '</span>
-                    <span class="string">'<span class="variable">$request_time</span> '</span>
-                    <span class="string">'<span class="variable">$upstream_response_time</span>'</span>;
-</code></pre><blockquote>
-<p>Make sure to add this <strong>above</strong> the “# virtual hosting” directive to prevent nginx failing with “unkown log format” errors.</p>
-</blockquote>
-<h2 id="Enable_the_custom_Nginx_log_format">Enable the custom Nginx log format</h2><p>Update your nginx site configuration file(s) to start logging with the new custom log_format:</p>
-<pre><code><span class="variable">#access_log</span> /<span class="built_in">var</span>/<span class="keyword">log</span>/nginx/access<span class="built_in">.</span><span class="keyword">log</span>;
-access_log /<span class="built_in">var</span>/<span class="keyword">log</span>/nginx/access<span class="built_in">.</span><span class="keyword">log</span> logstash;
-</code></pre><p>Restart nginx. </p>
-<p>Check your access log(s) and confirm that entries no longer look like the first line below (default nginx format) but look similar to second one (using our custom logstash format):</p>
-<pre><code><span class="number">10.33</span><span class="number">.10</span><span class="number">.1</span> - - [<span class="number">21</span>/<span class="keyword">Dec</span>/<span class="number">2014</span>:<span class="number">14</span>:<span class="number">36</span>:<span class="number">25</span> +<span class="number">0000</span>] <span class="string">"GET /test_126 HTTP/1.1"</span> <span class="number">404</span> <span class="number">6642</span> <span class="string">"-"</span> <span class="string">"Mozilla/5.0 (Windows NT 6.3; WOW64; rv:34.0) Gecko/20100101 Firefox/34.0"</span>
-my.app <span class="number">10.33</span><span class="number">.10</span><span class="number">.1</span> [<span class="number">21</span>/<span class="keyword">Dec</span>/<span class="number">2014</span>:<span class="number">13</span>:<span class="number">58</span>:<span class="number">48</span> +<span class="number">0000</span>] <span class="string">"GET /test_126 HTTP/1.1"</span> <span class="number">404</span> <span class="number">6641</span> <span class="string">"-"</span> <span class="string">"Mozilla/5.0 (Windows NT 6.3; WOW64; rv:34.0) Gecko/20100101 Firefox/34.0"</span> <span class="number">2.465</span> <span class="number">2.465</span>
-</code></pre><h2 id="Create_a_Logstash_nginx_pattern">Create a Logstash nginx pattern</h2><p>Create new file <em>/opt/logstash/server/patterns/nginx</em> with:</p>
-<pre><code>NGUSERNAME [a-zA-Z<span class="string">\.\@\-\+_%]+</span>
-NGUSER %{NGUSERNAME}
-NGINXACCESS %{<span class="attribute">IPORHOST</span>:http_host} %{<span class="attribute">IPORHOST</span>:clientip} <span class="string">\[%{HTTPDATE:timestamp}\]</span> <span class="string">\"(?:%{WORD:verb}</span> %{<span class="attribute">NOTSPACE</span>:request}(?: HTTP/%{<span class="attribute">NUMBER</span>:httpversion})?|%{<span class="attribute">DATA</span>:rawrequest})<span class="string">\"</span> %{<span class="attribute">NUMBER</span>:response} (?:%{<span class="attribute">NUMBER</span>:bytes}|-) %{<span class="attribute">QS</span>:referrer} %{<span class="attribute">QS</span>:agent} %{<span class="attribute">NUMBER</span>:<span class="attribute">request_time</span>:float} %{<span class="attribute">NUMBER</span>:<span class="attribute">upstream_time</span>:float}
-NGINXACCESS %{<span class="attribute">IPORHOST</span>:http_host} %{<span class="attribute">IPORHOST</span>:clientip} <span class="string">\[%{HTTPDATE:timestamp}\]</span> <span class="string">\"(?:%{WORD:verb}</span> %{<span class="attribute">NOTSPACE</span>:request}(?: HTTP/%{<span class="attribute">NUMBER</span>:httpversion})?|%{<span class="attribute">DATA</span>:rawrequest})<span class="string">\"</span> %{<span class="attribute">NUMBER</span>:response} (?:%{<span class="attribute">NUMBER</span>:bytes}|-) %{<span class="attribute">QS</span>:referrer} %{<span class="attribute">QS</span>:agent} %{<span class="attribute">NUMBER</span>:<span class="attribute">request_time</span>:float}    
-</code></pre><p><strong>Notes:</strong></p>
-<ul>
-<li>by creating a pattern we keep our our logstash filters clean (simply referencing the pattern)</li>
-<li>the first rule catches requests that are sent upstream</li>
-<li>the second rule catches all static requests (where no upstream_response_time is available)</li>
-</ul>
-<blockquote>
-<p>Pro tip: use the online <a href="https://grokdebug.herokuapp.com" target="_blank" rel="external">Grok Debugger</a> if you need to test/develop patterns.</p>
-</blockquote>
-<h2 id="Create_a_Logstash_configuration_file">Create a Logstash configuration file</h2><p>Create new file <em>/opt/logstash/server/etc/conf.d/nginx.conf</em> with:</p>
-<pre><code>input {
-  file {
-    path =&gt; <span class="string">"/var/log/nginx/*access*"</span>
-  }
-}
-
-filter {
-  mutate { replace =&gt; { <span class="string">"type"</span> =&gt; <span class="string">"nginx_access"</span> } }
-  grok {
-    <span class="keyword">match</span> =&gt; { <span class="string">"message"</span> =&gt; <span class="string">"%{NGINXACCESS}"</span> }
-  }
-  date {
-    <span class="keyword">match</span> =&gt; [ <span class="string">"timestamp"</span> , <span class="string">"dd/MMM/YYYY:HH:mm:ss Z"</span> ]
-  }
-  geoip {
-    source =&gt; <span class="string">"clientip"</span>
-  }
-}
-
-output {
-  elasticsearch {
-    host =&gt; <span class="string">"localhost"</span>
-    protocol =&gt; <span class="string">"http"</span>
-  }
-  stdout { codec =&gt; rubydebug }
-}
-</code></pre><p><strong>Notes:</strong></p>
-<ul>
-<li>we change the timestamp to use the time the request arrived at the nginx server (instead of using the default which is the time the event was written to log, which is after the request has been processed)</li>
-<li>all logentries will be indexed using Elasticsearch type “nginx_access”</li>
-<li>we do NOT use the “index” directive in our output, all logentries will use Elasticsearch index “logstash-%{+YYYY.MM.dd}”</li>
-</ul>
-<blockquote>
-<p>We MUST use the http protocol. By default Logstash will use the “node” protocol which joins Logstash as a participating node to the Elasticsearch cluster using it’s embedded ES library. Since that embedded version (1.1.1) is currently incompatible with version 1.4.2 it will cause issues all over the place like breaking Kibana due to incompatible nodes etc.</p>
-</blockquote>
-<h2 id="Start_logging_to_Elasticsearch">Start logging to Elasticsearch</h2><p>Manually test your new Logstash configuration by running:</p>
-<pre><code><span class="regexp">/opt/</span>logstash<span class="regexp">/server/</span>bin<span class="regexp">/logstash -f /</span>opt<span class="regexp">/logstash/</span>server<span class="regexp">/etc/</span>conf.d<span class="regexp">/nginx.conf</span>
-</code></pre><p>If your logs are appearing in Elasticsearch restart your logstash service. </p>
-<h2 id="Credits">Credits</h2><p>Hat-tip to <a href="http://tech.ftbpro.com/post/92330141601/getting-the-best-out-of-logstash-for-nginx" target="_blank" rel="external">FTBpro developers</a> for the inspiration and the Logstash pattern</p>
-
-      
-    </div>
     <footer>
-      
+		
         
+  
+  <div class="categories">
+    <a href="/categories/sysop/">Sysop</a>
+  </div>
+
         
-      
-      <div class="clearfix"></div>
+  
+  <div class="tags">
+    <a href="/tags/elasticsearch/">elasticsearch</a>, <a href="/tags/logstash/">logstash</a>, <a href="/tags/nginx/">nginx</a>
+  </div>
+
+        
+		<div class="clearfix"></div>
     </footer>
   </div>
 </article>
@@ -437,7 +194,6 @@ output {
 
   
     <article class="post">
-  
   <div class="post-content">
     <header>
       
@@ -450,58 +206,22 @@ output {
   
 
     </header>
-    <div class="entry">
-      
-        <h2 id="The_case">The case</h2><p>Running <code>kitchen converge</code> on Windows using Chef-DK against a .kitchen.yml vagrant server with a synced folder:</p>
-<ul>
-<li>succeeds the first time</li>
-<li>fails every following attempt stating there is <em>“No such file or directory”</em></li>
-</ul>
-<p>Strangely enough:</p>
-<ul>
-<li>the mentioned file does exist (both locally and remote)</li>
-<li>manually deleting the mounted folder solves the problem</li>
-</ul>
-<h2 id="The_error">The error</h2><p>Where <code>kitchen converge</code> would normally display <em>“Removing non-cookbook files before transfer”</em> it now produces the following errors.</p>
-<p><strong>On screen:</strong></p>
-<pre><code>-----&gt; Starting Kitchen (v1.2.1)
------&gt; Converging &lt;default-ubuntu-<span class="number">1404</span>&gt;<span class="keyword">...</span>
-       Preparing files <span class="keyword">for</span> transfer
-       Resolving cookbook dependencies with Berkshelf <span class="number">3.1</span><span class="number">.5</span><span class="keyword">...</span>
-&gt;&gt;&gt;&gt;&gt;&gt; ------Exception-------
-&gt;&gt;&gt;&gt;&gt;&gt; Class: Kitchen::ActionFailed
-&gt;&gt;&gt;&gt;&gt;&gt; Message: Failed to complete <span class="comment">#converge action: [No such file or directory - C:/Users/bravo-kernel/AppData/Local/Temp/default-ubuntu-1404-sandbox-20141014-5236-n5f95k/cookbooks/vagrant-hexo/blogs/default-ubuntu-1404/demo/node_modules/hexo-renderer-stylus/node_modules/nib/node_modules/stylus/node_modules/glob/node_modules/inherits/inherits_browser.js]</span>
-&gt;&gt;&gt;&gt;&gt;&gt; ----------------------
-&gt;&gt;&gt;&gt;&gt;&gt; Please see .kitchen/logs/kitchen.log <span class="keyword">for</span> more details
-&gt;&gt;&gt;&gt;&gt;&gt; Also <span class="keyword">try</span> running `kitchen diagnose --all` <span class="keyword">for</span> configuration
-</code></pre><p><strong>.kitchen/logs/kitchen.log:</strong></p>
-<pre><code>I, [<span class="number">2014</span>-<span class="number">10</span>-<span class="number">14</span>T18:<span class="number">09</span>:<span class="number">33.513287</span> <span class="hexcolor">#523</span>6]  INFO -- Kitchen: -----&gt; Starting Kitchen (v1.<span class="number">2.1</span>)
-I, [<span class="number">2014</span>-<span class="number">10</span>-<span class="number">14</span>T18:<span class="number">09</span>:<span class="number">37.866034</span> <span class="hexcolor">#523</span>6]  INFO -- Kitchen: -----&gt; Converging &lt;default-ubuntu-<span class="number">1404</span>&gt;...
-E, [<span class="number">2014</span>-<span class="number">10</span>-<span class="number">14</span>T18:<span class="number">09</span>:<span class="number">44.489123</span> <span class="hexcolor">#523</span>6] ERROR -- Kitchen: ------Exception-------
-E, [<span class="number">2014</span>-<span class="number">10</span>-<span class="number">14</span>T18:<span class="number">09</span>:<span class="number">44.489123</span> <span class="hexcolor">#523</span>6] ERROR -- Kitchen: Class: Kitchen::ActionFailed
-E, [<span class="number">2014</span>-<span class="number">10</span>-<span class="number">14</span>T18:<span class="number">09</span>:<span class="number">44.489123</span> <span class="hexcolor">#523</span>6] ERROR -- Kitchen: Message: Failed to complete <span class="id">#converge</span> action: [No such file or directory - C:/Users/bravo-kernel/AppData/Local/Temp/default-ubuntu-<span class="number">1404</span>-sandbox-<span class="number">20141014</span>-<span class="number">5236</span>-n5f95k/cookbooks/vagrant-hexo/blogs/default-ubuntu-<span class="number">1404</span>/demo/node_modules/hexo-renderer-stylus/node_modules/nib/node_modules/stylus/node_modules/glob/node_modules/inherits/inherits_browser.js]
-E, [<span class="number">2014</span>-<span class="number">10</span>-<span class="number">14</span>T18:<span class="number">09</span>:<span class="number">44.489123</span> <span class="hexcolor">#523</span>6] ERROR -- Kitchen: ---Nested Exception---
-E, [<span class="number">2014</span>-<span class="number">10</span>-<span class="number">14</span>T18:<span class="number">09</span>:<span class="number">44.489123</span> <span class="hexcolor">#523</span>6] ERROR -- Kitchen: Class: Errno::ENOENT
-E, [<span class="number">2014</span>-<span class="number">10</span>-<span class="number">14</span>T18:<span class="number">09</span>:<span class="number">44.489123</span> <span class="hexcolor">#523</span>6] ERROR -- Kitchen: Message: No such file or directory - C:/Users/bravo-kernel/AppData/Local/Temp/default-ubuntu-<span class="number">1404</span>-sandbox-<span class="number">20141014</span>-<span class="number">5236</span>-n5f95k/cookbooks/vagrant-hexo/blogs/default-ubuntu-<span class="number">1404</span>/demo/node_modules/hexo-renderer-stylus/node_modules/nib/node_modules/stylus/node_modules/glob/node_modules/inherits/inherits_browser<span class="class">.js</span>
-E, [<span class="number">2014</span>-<span class="number">10</span>-<span class="number">14</span>T18:<span class="number">09</span>:<span class="number">44.489123</span> <span class="hexcolor">#523</span>6] ERROR -- Kitchen: ------Backtrace-------
-</code></pre><h2 id="The_cause">The cause</h2><p>The reason is so obvious one might never consider it at all:</p>
-<blockquote>
-<p>The path to the non-cookbook file to be deleted exceeds the maximum of 255 characters supported by the Windows platform causing the kitchen delete command to fail.</p>
-</blockquote>
-<h2 id="The_solution">The solution</h2><p>Since there does not seem to be a solid solution (yet) resort to one of the following workarounds:</p>
-<ul>
-<li>shortening the path by moving the user’s sandbox directory to a higher level (e.g. directly unde    r C:)</li>
-<li>shortening the path by changing the directory structure on the remote node</li>
-</ul>
-
-      
-    </div>
     <footer>
-      
+		
         
+  
+  <div class="categories">
+    <a href="/categories/sysop/">Sysop</a>
+  </div>
+
         
-      
-      <div class="clearfix"></div>
+  
+  <div class="tags">
+    <a href="/tags/chef-dk/">chef-dk</a>, <a href="/tags/kitchen/">kitchen</a>, <a href="/tags/vagrant/">vagrant</a>
+  </div>
+
+        
+		<div class="clearfix"></div>
     </footer>
   </div>
 </article>
@@ -510,7 +230,6 @@ E, [<span class="number">2014</span>-<span class="number">10</span>-<span class=
 
   
     <article class="post">
-  
   <div class="post-content">
     <header>
       
@@ -523,32 +242,22 @@ E, [<span class="number">2014</span>-<span class="number">10</span>-<span class=
   
 
     </header>
-    <div class="entry">
-      
-        <p>Two copy-paste solutions for your recipes that will:</p>
-<ul>
-<li>make your Chef deployed servers <a href="http://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2014-6271" target="_blank" rel="external">Shellshock</a> proof</li>
-<li>display <code>shellshock-fix</code> during provisioning to make you look good as a bonus</li>
-</ul>
-<h2 id="Using_package">Using package</h2><p>Place anywhere after your <code>apt-get update</code> action.</p>
-<pre><code>package <span class="string">'shellshock-fix'</span> <span class="keyword">do</span>
-  package_name <span class="string">'bash'</span>
-  action <span class="symbol">:upgrade</span>
-<span class="keyword">end</span>
-</code></pre><h2 id="Using_execute">Using execute</h2><p>Place anywhere.</p>
-<pre><code>execute <span class="string">"shellshock-fix"</span> <span class="built_in">do</span>
-  <span class="command"><span class="keyword">command</span> <span class="string">'apt-get update &amp;&amp; sudo apt-get install --only-upgrade bash'</span></span>
-  action :run
-<span class="function"><span class="keyword">end</span></span>
-</code></pre>
-      
-    </div>
     <footer>
-      
+		
         
+  
+  <div class="categories">
+    <a href="/categories/sysop/">Sysop</a>
+  </div>
+
         
-      
-      <div class="clearfix"></div>
+  
+  <div class="tags">
+    <a href="/tags/chef/">chef</a>, <a href="/tags/shellshock/">shellshock</a>
+  </div>
+
+        
+		<div class="clearfix"></div>
     </footer>
   </div>
 </article>
@@ -557,7 +266,6 @@ E, [<span class="number">2014</span>-<span class="number">10</span>-<span class=
 
   
     <article class="post">
-  
   <div class="post-content">
     <header>
       
@@ -570,26 +278,22 @@ E, [<span class="number">2014</span>-<span class="number">10</span>-<span class=
   
 
     </header>
-    <div class="entry">
-      
-        <p>Install required package</p>
-<pre><code>sudo apt-<span class="keyword">get</span> install php-codesniffer
-</code></pre><p>Install the <a href="https://github.com/cakephp/cakephp-codesniffer" title="CakePHP Coding Standard" target="_blank" rel="external">CakePHP Coding Standard</a></p>
-<pre><code>$ sudo pear channel-discover pear<span class="class">.cakephp</span><span class="class">.org</span>
-$ sudo pear install cakephp/CakePHP_CodeSniffer
-</code></pre><h3 id="Usage">Usage</h3><pre><code>$ cd /<span class="built_in">var</span>/repos
-$ cd <span class="subst">&lt;</span>your<span class="attribute">-repo</span><span class="subst">&gt;</span>
-$ phpcs app <span class="attribute">-p</span> <span class="subst">--</span>extensions<span class="subst">=</span>php <span class="subst">--</span>standard<span class="subst">=</span>CakePHP
-<span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span>
-</code></pre>
-      
-    </div>
     <footer>
-      
+		
         
+  
+  <div class="categories">
+    <a href="/categories/web/">Web</a>
+  </div>
+
         
-      
-      <div class="clearfix"></div>
+  
+  <div class="tags">
+    <a href="/tags/cakephp/">cakephp</a>, <a href="/tags/phpcs/">phpcs</a>, <a href="/tags/ubuntu/">ubuntu</a>
+  </div>
+
+        
+		<div class="clearfix"></div>
     </footer>
   </div>
 </article>
@@ -598,7 +302,6 @@ $ phpcs app <span class="attribute">-p</span> <span class="subst">--</span>exten
 
   
     <article class="post">
-  
   <div class="post-content">
     <header>
       
@@ -611,24 +314,22 @@ $ phpcs app <span class="attribute">-p</span> <span class="subst">--</span>exten
   
 
     </header>
-    <div class="entry">
-      
-        <p>Install required packages:</p>
-<pre><code>$ sudo apt-get <span class="keyword">install</span> php5-dev php-pear
-$ sudo pecl <span class="keyword">install</span> xdebug
-</code></pre><p>Open file <code>/etc/php5/fpm/php.ini</code> and add the following line to the “Dynamic Extensions” section:</p>
-<pre><code><span class="setting">zend_extension=<span class="value"><span class="string">"/usr/lib/php5/20121212/xdebug.so"</span></span></span>
-</code></pre><p>Restart PHP:</p>
-<pre><code>$ sudo <span class="keyword">service</span> php5-fpm <span class="literal">restart</span>
-</code></pre>
-      
-    </div>
     <footer>
-      
+		
         
+  
+  <div class="categories">
+    <a href="/categories/web/">Web</a>
+  </div>
+
         
-      
-      <div class="clearfix"></div>
+  
+  <div class="tags">
+    <a href="/tags/php/">php</a>, <a href="/tags/ubuntu/">ubuntu</a>, <a href="/tags/xdebug/">xdebug</a>
+  </div>
+
+        
+		<div class="clearfix"></div>
     </footer>
   </div>
 </article>
@@ -637,7 +338,6 @@ $ sudo pecl <span class="keyword">install</span> xdebug
 
   
     <article class="post">
-  
   <div class="post-content">
     <header>
       
@@ -650,34 +350,22 @@ $ sudo pecl <span class="keyword">install</span> xdebug
   
 
     </header>
-    <div class="entry">
-      
-        <p>To use variables in MSSQL queries simply declare and set them before using:</p>
-<pre><code><span class="bullet">--
-</span><span class="header">-- Declare and set variables
---</span>
-DECLARE @migrationDate VARCHAR(100), @groupName VARCHAR(100)
-SET @migrationDate = <span class="emphasis">'2014-08-15'</span>
-SET @groupName = <span class="emphasis">'SOME-GROUP-NAME'</span>
-
-<span class="bullet">--
-</span><span class="header">-- Execute query using variables
---</span>
-SELECT DISTINCT [username]
-<span class="code">  ,[groupname]</span>
-<span class="code">  ,[migrationdate]</span>
-FROM [MYDB].[dbo].[vw<span class="emphasis">_my_</span>special<span class="emphasis">_view]
-WHERE [groupname] LIKE @groupName
-AND [migrationdate] LIKE @migrationDate</span>
-</code></pre>
-      
-    </div>
     <footer>
-      
+		
         
+  
+  <div class="categories">
+    <a href="/categories/database/">Database</a>
+  </div>
+
         
-      
-      <div class="clearfix"></div>
+  
+  <div class="tags">
+    <a href="/tags/database/">database</a>, <a href="/tags/mssql/">mssql</a>
+  </div>
+
+        
+		<div class="clearfix"></div>
     </footer>
   </div>
 </article>
@@ -686,7 +374,6 @@ AND [migrationdate] LIKE @migrationDate</span>
 
   
     <article class="post">
-  
   <div class="post-content">
     <header>
       
@@ -699,26 +386,22 @@ AND [migrationdate] LIKE @migrationDate</span>
   
 
     </header>
-    <div class="entry">
-      
-        <h3 id="Reinstall_Octopress">Reinstall Octopress</h3><pre><code><span class="variable">$ </span>cd [path-to-repos]
-<span class="variable">$ </span>git clone git<span class="variable">@github</span>.<span class="symbol">com:</span>[your-github-pages-repo.git] octopress
-<span class="variable">$ </span>cd octopress
-<span class="variable">$ </span>git checkout source
-<span class="variable">$ </span>rake setup_github_pages
-</code></pre><h3 id="Re-enable_theme_submodule">Re-enable theme submodule</h3><pre><code><span class="variable">$ </span>git submodule init
-<span class="variable">$ </span>git submodule update
-<span class="variable">$ </span>cd .themes/octostrap3
-<span class="variable">$ </span>git checkout master
-</code></pre>
-      
-    </div>
     <footer>
-      
+		
         
+  
+  <div class="categories">
+    <a href="/categories/web/">Web</a>
+  </div>
+
         
-      
-      <div class="clearfix"></div>
+  
+  <div class="tags">
+    <a href="/tags/debian/">debian</a>, <a href="/tags/octopress/">octopress</a>, <a href="/tags/octostrap3/">octostrap3</a>
+  </div>
+
+        
+		<div class="clearfix"></div>
     </footer>
   </div>
 </article>
@@ -747,7 +430,7 @@ AND [migrationdate] LIKE @migrationDate</span>
 <div class="widget tagcloud">
   <h3 class="title">Tag Cloud</h3>
   <div class="entry">
-    <a href="/tags/api/" style="font-size: 13.33px;">api</a><a href="/tags/apple/" style="font-size: 10px;">apple</a><a href="/tags/cakephp/" style="font-size: 16.67px;">cakephp</a><a href="/tags/cakephp3/" style="font-size: 13.33px;">cakephp3</a><a href="/tags/chef/" style="font-size: 10px;">chef</a><a href="/tags/chef-dk/" style="font-size: 10px;">chef-dk</a><a href="/tags/cocktails/" style="font-size: 10px;">cocktails</a><a href="/tags/composer/" style="font-size: 10px;">composer</a><a href="/tags/database/" style="font-size: 10px;">database</a><a href="/tags/debian/" style="font-size: 20px;">debian</a><a href="/tags/dns/" style="font-size: 10px;">dns</a><a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a><a href="/tags/fim/" style="font-size: 10px;">fim</a><a href="/tags/foc/" style="font-size: 10px;">foc</a><a href="/tags/git/" style="font-size: 20px;">git</a><a href="/tags/github/" style="font-size: 10px;">github</a><a href="/tags/ipad/" style="font-size: 10px;">ipad</a><a href="/tags/iphone/" style="font-size: 10px;">iphone</a><a href="/tags/javascript/" style="font-size: 10px;">javascript</a><a href="/tags/kitchen/" style="font-size: 10px;">kitchen</a><a href="/tags/logstash/" style="font-size: 10px;">logstash</a><a href="/tags/microsoft/" style="font-size: 10px;">microsoft</a><a href="/tags/minecraft/" style="font-size: 10px;">minecraft</a><a href="/tags/misc/" style="font-size: 13.33px;">misc</a><a href="/tags/mobile/" style="font-size: 10px;">mobile</a><a href="/tags/mssql/" style="font-size: 10px;">mssql</a><a href="/tags/nginx/" style="font-size: 13.33px;">nginx</a><a href="/tags/octopress/" style="font-size: 16.67px;">octopress</a><a href="/tags/octostrap3/" style="font-size: 13.33px;">octostrap3</a><a href="/tags/php/" style="font-size: 10px;">php</a><a href="/tags/phpcs/" style="font-size: 10px;">phpcs</a><a href="/tags/rest/" style="font-size: 13.33px;">rest</a><a href="/tags/security/" style="font-size: 10px;">security</a><a href="/tags/shellshock/" style="font-size: 10px;">shellshock</a><a href="/tags/time/" style="font-size: 10px;">time</a><a href="/tags/ubuntu/" style="font-size: 13.33px;">ubuntu</a><a href="/tags/vagrant/" style="font-size: 10px;">vagrant</a><a href="/tags/validator/" style="font-size: 10px;">validator</a><a href="/tags/wheezy/" style="font-size: 16.67px;">wheezy</a><a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a>
+    <a href="/tags/api/" style="font-size: 13.33px;">api</a><a href="/tags/apple/" style="font-size: 10px;">apple</a><a href="/tags/cakephp/" style="font-size: 16.67px;">cakephp</a><a href="/tags/cakephp3/" style="font-size: 13.33px;">cakephp3</a><a href="/tags/chef/" style="font-size: 10px;">chef</a><a href="/tags/chef-dk/" style="font-size: 10px;">chef-dk</a><a href="/tags/cocktails/" style="font-size: 10px;">cocktails</a><a href="/tags/composer/" style="font-size: 13.33px;">composer</a><a href="/tags/database/" style="font-size: 10px;">database</a><a href="/tags/debian/" style="font-size: 20px;">debian</a><a href="/tags/dns/" style="font-size: 10px;">dns</a><a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a><a href="/tags/fim/" style="font-size: 10px;">fim</a><a href="/tags/foc/" style="font-size: 10px;">foc</a><a href="/tags/git/" style="font-size: 20px;">git</a><a href="/tags/github/" style="font-size: 10px;">github</a><a href="/tags/ipad/" style="font-size: 10px;">ipad</a><a href="/tags/iphone/" style="font-size: 10px;">iphone</a><a href="/tags/javascript/" style="font-size: 10px;">javascript</a><a href="/tags/kitchen/" style="font-size: 10px;">kitchen</a><a href="/tags/logstash/" style="font-size: 10px;">logstash</a><a href="/tags/microsoft/" style="font-size: 10px;">microsoft</a><a href="/tags/minecraft/" style="font-size: 10px;">minecraft</a><a href="/tags/misc/" style="font-size: 13.33px;">misc</a><a href="/tags/mobile/" style="font-size: 10px;">mobile</a><a href="/tags/mssql/" style="font-size: 10px;">mssql</a><a href="/tags/nginx/" style="font-size: 13.33px;">nginx</a><a href="/tags/octopress/" style="font-size: 16.67px;">octopress</a><a href="/tags/octostrap3/" style="font-size: 13.33px;">octostrap3</a><a href="/tags/php/" style="font-size: 10px;">php</a><a href="/tags/phpcs/" style="font-size: 10px;">phpcs</a><a href="/tags/rest/" style="font-size: 13.33px;">rest</a><a href="/tags/security/" style="font-size: 10px;">security</a><a href="/tags/shellshock/" style="font-size: 10px;">shellshock</a><a href="/tags/time/" style="font-size: 10px;">time</a><a href="/tags/ubuntu/" style="font-size: 13.33px;">ubuntu</a><a href="/tags/vagrant/" style="font-size: 10px;">vagrant</a><a href="/tags/validator/" style="font-size: 10px;">validator</a><a href="/tags/wheezy/" style="font-size: 16.67px;">wheezy</a><a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a>
   </div>
 </div>
 

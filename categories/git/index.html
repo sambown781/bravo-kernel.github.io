@@ -50,7 +50,6 @@
 
   
     <article class="post">
-  
   <div class="post-content">
     <header>
       
@@ -63,47 +62,22 @@
   
 
     </header>
-    <div class="entry">
-      
-        <p>Step-by-step instructions for creating Github Releases like the pros.</p>
-<p>Assuming:</p>
-<ul>
-<li>a <code>master</code> branch</li>
-<li>a more-or-less stable <code>dev</code> branch ready to be merged into master</li>
-<li>a <code>VERSION.txt</code> file holding release version</li>
-</ul>
-<p><strong>Pro Tip:</strong> keep release cycles short, release often!</p>
-<h2 id="Creating_the_release">Creating the release</h2><ol>
-<li>create <code>VERSION.txt</code> in your dev branch and fill it with the release number (e.g. 1.0-alpha1)</li>
-<li>merge the master branch into dev</li>
-<li>merge the dev branch back into master</li>
-<li>go to the Github page holding your project and:<ul>
-<li>select <em>releases</em></li>
-<li>select <em>Draft a new release</em></li>
-<li>fill in 1.0-alpha1 as the <em>Tag version</em> </li>
-<li>target the master branch</li>
-<li>doublecheck before pressing the “Publish release” button</li>
-</ul>
-</li>
-</ol>
-<p>That’s all there’s too it, your first release. </p>
-<p><strong>Note:</strong> to prevent future merge conflicts caused by e.g. bugfixes… regularly merge master into dev!</p>
-<h2 id="Starting_work_on_the_next_release">Starting work on the next release</h2><p>Now that the release is out, it’s time to start work on the next one</p>
-<ol>
-<li>update <code>VERSION.txt</code> in the dev branch with the next release number (e.g. 1.0-alpha2)</li>
-<li>commit and push change to dev</li>
-<li>add features to your dev branch</li>
-</ol>
-<p>Once you are ready to publish a new release… simply restart <code>Creating the release</code> but skip step 1.</p>
-
-      
-    </div>
     <footer>
-      
+		
         
+  
+  <div class="categories">
+    <a href="/categories/git/">Git</a>
+  </div>
+
         
-      
-      <div class="clearfix"></div>
+  
+  <div class="tags">
+    <a href="/tags/git/">git</a>, <a href="/tags/github/">github</a>
+  </div>
+
+        
+		<div class="clearfix"></div>
     </footer>
   </div>
 </article>
@@ -112,7 +86,6 @@
 
   
     <article class="post">
-  
   <div class="post-content">
     <header>
       
@@ -125,20 +98,22 @@
   
 
     </header>
-    <div class="entry">
-      
-        <p>This will keep your email address private:</p>
-<pre><code>git config --global user<span class="class">.name</span> <span class="string">"username"</span>
-git config --global user<span class="class">.email</span> <span class="string">"username@users.noreply.github.com"</span>
-</code></pre>
-      
-    </div>
     <footer>
-      
+		
         
+  
+  <div class="categories">
+    <a href="/categories/git/">Git</a>
+  </div>
+
         
-      
-      <div class="clearfix"></div>
+  
+  <div class="tags">
+    <a href="/tags/git/">git</a>
+  </div>
+
+        
+		<div class="clearfix"></div>
     </footer>
   </div>
 </article>
@@ -147,7 +122,6 @@ git config --global user<span class="class">.email</span> <span class="string">"
 
   
     <article class="post">
-  
   <div class="post-content">
     <header>
       
@@ -160,23 +134,22 @@ git config --global user<span class="class">.email</span> <span class="string">"
   
 
     </header>
-    <div class="entry">
-      
-        <p>When <code>git commit</code> gives this error:</p>
-<pre><code><span class="keyword">error</span>: insufficient permission <span class="keyword">for</span> adding an <span class="built_in">object</span> <span class="keyword">to</span> repository database .git/objects
-</code></pre><p>take back ownership of all Git objects by runnning:</p>
-<pre><code>cd <span class="variable">&lt;path-to-repo&gt;</span>
-cd .git/objects
-sudo chown -R <span class="variable">&lt;username&gt;</span>:<span class="variable">&lt;username&gt;</span> <span class="keyword">*</span>
-</code></pre>
-      
-    </div>
     <footer>
-      
+		
         
+  
+  <div class="categories">
+    <a href="/categories/git/">Git</a>
+  </div>
+
         
-      
-      <div class="clearfix"></div>
+  
+  <div class="tags">
+    <a href="/tags/git/">git</a>
+  </div>
+
+        
+		<div class="clearfix"></div>
     </footer>
   </div>
 </article>
@@ -185,7 +158,6 @@ sudo chown -R <span class="variable">&lt;username&gt;</span>:<span class="variab
 
   
     <article class="post">
-  
   <div class="post-content">
     <header>
       
@@ -198,19 +170,22 @@ sudo chown -R <span class="variable">&lt;username&gt;</span>:<span class="variab
   
 
     </header>
-    <div class="entry">
-      
-        <p>There a tons of cases where a Git commit has to be undone, each with it’s own prefered approach.</p>
-<p>This <a href="http://stackoverflow.com/questions/927358/how-to-undo-the-last-git-commit" title="Stackoverflow: how to undo the last Git commit" target="_blank" rel="external">Stackoverflow thread</a> describes most of them.</p>
-
-      
-    </div>
     <footer>
-      
+		
         
+  
+  <div class="categories">
+    <a href="/categories/git/">Git</a>
+  </div>
+
         
-      
-      <div class="clearfix"></div>
+  
+  <div class="tags">
+    <a href="/tags/git/">git</a>
+  </div>
+
+        
+		<div class="clearfix"></div>
     </footer>
   </div>
 </article>
@@ -219,7 +194,6 @@ sudo chown -R <span class="variable">&lt;username&gt;</span>:<span class="variab
 
   
     <article class="post">
-  
   <div class="post-content">
     <header>
       
@@ -232,26 +206,22 @@ sudo chown -R <span class="variable">&lt;username&gt;</span>:<span class="variab
   
 
     </header>
-    <div class="entry">
-      
-        <p>When your local repository is behind/untracked this will:</p>
-<ul>
-<li>delete all local files that are no longer present in the remote repo</li>
-<li>replace all local files that have newer versions in the remote repo</li>
-</ul>
-<!-- break list -->
-<pre><code>git reset --hard HEAD
-git clean <span class="operator">-f</span> <span class="operator">-d</span>
-git pull
-</code></pre>
-      
-    </div>
     <footer>
-      
+		
         
+  
+  <div class="categories">
+    <a href="/categories/git/">Git</a>
+  </div>
+
         
-      
-      <div class="clearfix"></div>
+  
+  <div class="tags">
+    <a href="/tags/git/">git</a>
+  </div>
+
+        
+		<div class="clearfix"></div>
     </footer>
   </div>
 </article>
@@ -260,7 +230,6 @@ git pull
 
   
     <article class="post">
-  
   <div class="post-content">
     <header>
       
@@ -273,38 +242,22 @@ git pull
   
 
     </header>
-    <div class="entry">
-      
-        <p>This example will create a patch for the CakeDC Comments Plugin:</p>
-<pre><code><span class="preprocessor"># cd /app/plugins/comments</span>
-<span class="preprocessor"># git fetch</span>
-<span class="preprocessor"># git checkout master</span>
-<span class="preprocessor"># git checkout master</span>
-<span class="preprocessor"># git checkout -b local_fix</span>
-</code></pre><p>You are now working in your local branch “local_fix” so:</p>
-<ul>
-<li>make required changes to the code</li>
-<li>commit the changes</li>
-<li>create the patch</li>
-</ul>
-<p>In this case:</p>
-<pre><code><span class="preprocessor"># git add controllers/comments_controller.php</span>
-<span class="preprocessor"># git commit -m "Fix for broken Search plugin usage on admin_index page"</span>
-<span class="preprocessor"># git format-patch origin/master</span>
-</code></pre><p>If all went well:</p>
-<ul>
-<li>there should be a file named “0001-Fix-for-broken-Search-plugin-usage-on-admin_index-page.patch” in your /app/plugins/comments directory</li>
-<li>send the file to the big boys for approval</li>
-</ul>
-
-      
-    </div>
     <footer>
-      
+		
         
+  
+  <div class="categories">
+    <a href="/categories/git/">Git</a>
+  </div>
+
         
-      
-      <div class="clearfix"></div>
+  
+  <div class="tags">
+    <a href="/tags/git/">git</a>
+  </div>
+
+        
+		<div class="clearfix"></div>
     </footer>
   </div>
 </article>
@@ -313,7 +266,6 @@ git pull
 
   
     <article class="post">
-  
   <div class="post-content">
     <header>
       
@@ -326,35 +278,22 @@ git pull
   
 
     </header>
-    <div class="entry">
-      
-        <h2 id="Create_a_feature_branch:">Create a feature branch:</h2><p>Create a local feature branch called “tooltips” and add it to the remote repository:</p>
-<pre><code><span class="preprocessor"># git branch -a</span>
-<span class="preprocessor"># git checkout -b tooltips</span>
-<span class="preprocessor"># git push origin tooltips</span>
-</code></pre><h2 id="Develop_on_the_feature_branch:">Develop on the feature branch:</h2><p>Make sure you are working in the local “tooltips” branch and make some file changes.</p>
-<pre><code><span class="preprocessor"># git branch -a</span>
-<span class="preprocessor"># git status</span>
-<span class="preprocessor"># git commit .</span>
-<span class="preprocessor"># git push origin tooltips</span>
-</code></pre><h2 id="Merge_feature_branch_into_master:">Merge feature branch into master:</h2><p><strong>Please note:</strong> Merging should be done from within the local master</p>
-<pre><code><span class="preprocessor"># git checkout master</span>
-<span class="preprocessor"># git diff master tooltips</span>
-<span class="preprocessor"># git merge tooltips</span>
-<span class="preprocessor"># git push origin</span>
-</code></pre><h2 id="Clean_up_the_feature_branch:">Clean up the feature branch:</h2><p>Once the feature branch is completely merged into the master we can safely remove the local and remote feature branches:</p>
-<pre><code><span class="preprocessor"># git checkout master</span>
-<span class="preprocessor"># git branch -d tooltips</span>
-<span class="preprocessor"># git push origin :tooltips</span>
-</code></pre>
-      
-    </div>
     <footer>
-      
+		
         
+  
+  <div class="categories">
+    <a href="/categories/git/">Git</a>
+  </div>
+
         
-      
-      <div class="clearfix"></div>
+  
+  <div class="tags">
+    <a href="/tags/git/">git</a>
+  </div>
+
+        
+		<div class="clearfix"></div>
     </footer>
   </div>
 </article>
@@ -381,7 +320,7 @@ git pull
 <div class="widget tagcloud">
   <h3 class="title">Tag Cloud</h3>
   <div class="entry">
-    <a href="/tags/api/" style="font-size: 13.33px;">api</a><a href="/tags/apple/" style="font-size: 10px;">apple</a><a href="/tags/cakephp/" style="font-size: 16.67px;">cakephp</a><a href="/tags/cakephp3/" style="font-size: 13.33px;">cakephp3</a><a href="/tags/chef/" style="font-size: 10px;">chef</a><a href="/tags/chef-dk/" style="font-size: 10px;">chef-dk</a><a href="/tags/cocktails/" style="font-size: 10px;">cocktails</a><a href="/tags/composer/" style="font-size: 10px;">composer</a><a href="/tags/database/" style="font-size: 10px;">database</a><a href="/tags/debian/" style="font-size: 20px;">debian</a><a href="/tags/dns/" style="font-size: 10px;">dns</a><a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a><a href="/tags/fim/" style="font-size: 10px;">fim</a><a href="/tags/foc/" style="font-size: 10px;">foc</a><a href="/tags/git/" style="font-size: 20px;">git</a><a href="/tags/github/" style="font-size: 10px;">github</a><a href="/tags/ipad/" style="font-size: 10px;">ipad</a><a href="/tags/iphone/" style="font-size: 10px;">iphone</a><a href="/tags/javascript/" style="font-size: 10px;">javascript</a><a href="/tags/kitchen/" style="font-size: 10px;">kitchen</a><a href="/tags/logstash/" style="font-size: 10px;">logstash</a><a href="/tags/microsoft/" style="font-size: 10px;">microsoft</a><a href="/tags/minecraft/" style="font-size: 10px;">minecraft</a><a href="/tags/misc/" style="font-size: 13.33px;">misc</a><a href="/tags/mobile/" style="font-size: 10px;">mobile</a><a href="/tags/mssql/" style="font-size: 10px;">mssql</a><a href="/tags/nginx/" style="font-size: 13.33px;">nginx</a><a href="/tags/octopress/" style="font-size: 16.67px;">octopress</a><a href="/tags/octostrap3/" style="font-size: 13.33px;">octostrap3</a><a href="/tags/php/" style="font-size: 10px;">php</a><a href="/tags/phpcs/" style="font-size: 10px;">phpcs</a><a href="/tags/rest/" style="font-size: 13.33px;">rest</a><a href="/tags/security/" style="font-size: 10px;">security</a><a href="/tags/shellshock/" style="font-size: 10px;">shellshock</a><a href="/tags/time/" style="font-size: 10px;">time</a><a href="/tags/ubuntu/" style="font-size: 13.33px;">ubuntu</a><a href="/tags/vagrant/" style="font-size: 10px;">vagrant</a><a href="/tags/validator/" style="font-size: 10px;">validator</a><a href="/tags/wheezy/" style="font-size: 16.67px;">wheezy</a><a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a>
+    <a href="/tags/api/" style="font-size: 13.33px;">api</a><a href="/tags/apple/" style="font-size: 10px;">apple</a><a href="/tags/cakephp/" style="font-size: 16.67px;">cakephp</a><a href="/tags/cakephp3/" style="font-size: 13.33px;">cakephp3</a><a href="/tags/chef/" style="font-size: 10px;">chef</a><a href="/tags/chef-dk/" style="font-size: 10px;">chef-dk</a><a href="/tags/cocktails/" style="font-size: 10px;">cocktails</a><a href="/tags/composer/" style="font-size: 13.33px;">composer</a><a href="/tags/database/" style="font-size: 10px;">database</a><a href="/tags/debian/" style="font-size: 20px;">debian</a><a href="/tags/dns/" style="font-size: 10px;">dns</a><a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a><a href="/tags/fim/" style="font-size: 10px;">fim</a><a href="/tags/foc/" style="font-size: 10px;">foc</a><a href="/tags/git/" style="font-size: 20px;">git</a><a href="/tags/github/" style="font-size: 10px;">github</a><a href="/tags/ipad/" style="font-size: 10px;">ipad</a><a href="/tags/iphone/" style="font-size: 10px;">iphone</a><a href="/tags/javascript/" style="font-size: 10px;">javascript</a><a href="/tags/kitchen/" style="font-size: 10px;">kitchen</a><a href="/tags/logstash/" style="font-size: 10px;">logstash</a><a href="/tags/microsoft/" style="font-size: 10px;">microsoft</a><a href="/tags/minecraft/" style="font-size: 10px;">minecraft</a><a href="/tags/misc/" style="font-size: 13.33px;">misc</a><a href="/tags/mobile/" style="font-size: 10px;">mobile</a><a href="/tags/mssql/" style="font-size: 10px;">mssql</a><a href="/tags/nginx/" style="font-size: 13.33px;">nginx</a><a href="/tags/octopress/" style="font-size: 16.67px;">octopress</a><a href="/tags/octostrap3/" style="font-size: 13.33px;">octostrap3</a><a href="/tags/php/" style="font-size: 10px;">php</a><a href="/tags/phpcs/" style="font-size: 10px;">phpcs</a><a href="/tags/rest/" style="font-size: 13.33px;">rest</a><a href="/tags/security/" style="font-size: 10px;">security</a><a href="/tags/shellshock/" style="font-size: 10px;">shellshock</a><a href="/tags/time/" style="font-size: 10px;">time</a><a href="/tags/ubuntu/" style="font-size: 13.33px;">ubuntu</a><a href="/tags/vagrant/" style="font-size: 10px;">vagrant</a><a href="/tags/validator/" style="font-size: 10px;">validator</a><a href="/tags/wheezy/" style="font-size: 16.67px;">wheezy</a><a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a>
   </div>
 </div>
 
