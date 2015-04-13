@@ -1,3 +1,17 @@
+# Customization changelog
+
+###2015-04-13
+
++ added layout/\_widget/adsense_responsive.ejs
++ extended theme config.yml to include adsense
+
+###2015-04-12
+
++ added layout/\_partial/article_summary.ejs
++ layout/index.ejs now uses ``article_summary``
++ layout/\_partial/archive.ejs  now uses ``article_summary``
+
+
 # Light
 
 Default theme for [Hexo].

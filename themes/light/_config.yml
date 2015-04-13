@@ -6,6 +6,7 @@ menu:
 widgets:
 - search
 - tagcloud
+- adsense_responsive
 
 excerpt_link: Read More
 
@@ -24,7 +25,7 @@ addthis:
 
 fancybox: true
 
-google_analytics:
+google_analytics: UA-40048049-1
 rss:
 
 comment_provider: disqus

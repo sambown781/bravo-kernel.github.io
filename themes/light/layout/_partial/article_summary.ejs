@@ -1,0 +1,24 @@
+<article class="<%= item.layout %>">
+  <div class="post-content">
+    <header>
+      <% if (item.layout != 'page'){ %>
+        <div class="icon"></div>
+        <time datetime="<%= item.date.toDate().toISOString() %>"><a href="<%- config.root %><%- item.path %>"><%= item.date.format(config.date_format) %></a></time>
+      <% } %>
+      <%- partial('post/title') %>
+    </header>
+    <footer>
+		<% if (item.comment && config.disqus_shortname){ %>
+			<div class="alignright">
+			  <a href="<%- item.permalink %>#disqus_thread" class="comment-link">Comments</a>
+			</div>
+		<% } %>
+        <%- partial('post/category') %>
+        <%- partial('post/tag') %>
+        <%- partial('post/share') %>
+		<div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+<%- partial('comment') %>

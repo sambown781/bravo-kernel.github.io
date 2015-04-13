@@ -11,7 +11,7 @@ if (page.archive){
 
 <% if (pagination == 2){ %>
   <% page.posts.each(function(item){ %>
-    <%- partial('article', {item: item, index: true}) %>
+    <%- partial('article_summary', {item: item, index: true}) %>
   <% }); %>
 
   <%- partial('pagination') %>
