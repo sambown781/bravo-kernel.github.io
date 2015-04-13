@@ -8,9 +8,12 @@ tags:
 - rest
 - api
 ---
-In this follow-up post to [How to build a CakePHP 3 REST API in minutes](/2015/04/how-to-build-a-cakephp-3-rest-api-in-minutes/) we explore the inner workings of our new API by:
+In this follow-up post to
+[How to build a CakePHP 3 REST API in minutes](/2015/04/how-to-build-a-cakephp-3-rest-api-in-minutes/)
+we explore the inner workings of our new API by:
 
-1. Adding some tasty cocktail data to our application (already listening at ``http://cake3api.app``)
+1. Adding some tasty cocktail data to our application
+(already listening at ``http://cake3api.app``)
 2. Accessing the cocktail resources through our API using the:
     + index action (GET)
 	+ view action (GET)
@@ -26,9 +29,12 @@ In this follow-up post to [How to build a CakePHP 3 REST API in minutes](/2015/0
 
 ### Populate the database
 
-Download this CakePHP [database migration file](https://github.com/bravo-kernel/examples/blob/master/blog-how-to-use-a-cakephp3-rest-api/config/Migrations/20150411161731_initial.php) to your ``config/Migrations`` directory.
+Download this CakePHP
+[database migration file](https://github.com/bravo-kernel/examples/blob/master/blog-how-to-use-a-cakephp3-rest-api/config/Migrations/20150411161731_initial.php)
+to your ``config/Migrations`` directory.
 
-Now run the following command inside your application's root directory to create and popuplate the ``cocktails`` table:
+Now run the following command inside your application's root directory to
+create and popuplate the ``cocktails`` table:
 
 ```bash
 bin/cake migrations migrate
@@ -36,7 +42,8 @@ bin/cake migrations migrate
 
 ### Create the controller
 
-Create a new file named ``src/Controller/CocktailsController.php`` with the following content:
+Create a new file named ``src/Controller/CocktailsController.php`` with the
+following content:
 
 ```php
 <?php
@@ -62,7 +69,8 @@ class CocktailsController extends AppController
 
 ### Create the entity and table
 
-Generate the required entity and model by running the following command inside your application's root directory:
+Generate the required entity and model by running the following command inside
+your application's root directory:
 
 ```bash
 bin/cake bake model Cocktails
@@ -70,22 +78,27 @@ bin/cake bake model Cocktails
 
 ### Optionally create html views
 
-Even though **your API does not use views** to output JSON and XML you might want to generate some html views for easy browsing the cocktails by running the following command inside your application's root directory:
+Even though **your API does not use views** to output JSON and XML you might
+want to generate some html views for easy browsing the cocktails by running
+the following command inside your application's root directory:
 
 ```bash
 bin/cake bake template Cocktails
 ```
 
-If things went well browsing to ``http://cake3api.app/cocktails`` should display something similar to:
+If things went well browsing to ``http://cake3api.app/cocktails`` should
+display something similar to:
 <br />
 
 {% asset_img browser-cocktails-index.png 'Cocktails index' %}
 
 ## 2. Accessing API Resources
 
-Your API supports accessing resources with or without extensions and we will test both where applicable.
+Your API supports accessing resources with or without extensions and we will
+test both where applicable.
 
-If you don't have a client capable of testing Request Headers you might consider using:
+If you don't have a client capable of testing Request Headers you might
+consider using:
 
 + the [RESTClient](https://addons.mozilla.org/nl/firefox/addon/restclient/) plugin for Firefox
 + the [Postman](https://chrome.google.com/webstore/detail/postman-rest-client/fdmmgilgnpjigdojojpjoooidkmcomcm) plugin for Chrome
@@ -174,7 +187,8 @@ Create a new cocktail record by posting JSON data to your API using:
 
 {% asset_img api-request-headers-add.png 'API Request Headers for add action' %}
 
-Should return Status Code 201 (Created) with a JSON response body containing the **id of the created cocktail** similar to:
+Should return Status Code 201 (Created) with a JSON response body containing
+the **id of the created cocktail** similar to:
 
 ```json
 {
@@ -227,7 +241,9 @@ Should return Status Code 200 (Success) on success with a JSON response body sim
 
 ## 3. Configuring Pagination
 
-The Paginator settings in ``src/Controller/CocktailsController.php`` are used by your API to format the outputted JSON/XML. Let's change some of the settings below in preparation for querystring parameter testing.
+The Paginator settings in ``src/Controller/CocktailsController.php`` are used
+by your API to format the outputted JSON/XML. Let's change some of the settings
+below in preparation for querystring parameter testing.
 
 ```php
     public $paginate = [
@@ -245,9 +261,11 @@ The Paginator settings in ``src/Controller/CocktailsController.php`` are used by
 
 ### Show all cocktail details/fields
 
-To show all record details **remove** the ``fields`` array (used earlier to keep the JSON output examples readable).
+To show all record details **remove** the ``fields`` array (used earlier to
+keep the JSON output examples readable).
 
-Querying ``http://cake3api.app/cocktails.json?limit=2`` should now produce more detailed JSON similar to:
+Querying ``http://cake3api.app/cocktails.json?limit=2`` should now produce
+more detailed JSON similar to:
 
 ```json
 {
@@ -285,23 +303,28 @@ To show only show 5 cocktails per page change ``limit => 10`` to ``limit => 5``.
 
 ### Set maximum number of cocktails per page
 
-To never show more than 15 cocktails change ``'maxLimit' => 100`` to ``'maxLimit' => 15``.
+To never show more than 15 cocktails change ``'maxLimit' => 100`` to
+``'maxLimit' => 15``.
 
 ### Prevent sorting by description
 
-To prevent users from sorting by the description field remove ``description`` from the ``sortWhitelist`` array.
+To prevent users from sorting by the description field remove ``description``
+from the ``sortWhitelist`` array.
 
 ### Default page
 
-Do NOT change the default ``page`` used for the index resultset to prevent frustrating further tests.
+Do NOT change the default ``page`` used for the index resultset to prevent
+frustrating further tests.
 
 ## 4. Testing Querystring Parameters
 
-Your API comes with support for querystring parameters that clients can use to manipulate the output produced by your API.
+Your API comes with support for querystring parameters that clients can use
+to manipulate the output produced by your API.
 
 ### Limiting results
 
-Clients can use the ``limit`` parameter to manipulate the number of records returned by your API.
+Clients can use the ``limit`` parameter to manipulate the number of records
+returned by your API.
 
 To verify the parameter works as expected query ``http://cake3api.app/cocktails.json?limit=3``.
 
@@ -309,31 +332,39 @@ The result should list three cocktails instead of (the now default) five.
 
 ### Rate limiting
 
-To verify your API is respecting the ``maxLimit`` Paginator setting query ``http://cake3api.app/cocktails.json?limit=20``.
+To verify your API is respecting the ``maxLimit`` Paginator setting
+query ``http://cake3api.app/cocktails.json?limit=20``.
 
 The result should only list 15 cocktails.
 
 ### Sorting by field
 
-Clients can use the ``sort`` parameter to specify which field should be used to sort the results produced by your API. 
+Clients can use the ``sort`` parameter to specify which field should be used
+to sort the results produced by your API.
 
-To verify the parameter is working as expected query ``http://cake3api.app/cocktails.json?sort=name``.
+To verify the parameter is working as expected query
+``http://cake3api.app/cocktails.json?sort=name``.
 
 The results should be sorted by cocktail name.
 
 ### Sorting ascending/descending
 
-Clients can use the ``direction`` parameter **in combination** with the ``sort`` parameter to specify the direction in which results are sorted by your API (either ``asc`` or ``desc``). 
+Clients can use the ``direction`` parameter **in combination** with the ``sort``
+parameter to specify the direction in which results are sorted by your API
+(either ``asc`` or ``desc``).
 
-To verify the parameter is working as expected query ``http://cake3api.app/cocktails.json?sort=name&direction=desc``.
+To verify the parameter is working as expected query
+``http://cake3api.app/cocktails.json?sort=name&direction=desc``.
 
 The results should be reverse-sorted by cocktail name.
 
 ### Sort whitelist
 
-To verify your API is respecting the ``sortWhitelist`` Paginator setting query ``http://cake3api.app/cocktails.json?sort=description``.
+To verify your API is respecting the ``sortWhitelist`` Paginator setting
+query ``http://cake3api.app/cocktails.json?sort=description``.
 
-The result should show the default (non-sorted) index results since we removed ``description`` from the sortWhitelist array.
+The result should show the default (non-sorted) index results since we
+removed ``description`` from the sortWhitelist array.
 
 ## Additional reading
 
