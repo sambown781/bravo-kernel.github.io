@@ -46,7 +46,17 @@ use App\Controller\AppController;
 
 class CocktailsController extends AppController
 {
-
+    public $paginate = [
+        'page' => 1,
+        'limit' => 10,
+        'maxLimit' => 100,
+        'fields' => [
+            'id', 'name', 'description'
+        ],
+        'sortWhitelist' => [
+            'id', 'name', 'description'
+        ]
+    ];
 }
 ```
 
@@ -217,27 +227,27 @@ Should return Status Code 200 (Success) on success with a JSON response body sim
 
 ## 3. Configuring Pagination
 
-Let's change some of the PaginatorComponent settings in ``src/Controller/AppController.php`` used by your API in preparation for querystring parameter testing.
+The Paginator settings in ``src/Controller/CocktailsController.php`` are used by your API to format the outputted JSON/XML. Let's change some of the settings below in preparation for querystring parameter testing.
 
 ```php
-        'Paginator' => [
-            'page' => 1,
-            'limit' => 10,
-            'maxLimit' => 100,
-            'fields' => [
-                'id', 'name', 'description'
-            ],
-            'sortWhitelist' => [
-                'id', 'name', 'description'
-            ]
+    public $paginate = [
+        'page' => 1,
+        'limit' => 10,
+        'maxLimit' => 100,
+        'fields' => [
+            'id', 'name', 'description'
+        ],
+        'sortWhitelist' => [
+            'id', 'name', 'description'
         ]
+    ];
 ```
 
 ### Show all cocktail details/fields
 
-Show all record details by removing the ``fields`` array (used earlier to keep the JSON output examples readable).
+To show all record details **remove** the ``fields`` array (used earlier to keep the JSON output examples readable).
 
-Querying ``http://cake3api.cocktails?limit=2`` should now produce JSON similar to:
+Querying ``http://cake3api.app/cocktails.json?limit=2`` should now produce more detailed JSON similar to:
 
 ```json
 {
@@ -271,15 +281,15 @@ Querying ``http://cake3api.cocktails?limit=2`` should now produce JSON similar t
 
 ### Show less cocktails per page
 
-Show only show 5 cocktails per page by changing ``limit => 10`` to ``limit => 5``.
+To show only show 5 cocktails per page change ``limit => 10`` to ``limit => 5``.
 
 ### Set maximum number of cocktails per page
 
-Never show more than 15 cocktails by changing ``'maxLimit' => 100`` to ``'maxLimit' => 15``.
+To never show more than 15 cocktails change ``'maxLimit' => 100`` to ``'maxLimit' => 15``.
 
 ### Prevent sorting by description
 
-Prevent users from sorting by the description field by removing ``description`` from the ``sortWhitelist`` array.
+To prevent users from sorting by the description field remove ``description`` from the ``sortWhitelist`` array.
 
 ### Default page
 
