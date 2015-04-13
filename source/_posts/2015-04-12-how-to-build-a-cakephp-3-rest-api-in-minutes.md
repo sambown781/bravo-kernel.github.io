@@ -43,9 +43,9 @@ bin/cake plugin load Crud
 
 ### a) Expose one or more controllers
 
-Only controllers explicitly enabled for API use will be accessible through your API. 
+Only controllers **explicitly enabled** for API use will be accessible through your API. 
 
-Enable controllers using the ``resources()`` method **inside** the / scope definition in your ``config/routes.php`` file like this:
+Enable controllers using the ``resources()`` method inside the / scope definition in your ``config/routes.php`` file like this:
 
 ```php
 Router::scope('/', function ($routes) {
@@ -83,17 +83,6 @@ class AppController extends Controller {
                 'Crud.Api',
                 'Crud.ApiPagination',
                 'Crud.ApiQueryLog'
-            ]
-        ],
-        'Paginator' => [
-            'page' => 1,
-            'limit' => 10,
-            'maxLimit' => 100,
-            'fields' => [
-                'id', 'name', 'description'
-            ],			
-            'sortWhitelist' => [
-                'id', 'name', 'description'
             ]
         ]
     ];
