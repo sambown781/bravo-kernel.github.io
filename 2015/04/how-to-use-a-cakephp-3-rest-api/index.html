@@ -6,7 +6,9 @@
   <title>How to use a CakePHP 3 REST API | Bravo Kernel</title>
   <meta name="author" content="bravo-kernel">
   
-  <meta name="description" content="In this follow-up post to How to build a CakePHP 3 REST API in minutes we explore the inner workings of our new API by:
+  <meta name="description" content="In this follow-up post to
+How to build a CakePHP 3 REST API in minutes
+we explore the inner workings of our new API by:
 
 Adding some tasty cocktail da">
   
@@ -77,9 +79,12 @@ Adding some tasty cocktail da">
     </header>
     <div class="entry">
       
-        <p>In this follow-up post to <a href="/2015/04/how-to-build-a-cakephp-3-rest-api-in-minutes/">How to build a CakePHP 3 REST API in minutes</a> we explore the inner workings of our new API by:</p>
+        <p>In this follow-up post to
+<a href="/2015/04/how-to-build-a-cakephp-3-rest-api-in-minutes/">How to build a CakePHP 3 REST API in minutes</a>
+we explore the inner workings of our new API by:</p>
 <ol>
-<li>Adding some tasty cocktail data to our application (already listening at <code>http://cake3api.app</code>)</li>
+<li>Adding some tasty cocktail data to our application
+(already listening at <code>http://cake3api.app</code>)</li>
 <li>Accessing the cocktail resources through our API using the:<ul>
 <li>index action (GET)</li>
 <li>view action (GET)</li>
@@ -92,19 +97,30 @@ Adding some tasty cocktail da">
 <li>Testing Querystring Parameters</li>
 </ol>
 <p><em>Application sources <a href="https://github.com/bravo-kernel/examples/tree/master/blog-how-to-use-a-cakephp3-rest-api" target="_blank" rel="external">available here</a>.</em></p>
-<h2 id="1-_Adding_The_Cocktails">1. Adding The Cocktails</h2><h3 id="Populate_the_database">Populate the database</h3><p>Download this CakePHP <a href="https://github.com/bravo-kernel/examples/blob/master/blog-how-to-use-a-cakephp3-rest-api/config/Migrations/20150411161731_initial.php" target="_blank" rel="external">database migration file</a> to your <code>config/Migrations</code> directory.</p>
-<p>Now run the following command inside your application’s root directory to create and popuplate the <code>cocktails</code> table:</p>
+<h2 id="1-_Adding_The_Cocktails">1. Adding The Cocktails</h2><h3 id="Populate_the_database">Populate the database</h3><p>Download this CakePHP
+<a href="https://github.com/bravo-kernel/examples/blob/master/blog-how-to-use-a-cakephp3-rest-api/config/Migrations/20150411161731_initial.php" target="_blank" rel="external">database migration file</a>
+to your <code>config/Migrations</code> directory.</p>
+<p>Now run the following command inside your application’s root directory to
+create and popuplate the <code>cocktails</code> table:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/cake migrations migrate</span><br></pre></td></tr></table></figure>
-<h3 id="Create_the_controller">Create the controller</h3><p>Create a new file named <code>src/Controller/CocktailsController.php</code> with the following content:</p>
+<h3 id="Create_the_controller">Create the controller</h3><p>Create a new file named <code>src/Controller/CocktailsController.php</code> with the
+following content:</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">&lt;?php</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">App</span>\<span class="title">Controller</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">App</span>\<span class="title">Controller</span>\<span class="title">AppController</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CocktailsController</span> <span class="keyword">extends</span> <span class="title">AppController</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$paginate</span> = [</span><br><span class="line">        <span class="string">'page'</span> =&gt; <span class="number">1</span>,</span><br><span class="line">        <span class="string">'limit'</span> =&gt; <span class="number">10</span>,</span><br><span class="line">        <span class="string">'maxLimit'</span> =&gt; <span class="number">100</span>,</span><br><span class="line">        <span class="string">'fields'</span> =&gt; [</span><br><span class="line">            <span class="string">'id'</span>, <span class="string">'name'</span>, <span class="string">'description'</span></span><br><span class="line">        ],</span><br><span class="line">        <span class="string">'sortWhitelist'</span> =&gt; [</span><br><span class="line">            <span class="string">'id'</span>, <span class="string">'name'</span>, <span class="string">'description'</span></span><br><span class="line">        ]</span><br><span class="line">    ];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="Create_the_entity_and_table">Create the entity and table</h3><p>Generate the required entity and model by running the following command inside your application’s root directory:</p>
+<h3 id="Create_the_entity_and_table">Create the entity and table</h3><p>Generate the required entity and model by running the following command inside
+your application’s root directory:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/cake bake model Cocktails</span><br></pre></td></tr></table></figure>
-<h3 id="Optionally_create_html_views">Optionally create html views</h3><p>Even though <strong>your API does not use views</strong> to output JSON and XML you might want to generate some html views for easy browsing the cocktails by running the following command inside your application’s root directory:</p>
+<h3 id="Optionally_create_html_views">Optionally create html views</h3><p>Even though <strong>your API does not use views</strong> to output JSON and XML you might
+want to generate some html views for easy browsing the cocktails by running
+the following command inside your application’s root directory:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/cake bake template Cocktails</span><br></pre></td></tr></table></figure>
-<p>If things went well browsing to <code>http://cake3api.app/cocktails</code> should display something similar to:<br><br></p>
+<p>If things went well browsing to <code>http://cake3api.app/cocktails</code> should
+display something similar to:
+<br></p>
 <img src="/2015/04/how-to-use-a-cakephp-3-rest-api/browser-cocktails-index.png">
-<h2 id="2-_Accessing_API_Resources">2. Accessing API Resources</h2><p>Your API supports accessing resources with or without extensions and we will test both where applicable.</p>
-<p>If you don’t have a client capable of testing Request Headers you might consider using:</p>
+<h2 id="2-_Accessing_API_Resources">2. Accessing API Resources</h2><p>Your API supports accessing resources with or without extensions and we will
+test both where applicable.</p>
+<p>If you don’t have a client capable of testing Request Headers you might
+consider using:</p>
 <ul>
 <li>the <a href="https://addons.mozilla.org/nl/firefox/addon/restclient/" target="_blank" rel="external">RESTClient</a> plugin for Firefox</li>
 <li>the <a href="https://chrome.google.com/webstore/detail/postman-rest-client/fdmmgilgnpjigdojojpjoooidkmcomcm" target="_blank" rel="external">Postman</a> plugin for Chrome</li>
@@ -145,7 +161,8 @@ Adding some tasty cocktail da">
 <li>Body data in (absolutely) correct JSON format</li>
 </ul>
 <img src="/2015/04/how-to-use-a-cakephp-3-rest-api/api-request-headers-add.png">
-<p>Should return Status Code 201 (Created) with a JSON response body containing the <strong>id of the created cocktail</strong> similar to:</p>
+<p>Should return Status Code 201 (Created) with a JSON response body containing
+the <strong>id of the created cocktail</strong> similar to:</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    "<span class="attribute">success</span>": <span class="value"><span class="literal">true</span></span>,</span><br><span class="line">    "<span class="attribute">data</span>": <span class="value">&#123;</span><br><span class="line">        "<span class="attribute">id</span>": <span class="value"><span class="number">22</span></span><br><span class="line">    </span>&#125;</span><br><span class="line"></span>&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="Edit/Update_action_(PUT)">Edit/Update action (PUT)</h3><p>Change an existing cocktail by posting JSON data to our API using:</p>
 <ul>
@@ -167,29 +184,46 @@ Adding some tasty cocktail da">
 <img src="/2015/04/how-to-use-a-cakephp-3-rest-api/api-request-headers-delete.png">
 <p>Should return Status Code 200 (Success) on success with a JSON response body similar to:</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    "<span class="attribute">success</span>": <span class="value"><span class="literal">true</span></span>,</span><br><span class="line">    "<span class="attribute">data</span>": <span class="value">[]</span><br><span class="line"></span>&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="3-_Configuring_Pagination">3. Configuring Pagination</h2><p>The Paginator settings in <code>src/Controller/CocktailsController.php</code> are used by your API to format the outputted JSON/XML. Let’s change some of the settings below in preparation for querystring parameter testing.</p>
+<h2 id="3-_Configuring_Pagination">3. Configuring Pagination</h2><p>The Paginator settings in <code>src/Controller/CocktailsController.php</code> are used
+by your API to format the outputted JSON/XML. Let’s change some of the settings
+below in preparation for querystring parameter testing.</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="variable">$paginate</span> = [</span><br><span class="line">    <span class="string">'page'</span> =&gt; <span class="number">1</span>,</span><br><span class="line">    <span class="string">'limit'</span> =&gt; <span class="number">10</span>,</span><br><span class="line">    <span class="string">'maxLimit'</span> =&gt; <span class="number">100</span>,</span><br><span class="line">    <span class="string">'fields'</span> =&gt; [</span><br><span class="line">        <span class="string">'id'</span>, <span class="string">'name'</span>, <span class="string">'description'</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="string">'sortWhitelist'</span> =&gt; [</span><br><span class="line">        <span class="string">'id'</span>, <span class="string">'name'</span>, <span class="string">'description'</span></span><br><span class="line">    ]</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-<h3 id="Show_all_cocktail_details/fields">Show all cocktail details/fields</h3><p>To show all record details <strong>remove</strong> the <code>fields</code> array (used earlier to keep the JSON output examples readable).</p>
-<p>Querying <code>http://cake3api.app/cocktails.json?limit=2</code> should now produce more detailed JSON similar to:</p>
+<h3 id="Show_all_cocktail_details/fields">Show all cocktail details/fields</h3><p>To show all record details <strong>remove</strong> the <code>fields</code> array (used earlier to
+keep the JSON output examples readable).</p>
+<p>Querying <code>http://cake3api.app/cocktails.json?limit=2</code> should now produce
+more detailed JSON similar to:</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    "<span class="attribute">success</span>": <span class="value"><span class="literal">true</span></span>,</span><br><span class="line">    "<span class="attribute">data</span>": <span class="value">[</span><br><span class="line">        &#123;</span><br><span class="line">            "<span class="attribute">id</span>": <span class="value"><span class="number">1</span></span>,</span><br><span class="line">            "<span class="attribute">name</span>": <span class="value"><span class="string">"Cosmopolitan"</span></span>,</span><br><span class="line">            "<span class="attribute">description</span>": <span class="value"><span class="string">"Vodka based"</span></span>,</span><br><span class="line">            "<span class="attribute">created</span>": <span class="value"><span class="string">"2015-04-10T15:56:23+0000"</span></span>,</span><br><span class="line">            "<span class="attribute">modified</span>": <span class="value"><span class="literal">null</span></span><br><span class="line">        </span>&#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            "<span class="attribute">id</span>": <span class="value"><span class="number">2</span></span>,</span><br><span class="line">            "<span class="attribute">name</span>": <span class="value"><span class="string">"Margarita"</span></span>,</span><br><span class="line">            "<span class="attribute">description</span>": <span class="value"><span class="string">"Tequila based"</span></span>,</span><br><span class="line">            "<span class="attribute">created</span>": <span class="value"><span class="string">"2015-04-10T15:59:39+0000"</span></span>,</span><br><span class="line">            "<span class="attribute">modified</span>": <span class="value"><span class="literal">null</span></span><br><span class="line">        </span>&#125;</span><br><span class="line">    ]</span>,</span><br><span class="line">    "<span class="attribute">pagination</span>": <span class="value">&#123;</span><br><span class="line">        "<span class="attribute">page_count</span>": <span class="value"><span class="number">11</span></span>,</span><br><span class="line">        "<span class="attribute">current_page</span>": <span class="value"><span class="number">1</span></span>,</span><br><span class="line">        "<span class="attribute">has_next_page</span>": <span class="value"><span class="literal">true</span></span>,</span><br><span class="line">        "<span class="attribute">has_prev_page</span>": <span class="value"><span class="literal">false</span></span>,</span><br><span class="line">        "<span class="attribute">count</span>": <span class="value"><span class="number">21</span></span>,</span><br><span class="line">        "<span class="attribute">limit</span>": <span class="value"><span class="number">2</span></span><br><span class="line">    </span>&#125;</span><br><span class="line"></span>&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="Show_less_cocktails_per_page">Show less cocktails per page</h3><p>To show only show 5 cocktails per page change <code>limit =&gt; 10</code> to <code>limit =&gt; 5</code>.</p>
-<h3 id="Set_maximum_number_of_cocktails_per_page">Set maximum number of cocktails per page</h3><p>To never show more than 15 cocktails change <code>&#39;maxLimit&#39; =&gt; 100</code> to <code>&#39;maxLimit&#39; =&gt; 15</code>.</p>
-<h3 id="Prevent_sorting_by_description">Prevent sorting by description</h3><p>To prevent users from sorting by the description field remove <code>description</code> from the <code>sortWhitelist</code> array.</p>
-<h3 id="Default_page">Default page</h3><p>Do NOT change the default <code>page</code> used for the index resultset to prevent frustrating further tests.</p>
-<h2 id="4-_Testing_Querystring_Parameters">4. Testing Querystring Parameters</h2><p>Your API comes with support for querystring parameters that clients can use to manipulate the output produced by your API.</p>
-<h3 id="Limiting_results">Limiting results</h3><p>Clients can use the <code>limit</code> parameter to manipulate the number of records returned by your API.</p>
+<h3 id="Set_maximum_number_of_cocktails_per_page">Set maximum number of cocktails per page</h3><p>To never show more than 15 cocktails change <code>&#39;maxLimit&#39; =&gt; 100</code> to
+<code>&#39;maxLimit&#39; =&gt; 15</code>.</p>
+<h3 id="Prevent_sorting_by_description">Prevent sorting by description</h3><p>To prevent users from sorting by the description field remove <code>description</code>
+from the <code>sortWhitelist</code> array.</p>
+<h3 id="Default_page">Default page</h3><p>Do NOT change the default <code>page</code> used for the index resultset to prevent
+frustrating further tests.</p>
+<h2 id="4-_Testing_Querystring_Parameters">4. Testing Querystring Parameters</h2><p>Your API comes with support for querystring parameters that clients can use
+to manipulate the output produced by your API.</p>
+<h3 id="Limiting_results">Limiting results</h3><p>Clients can use the <code>limit</code> parameter to manipulate the number of records
+returned by your API.</p>
 <p>To verify the parameter works as expected query <code>http://cake3api.app/cocktails.json?limit=3</code>.</p>
 <p>The result should list three cocktails instead of (the now default) five.</p>
-<h3 id="Rate_limiting">Rate limiting</h3><p>To verify your API is respecting the <code>maxLimit</code> Paginator setting query <code>http://cake3api.app/cocktails.json?limit=20</code>.</p>
+<h3 id="Rate_limiting">Rate limiting</h3><p>To verify your API is respecting the <code>maxLimit</code> Paginator setting
+query <code>http://cake3api.app/cocktails.json?limit=20</code>.</p>
 <p>The result should only list 15 cocktails.</p>
-<h3 id="Sorting_by_field">Sorting by field</h3><p>Clients can use the <code>sort</code> parameter to specify which field should be used to sort the results produced by your API. </p>
-<p>To verify the parameter is working as expected query <code>http://cake3api.app/cocktails.json?sort=name</code>.</p>
+<h3 id="Sorting_by_field">Sorting by field</h3><p>Clients can use the <code>sort</code> parameter to specify which field should be used
+to sort the results produced by your API.</p>
+<p>To verify the parameter is working as expected query
+<code>http://cake3api.app/cocktails.json?sort=name</code>.</p>
 <p>The results should be sorted by cocktail name.</p>
-<h3 id="Sorting_ascending/descending">Sorting ascending/descending</h3><p>Clients can use the <code>direction</code> parameter <strong>in combination</strong> with the <code>sort</code> parameter to specify the direction in which results are sorted by your API (either <code>asc</code> or <code>desc</code>). </p>
-<p>To verify the parameter is working as expected query <code>http://cake3api.app/cocktails.json?sort=name&amp;direction=desc</code>.</p>
+<h3 id="Sorting_ascending/descending">Sorting ascending/descending</h3><p>Clients can use the <code>direction</code> parameter <strong>in combination</strong> with the <code>sort</code>
+parameter to specify the direction in which results are sorted by your API
+(either <code>asc</code> or <code>desc</code>).</p>
+<p>To verify the parameter is working as expected query
+<code>http://cake3api.app/cocktails.json?sort=name&amp;direction=desc</code>.</p>
 <p>The results should be reverse-sorted by cocktail name.</p>
-<h3 id="Sort_whitelist">Sort whitelist</h3><p>To verify your API is respecting the <code>sortWhitelist</code> Paginator setting query <code>http://cake3api.app/cocktails.json?sort=description</code>.</p>
-<p>The result should show the default (non-sorted) index results since we removed <code>description</code> from the sortWhitelist array.</p>
+<h3 id="Sort_whitelist">Sort whitelist</h3><p>To verify your API is respecting the <code>sortWhitelist</code> Paginator setting
+query <code>http://cake3api.app/cocktails.json?sort=description</code>.</p>
+<p>The result should show the default (non-sorted) index results since we
+removed <code>description</code> from the sortWhitelist array.</p>
 <h2 id="Additional_reading">Additional reading</h2><ul>
 <li><a href="http://book.cakephp.org/3.0/en/controllers/components/pagination.html" target="_blank" rel="external">CakePHP 3 Pagination</a></li>
 <li><a href="https://github.com/ADmad/cakephp-jwt-auth" target="_blank" rel="external">Securing your API using JWT authentication</a></li>
