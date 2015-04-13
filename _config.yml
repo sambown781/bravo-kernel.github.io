@@ -39,6 +39,17 @@ highlight:
   line_number: true
   tab_replace:
 
+# Settings for markdown renderer 
+# https://github.com/hexojs/hexo-renderer-marked
+marked:
+  gfm: true
+  pedantic: false
+  sanitize: false
+  tables: true
+  breaks: false
+  smartLists: true
+  smartypants: true  
+  
 # Category & Tag
 default_category: uncategorized
 category_map:
