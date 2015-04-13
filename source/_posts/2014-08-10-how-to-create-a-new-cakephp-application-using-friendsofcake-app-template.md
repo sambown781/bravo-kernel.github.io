@@ -2,10 +2,11 @@ title: How to create a new CakePHP application using FriendsOfCake app-template
 alias: /blog/2014/08/how-to-create-a-new-cakephp-application-using-friendsofcake-app-template/index.html
 date: 2014-08-10 09:31:56 +0200
 categories:
-- Web
+- CakePHP
 tags:
 - cakephp
 - foc
+- composer
 ---
 
 This will create a new CakePHP application using the awesome [FriendsOfCake app-template](https://github.com/FriendsOfCake/app-template "FriendsOfCake app-template").
