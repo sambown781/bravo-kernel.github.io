@@ -12,7 +12,8 @@ Step-by-step instructions for creating a full featured RESTful API using CakePHP
 
 ## 1. Create The Application
 
-For this tutorial (and the follow-up posts) we will create a fresh CakePHP 3 application for our API:
+For this tutorial (and the follow-up posts) we will create a fresh CakePHP 3
+application for our API:
 
 + named ``cake3api.app``
 + connected to a database named ``cake3api_app``
@@ -20,14 +21,20 @@ For this tutorial (and the follow-up posts) we will create a fresh CakePHP 3 app
 
 If you need help with the installation either:
 
-+ follow the detailed installation instructions of [the CakePHP Blog Tutorial](http://book.cakephp.org/3.0/en/tutorials-and-examples/blog/blog.html#blog-tutorial)
-+ install [cakebox](https://github.com/alt3/cakebox) and run ``cakebox application add cake3api.app`` to set up the application, database and virtual host
++ follow the detailed installation instructions of
+[the CakePHP Blog Tutorial](http://book.cakephp.org/3.0/en/tutorials-and-examples/blog/blog.html#blog-tutorial)
++ install [cakebox](https://github.com/alt3/cakebox) and run
+``cakebox application add cake3api.app`` to set up the application, database
+and virtual host
 
 ## 2. Add the CRUD plugin
 
-Add the [CRUD plugin](https://github.com/FriendsOfCake/crud) to your application so your API will benefit of additional functionality like pagination, thin controllers and DRY best practices.
+Add the [CRUD plugin](https://github.com/FriendsOfCake/crud) to your
+application so your API will benefit of additional functionality like
+pagination, thin controllers and DRY best practices.
 
-Run the following command inside your application's root directory to Composer install the plugin:
+Run the following command inside your application's root directory to
+Composer install the plugin:
 
 ```bash
 composer require friendsofcake/crud:dev-cake3
@@ -43,9 +50,11 @@ bin/cake plugin load Crud
 
 ### a) Expose one or more controllers
 
-Only controllers **explicitly enabled** for API use will be accessible through your API. 
+Only controllers **explicitly enabled** for API use will be accessible
+through your API.
 
-Enable controllers using the ``resources()`` method inside the / scope definition in your ``config/routes.php`` file like this:
+Enable controllers using the ``resources()`` method inside the / scope
+definition in your ``config/routes.php`` file like this:
 
 ```php
 Router::scope('/', function ($routes) {
@@ -57,7 +66,9 @@ Router::scope('/', function ($routes) {
 
 ### b) Configure the API
 
-Make the default API configuration available to all controllers in your application by replacing the content of your ``src/Controller/AppController.php`` file with:
+Make the default API configuration available to all controllers in your
+application by replacing the content of your ``src/Controller/AppController.php``
+file with:
 
 ```php
 <?php
@@ -91,9 +102,13 @@ class AppController extends Controller {
 
 ### c) Optionally enable extensions
 
-Exposing your API resources **requires no additional configuration**, they are already fully accessible using Request Headers.
+Exposing your API resources **requires no additional configuration**, they are
+already fully accessible using Request Headers.
 
-However... if you want to additionally allow access to your API resources using the [.json and .xml extensions](http://book.cakephp.org/3.0/en/development/routing.html#routing-file-extensions) open your ``config/routes.php`` file and add the following line directly above the / scope definition:
+However... if you want to additionally allow access to your API resources using
+the [.json and .xml extensions](http://book.cakephp.org/3.0/en/development/routing.html#routing-file-extensions)
+open your ``config/routes.php`` file and add the following line directly above
+the / scope definition:
 
 ```php
 Router::extensions(['json', 'xml']);
@@ -101,7 +116,8 @@ Router::extensions(['json', 'xml']);
 
 ## Stop The Clock!
 
-That's all, you should now be able to browse to ``http://cake3api.app/index.json`` and be presented with your API's first JSON (error) response looking like this:
+That's all, you should now be able to browse to ``http://cake3api.app/index.json``
+and be presented with your API's first JSON (error) response looking like this:
 
 ```json
 {
@@ -111,7 +127,10 @@ That's all, you should now be able to browse to ``http://cake3api.app/index.json
 }
 ```
 
-Quite impressive but in all fairness... even though you now have a (very) cool API that only took minutes to create it is still pretty useless without any meaningful data to serve so this might be a good moment to dive straight into this follow-up post:
+Quite impressive but in all fairness... even though you now have a (very) cool
+API that only took minutes to create it is still pretty useless without any
+meaningful data to serve so this might be a good moment to dive straight into
+this follow-up post:
 
 > [How to use a CakePHP3 REST API](/2015/04/how-to-use-a-cakephp-3-rest-api/)
 
@@ -122,4 +141,5 @@ Quite impressive but in all fairness... even though you now have a (very) cool A
 + [Limiting API access to an /api prefixed route](http://book.cakephp.org/3.0/en/development/routing.html#prefix-routing)
 + [CakePHP 3 Pagination](http://book.cakephp.org/3.0/en/controllers/components/pagination.html)
 
-<em>Hat tip to CakePHP Core Developers [jose_zap](https://github.com/lorenzo) and [ADmad](https://github.com/admad) for helping create this post.</em>
+<em>Hat tip to CakePHP Core Developers [jose_zap](https://github.com/lorenzo)
+and [ADmad](https://github.com/admad) for helping create this post.</em>
