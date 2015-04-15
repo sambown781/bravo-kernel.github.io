@@ -20,9 +20,9 @@ to our API resources through (only) ``/api`` prefixed URLs.
 This is part three of the CakePHP 3 REST API tutorial series:
 
 1. [How to build a CakePHP 3 REST API in minutes](/2015/04/how-to-build-a-cakephp-3-rest-api-in-minutes/)
-2. [How to use a CAKEPHP 3 REST API](/2015/04/how-to-use-a-cakephp-3-rest-api/)
-3. How to prefix route a CAKEPHP 3 REST API
-4. How to add JWT Authentication to a CAKEPHP 3 REST API (**coming soon**)
+2. [How to use a CakePHP 3 REST API](/2015/04/how-to-use-a-cakephp-3-rest-api/)
+3. How to prefix route a CakePHP 3 REST API
+4. How to add JWT Authentication to a CakePHP 3 REST API (**coming soon**)
 
 Before starting this tutorial either:
 
@@ -140,5 +140,8 @@ If things went well it should:
 + no longer produce a JSON/XML response
 + respond with an HTML ``MissingController`` exception instead
 
+## Additional reading
 
++ [CakePHP routing documentation](http://book.cakephp.org/3.0/en/development/routing.html)
 
+<em>Hat tip to CakePHP Core Developer [Ceeram](https://github.com/ceeram) for proofing this post.</em>

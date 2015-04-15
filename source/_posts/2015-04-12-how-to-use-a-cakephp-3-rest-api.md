@@ -28,9 +28,9 @@ we explore the inner workings of our new API by:
 This is part two of the CakePHP 3 REST API tutorial series:
 
 1. [How to build a CakePHP 3 REST API in minutes](/2015/04/how-to-build-a-cakephp-3-rest-api-in-minutes/)
-2. How to use a CAKEPHP 3 REST API
-3. [How to prefix route a CAKEPHP 3 REST API](/2015/04/how-to-prefix-route-a-cakephp-3-rest-api/)
-4. How to add JWT Authentication to a CAKEPHP 3 REST API (**coming soon**)
+2. How to use a CakePHP 3 REST API
+3. [How to prefix route a CakePHP 3 REST API](/2015/04/how-to-prefix-route-a-cakephp-3-rest-api/)
+4. How to add JWT Authentication to a CakePHP 3 REST API (**coming soon**)
 
 Before starting this tutorial either:
 
@@ -383,6 +383,6 @@ removed ``description`` from the sortWhitelist array.
 ## Additional reading
 
 + Follow-up tutorial "[How to prefix route a CakePHP3 REST API](/2015/04/how-to-prefix-route-a-cakephp-3-rest-api/)"
-+ [CakePHP Pagination documentation](http://book.cakephp.org/3.0/en/controllers/components/pagination.html)
++ [CakePHP pagination documentation](http://book.cakephp.org/3.0/en/controllers/components/pagination.html)
 
 <em>Hat tip to CakePHP Core Developers [jose_zap](https://github.com/lorenzo) and [ADmad](https://github.com/admad) for helping create this post.</em>
