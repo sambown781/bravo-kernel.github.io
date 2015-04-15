@@ -107,11 +107,11 @@ we explore the inner workings of our new API by:</p>
 <ul>
 <li>complete the previous post</li>
 <li>start fresh by using these
-<a href="http://todo.com" target="_blank" rel="external">end-state application sources</a>
-and running the database migration</li>
+<a href="https://github.com/bravo-kernel/application-examples/tree/master/blog-how-to-build-a-cakephp3-rest-api" target="_blank" rel="external">end-state application sources</a>,
+composer installing and running the database migration</li>
 </ul>
 <h2 id="1-_Adding_The_Cocktails">1. Adding The Cocktails</h2><h3 id="Populate_the_database">Populate the database</h3><p>Download this CakePHP
-<a href="https://github.com/bravo-kernel/examples/blob/master/blog-how-to-use-a-cakephp3-rest-api/config/Migrations/20150411161731_initial.php" target="_blank" rel="external">database migration file</a>
+<a href="https://github.com/bravo-kernel/application-examples/blob/master/blog-how-to-use-a-cakephp3-rest-api/config/Migrations/20150411161731_initial.php" target="_blank" rel="external">database migration file</a>
 to your <code>config/Migrations</code> directory.</p>
 <p>Now run the following command inside your application’s root directory to
 create and popuplate the <code>cocktails</code> table:</p>
@@ -202,7 +202,7 @@ the <strong>id of the created cocktail</strong> similar to:</p>
 by your API to format the outputted JSON/XML. Let’s change some of the settings
 below in preparation for querystring parameter testing.</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="variable">$paginate</span> = [</span><br><span class="line">    <span class="string">'page'</span> =&gt; <span class="number">1</span>,</span><br><span class="line">    <span class="string">'limit'</span> =&gt; <span class="number">10</span>,</span><br><span class="line">    <span class="string">'maxLimit'</span> =&gt; <span class="number">100</span>,</span><br><span class="line">    <span class="string">'fields'</span> =&gt; [</span><br><span class="line">        <span class="string">'id'</span>, <span class="string">'name'</span>, <span class="string">'description'</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="string">'sortWhitelist'</span> =&gt; [</span><br><span class="line">        <span class="string">'id'</span>, <span class="string">'name'</span>, <span class="string">'description'</span></span><br><span class="line">    ]</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-<h3 id="Show_all_cocktail_details/fields">Show all cocktail details/fields</h3><p>To show all record details <strong>remove</strong> the <code>fields</code> array (used earlier to
+<h3 id="Show_all_cocktail_details/fields">Show all cocktail details/fields</h3><p>To show all record details <strong>completely remove</strong> the <code>fields</code> array (used earlier to
 keep the JSON output examples readable).</p>
 <p>Querying <code>http://cake3api.app/cocktails.json?limit=2</code> should now produce
 more detailed JSON similar to:</p>
