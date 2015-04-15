@@ -90,11 +90,13 @@ your application's root directory:
 bin/cake bake model Cocktails
 ```
 
-### Optionally create html views
+### Create html views
 
-Even though **your API does not use views** to output JSON and XML you might
-want to generate some html views for easy browsing the cocktails by running
-the following command inside your application's root directory:
+Even though **your API does not need/use views** to output JSON and XML (that part is handled
+for you by the CRUD plugin) we will still generate some html views for easy browsing the cocktails
+and to prepare for the follow-up tutorials.
+
+Generate the views by by running the following command inside your application's root directory:
 
 ```bash
 bin/cake bake template Cocktails
@@ -102,6 +104,7 @@ bin/cake bake template Cocktails
 
 If things went well browsing to ``http://cake3api.app/cocktails`` should
 display something similar to:
+
 <br />
 
 {% asset_img browser-cocktails-index.png 'Cocktails index' %}
