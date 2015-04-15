@@ -93,7 +93,7 @@ class CocktailsController extends AppController
 
 ## Testing the Routes
 
-### 1. Test the prefix
+### 1. Test the prefix route
 
 If things went well you should be able to query the prefix URL 
 ``http://cake3api.app/api/cocktails.json`` and be presented with the now familiar JSON output:
