@@ -10,6 +10,16 @@ tags:
 ---
 Step-by-step instructions for creating a full featured RESTful API using CakePHP 3.
 
+## Before We Begin
+
+This is part one of the CakePHP 3 REST API tutorial series:
+
+1. How to build a CakePHP 3 REST API in minutes
+2. [How to use a CAKEPHP 3 REST API](/2015/04/how-to-use-a-cakephp-3-rest-api/)
+3. [How to prefix route a CAKEPHP 3 REST API](/2015/04/how-to-prefix-route-a-cakephp-3-rest-api/)
+4. How to add JWT Authentication to a CAKEPHP 3 REST API (**coming soon**)
+
+
 ## 1. Create The Application
 
 For this tutorial (and the follow-up posts) we will create a fresh CakePHP 3
@@ -130,16 +140,13 @@ and be presented with your API's first JSON (error) response looking like this:
 Quite impressive but in all fairness... even though you now have a (very) cool
 API that only took minutes to create it is still pretty useless without any
 meaningful data to serve so this might be a good moment to dive straight into
-this follow-up post:
+the follow-up tutorial:
 
 > [How to use a CakePHP3 REST API](/2015/04/how-to-use-a-cakephp-3-rest-api/)
 
 ## Additional reading
 
-+ [CRUD plugin documentation](http://crud.readthedocs.org)
-+ [Securing your CakePHP 3 API using JWT authentication](https://github.com/ADmad/cakephp-jwt-auth)
-+ [Limiting API access to an /api prefixed route](http://book.cakephp.org/3.0/en/development/routing.html#prefix-routing)
-+ [CakePHP 3 Pagination](http://book.cakephp.org/3.0/en/controllers/components/pagination.html)
++ [FriendsOfCake CRUD plugin documentation](http://crud.readthedocs.org)
 
 <em>Hat tip to CakePHP Core Developers [jose_zap](https://github.com/lorenzo)
 and [ADmad](https://github.com/admad) for helping create this post.</em>

@@ -23,7 +23,21 @@ we explore the inner workings of our new API by:
 3. Configuring Pagination
 4. Testing Querystring Parameters
 
-<em>Application sources [available here](https://github.com/bravo-kernel/examples/tree/master/blog-how-to-use-a-cakephp3-rest-api).</em>
+## Before We Begin
+
+This is part two of the CakePHP 3 REST API tutorial series:
+
+1. [How to build a CakePHP 3 REST API in minutes](/2015/04/how-to-build-a-cakephp-3-rest-api-in-minutes/)
+2. How to use a CAKEPHP 3 REST API
+3. [How to prefix route a CAKEPHP 3 REST API](/2015/04/how-to-prefix-route-a-cakephp-3-rest-api/)
+4. How to add JWT Authentication to a CAKEPHP 3 REST API (**coming soon**)
+
+Before starting this tutorial either:
+
++ complete the previous post
++ start fresh by using these
+[end-state application sources](http://todo.com)
+and running the database migration
 
 ## 1. Adding The Cocktails
 
@@ -368,7 +382,7 @@ removed ``description`` from the sortWhitelist array.
 
 ## Additional reading
 
-+ [CakePHP 3 Pagination](http://book.cakephp.org/3.0/en/controllers/components/pagination.html)
-+ [Securing your API using JWT authentication](https://github.com/ADmad/cakephp-jwt-auth)
++ Follow-up tutorial "[How to prefix route a CakePHP3 REST API](/2015/04/how-to-prefix-route-a-cakephp-3-rest-api/)"
++ [CakePHP Pagination documentation](http://book.cakephp.org/3.0/en/controllers/components/pagination.html)
 
 <em>Hat tip to CakePHP Core Developers [jose_zap](https://github.com/lorenzo) and [ADmad](https://github.com/admad) for helping create this post.</em>
