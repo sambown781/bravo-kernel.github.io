@@ -122,13 +122,14 @@ following content:</p>
 <h3 id="Create_the_entity_and_table">Create the entity and table</h3><p>Generate the required entity and model by running the following command inside
 your application’s root directory:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/cake bake model Cocktails</span><br></pre></td></tr></table></figure>
-<h3 id="Optionally_create_html_views">Optionally create html views</h3><p>Even though <strong>your API does not use views</strong> to output JSON and XML you might
-want to generate some html views for easy browsing the cocktails by running
-the following command inside your application’s root directory:</p>
+<h3 id="Create_html_views">Create html views</h3><p>Even though <strong>your API does not need/use views</strong> to output JSON and XML (that part is handled
+for you by the CRUD plugin) we will still generate some html views for easy browsing the cocktails
+and to prepare for the follow-up tutorials.</p>
+<p>Generate the views by by running the following command inside your application’s root directory:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/cake bake template Cocktails</span><br></pre></td></tr></table></figure>
 <p>If things went well browsing to <code>http://cake3api.app/cocktails</code> should
-display something similar to:
-<br></p>
+display something similar to:</p>
+<p><br></p>
 <img src="/2015/04/how-to-use-a-cakephp-3-rest-api/browser-cocktails-index.png">
 <h2 id="2-_Accessing_API_Resources">2. Accessing API Resources</h2><p>Your API supports accessing resources with or without extensions and we will
 test both where applicable.</p>
