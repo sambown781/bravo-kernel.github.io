@@ -93,10 +93,13 @@ class CocktailsController extends AppController
 
 ## Testing the Routes
 
-### 1. Test the prefix route
+### 1. Test API access
 
-If things went well you should be able to query the prefix URL 
-``http://cake3api.app/api/cocktails.json`` and be presented with the now familiar JSON output:
+If things went well you should now be able to access your cocktail API resources using the ``/api``
+prefix route.
+
+To verify query ``http://cake3api.app/api/cocktails.json`` which should produce the familiar JSON
+response:
 
 ```json
 {
@@ -129,16 +132,29 @@ If things went well you should be able to query the prefix URL
 }
 ```
 
-<em>See the [previous tutorial](/2015/04/how-to-use-a-cakephp-3-rest-api/) for more usage examples.</em>
+<em>See the [previous tutorial](/2015/04/how-to-use-a-cakephp-3-rest-api/) if you need more usage examples.</em>
 
-### 2. Test the default route
+### 2. Test API access restrictions
 
-To verify your API resources are no longer accessible through the general routes
-query ``http://cake3api.app/cocktails.json`` as used in the previous tutorial.
-If things went well it should:
+If things went well your API resources should no longer be accessible using the default routes.
+
+To verify query ``http://cake3api.app/cocktails.json`` as used in the previous tutorial which 
+should:
 
 + no longer produce a JSON/XML response
 + respond with an HTML ``MissingController`` exception instead
+
+### 3. Test non-API access
+
+Even though we have restricted API access to the ``/api`` prefix all non-API requests should still
+function as expected.
+
+To verify browe to ``http://cake3api.app/cocktails`` which should still produce the familiar
+CakePHP index page:
+
+<br />
+
+{% asset_img browser-cocktails-index.png 'Cocktails index' %}
 
 ## Additional reading
 
