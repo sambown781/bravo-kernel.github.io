@@ -4,7 +4,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://bravo-kernel.com/"/>
-  <updated>2015-04-13T14:15:28.000Z</updated>
+  <updated>2015-04-15T13:10:28.000Z</updated>
   <id>http://bravo-kernel.com/</id>
   
   <author>
@@ -15,11 +15,86 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[How to prefix route a CAKEPHP 3 REST API]]></title>
+    <link href="http://bravo-kernel.com/2015/04/how-to-prefix-route-a-cakephp-3-rest-api/"/>
+    <id>http://bravo-kernel.com/2015/04/how-to-prefix-route-a-cakephp-3-rest-api/</id>
+    <published>2015-04-15T09:47:38.000Z</published>
+    <updated>2015-04-15T13:10:28.000Z</updated>
+    <content type="html"><![CDATA[<p>In this follow-up post to
+<a href="/2015/04/how-to-use-a-cakephp-3-rest-api/">How to use a CakePHP 3 REST API</a>
+we will implement a
+<a href="http://book.cakephp.org/3.0/en/development/routing.html#prefix-routing" target="_blank" rel="external">Prefix Route</a>
+so we can benefit of clean controller logic separation and limit access
+to our API resources through (only) <code>/api</code> prefixed URLs.</p>
+<h2 id="Before_We_Begin">Before We Begin</h2><p>This is part three of the CakePHP 3 REST API tutorial series:</p>
+<ol>
+<li><a href="/2015/04/how-to-build-a-cakephp-3-rest-api-in-minutes/">How to build a CakePHP 3 REST API in minutes</a></li>
+<li><a href="/2015/04/how-to-use-a-cakephp-3-rest-api/">How to use a CAKEPHP 3 REST API</a></li>
+<li>How to prefix route a CAKEPHP 3 REST API</li>
+<li>How to add JWT Authentication to a CAKEPHP 3 REST API (<strong>coming soon</strong>)</li>
+</ol>
+<p>Before starting this tutorial either:</p>
+<ul>
+<li>complete the previous posts</li>
+<li>start fresh by using these end-state <a href="http://todo.com" target="_blank" rel="external">application sources</a> and running the
+database migration</li>
+</ul>
+<h2 id="Creating_the_Prefix_Route">Creating the Prefix Route</h2><h3 id="1-_Remove_previous_routing">1. Remove previous routing</h3><p>Remove the general API routing created in the previous tutorial by removing these lines from your
+<code>config/routes.php</code> file:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Router::extensions([<span class="string">'json'</span>, <span class="string">'xml'</span>]);</span><br></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$routes</span>-&gt;resources(<span class="string">'Cocktails'</span>);</span><br></pre></td></tr></table></figure>
+<h3 id="2-_Create_the_route">2. Create the route</h3><p>Now create a new <code>/api</code> prefixed route we will use for all of our API resources by adding the
+following code directly above the / scope definition in your <code>config/routes.php</code> file:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Router::prefix(<span class="string">'api'</span>, <span class="function"><span class="keyword">function</span> <span class="params">(<span class="variable">$routes</span>)</span> </span>&#123;</span><br><span class="line">    <span class="variable">$routes</span>-&gt;extensions([<span class="string">'json'</span>, <span class="string">'xml'</span>]);</span><br><span class="line">    <span class="variable">$routes</span>-&gt;resources(<span class="string">'Cocktails'</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>Please note that once again:</p>
+<ul>
+<li>enabling extensions is optional</li>
+<li>only explicitely specified controllers will be accessible through your API</li>
+</ul>
+<h3 id="3-_Create_the_controller(s)">3. Create the controller(s)</h3><p>One of the great things about CakePHP 3 prefix routing is the automatic mapping to sub-namespaces 
+which allows us to separate concern by creating dedicated controller files for (just) our API logic
+inside the <code>src/Controller/Api</code> subdirectory.</p>
+<p>Create a new controller file named <code>src/Controller/Api/CocktailsController.php</code> with the
+same content we used in the previous tutorial but this time using a different namespace matching
+our prefix route:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">&lt;?php</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">App</span>\<span class="title">Controller</span>\<span class="title">Api</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">App</span>\<span class="title">Controller</span>\<span class="title">AppController</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CocktailsController</span> <span class="keyword">extends</span> <span class="title">AppController</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$paginate</span> = [</span><br><span class="line">        <span class="string">'page'</span> =&gt; <span class="number">1</span>,</span><br><span class="line">        <span class="string">'limit'</span> =&gt; <span class="number">5</span>,</span><br><span class="line">        <span class="string">'maxLimit'</span> =&gt; <span class="number">15</span>,</span><br><span class="line">        <span class="string">'sortWhitelist'</span> =&gt; [</span><br><span class="line">            <span class="string">'id'</span>, <span class="string">'name'</span></span><br><span class="line">        ]</span><br><span class="line">    ];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Testing_the_Routes">Testing the Routes</h2><h3 id="1-_Test_the_prefix">1. Test the prefix</h3><p>If things went well you should be able to query the prefix URL 
+<code>http://cake3api.app/api/cocktails.json</code> and be presented with the now familiar JSON output:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    "<span class="attribute">success</span>": <span class="value"><span class="literal">true</span></span>,</span><br><span class="line">    "<span class="attribute">data</span>": <span class="value">[</span><br><span class="line">        &#123;</span><br><span class="line">            "<span class="attribute">id</span>": <span class="value"><span class="number">1</span></span>,</span><br><span class="line">            "<span class="attribute">name</span>": <span class="value"><span class="string">"Cosmopolitan"</span></span>,</span><br><span class="line">            "<span class="attribute">description</span>": <span class="value"><span class="string">"Vodka based"</span></span><br><span class="line">        </span>&#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            "<span class="attribute">id</span>": <span class="value"><span class="number">2</span></span>,</span><br><span class="line">            "<span class="attribute">name</span>": <span class="value"><span class="string">"Margarita"</span></span>,</span><br><span class="line">            "<span class="attribute">description</span>": <span class="value"><span class="string">"Tequila based"</span></span><br><span class="line">        </span>&#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            "<span class="attribute">id</span>": <span class="value"><span class="number">3</span></span>,</span><br><span class="line">            "<span class="attribute">name</span>": <span class="value"><span class="string">"Mojito"</span></span>,</span><br><span class="line">            "<span class="attribute">description</span>": <span class="value"><span class="string">"Rum based"</span></span><br><span class="line">        </span>&#125;</span><br><span class="line">    ]</span>,</span><br><span class="line">    "<span class="attribute">pagination</span>": <span class="value">&#123;</span><br><span class="line">        "<span class="attribute">page_count</span>": <span class="value"><span class="number">5</span></span>,</span><br><span class="line">        "<span class="attribute">current_page</span>": <span class="value"><span class="number">1</span></span>,</span><br><span class="line">        "<span class="attribute">has_next_page</span>": <span class="value"><span class="literal">true</span></span>,</span><br><span class="line">        "<span class="attribute">has_prev_page</span>": <span class="value"><span class="literal">false</span></span>,</span><br><span class="line">        "<span class="attribute">count</span>": <span class="value"><span class="number">21</span></span>,</span><br><span class="line">        "<span class="attribute">limit</span>": <span class="value"><span class="literal">null</span></span><br><span class="line">    </span>&#125;</span><br><span class="line"></span>&#125;</span><br></pre></td></tr></table></figure>
+<p><em>See the <a href="/2015/04/how-to-use-a-cakephp-3-rest-api/">previous tutorial</a> for more usage examples.</em></p>
+<h3 id="2-_Test_the_default_route">2. Test the default route</h3><p>To verify your API resources are no longer accessible through the general routes
+query <code>http://cake3api.app/cocktails.json</code> as used in the previous tutorial.
+If things went well it should:</p>
+<ul>
+<li>no longer produce a JSON/XML response</li>
+<li>respond with an HTML <code>MissingController</code> exception instead</li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>In this follow-up post to
+<a href="/2015/04/how-to-use-a-cakephp-3-rest-api/">How to use a CakePHP 3 REST API</a>
+we will implement a
+<a ]]>
+    </summary>
+    
+      <category term="api" scheme="http://bravo-kernel.com/tags/api/"/>
+    
+      <category term="cakephp" scheme="http://bravo-kernel.com/tags/cakephp/"/>
+    
+      <category term="cakephp3" scheme="http://bravo-kernel.com/tags/cakephp3/"/>
+    
+      <category term="rest" scheme="http://bravo-kernel.com/tags/rest/"/>
+    
+      <category term="CakePHP" scheme="http://bravo-kernel.com/categories/cakephp/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[How to use a CakePHP 3 REST API]]></title>
     <link href="http://bravo-kernel.com/2015/04/how-to-use-a-cakephp-3-rest-api/"/>
     <id>http://bravo-kernel.com/2015/04/how-to-use-a-cakephp-3-rest-api/</id>
     <published>2015-04-12T13:10:24.000Z</published>
-    <updated>2015-04-13T14:15:28.000Z</updated>
+    <updated>2015-04-15T13:15:40.000Z</updated>
     <content type="html"><![CDATA[<p>In this follow-up post to
 <a href="/2015/04/how-to-build-a-cakephp-3-rest-api-in-minutes/">How to build a CakePHP 3 REST API in minutes</a>
 we explore the inner workings of our new API by:</p>
@@ -37,7 +112,20 @@ we explore the inner workings of our new API by:</p>
 <li>Configuring Pagination</li>
 <li>Testing Querystring Parameters</li>
 </ol>
-<p><em>Application sources <a href="https://github.com/bravo-kernel/examples/tree/master/blog-how-to-use-a-cakephp3-rest-api" target="_blank" rel="external">available here</a>.</em></p>
+<h2 id="Before_We_Begin">Before We Begin</h2><p>This is part two of the CakePHP 3 REST API tutorial series:</p>
+<ol>
+<li><a href="/2015/04/how-to-build-a-cakephp-3-rest-api-in-minutes/">How to build a CakePHP 3 REST API in minutes</a></li>
+<li>How to use a CAKEPHP 3 REST API</li>
+<li><a href="/2015/04/how-to-prefix-route-a-cakephp-3-rest-api/">How to prefix route a CAKEPHP 3 REST API</a></li>
+<li>How to add JWT Authentication to a CAKEPHP 3 REST API (<strong>coming soon</strong>)</li>
+</ol>
+<p>Before starting this tutorial either:</p>
+<ul>
+<li>complete the previous post</li>
+<li>start fresh by using these
+<a href="http://todo.com" target="_blank" rel="external">end-state application sources</a>
+and running the database migration</li>
+</ul>
 <h2 id="1-_Adding_The_Cocktails">1. Adding The Cocktails</h2><h3 id="Populate_the_database">Populate the database</h3><p>Download this CakePHP
 <a href="https://github.com/bravo-kernel/examples/blob/master/blog-how-to-use-a-cakephp3-rest-api/config/Migrations/20150411161731_initial.php" target="_blank" rel="external">database migration file</a>
 to your <code>config/Migrations</code> directory.</p>
@@ -166,8 +254,8 @@ query <code>http://cake3api.app/cocktails.json?sort=description</code>.</p>
 <p>The result should show the default (non-sorted) index results since we
 removed <code>description</code> from the sortWhitelist array.</p>
 <h2 id="Additional_reading">Additional reading</h2><ul>
-<li><a href="http://book.cakephp.org/3.0/en/controllers/components/pagination.html" target="_blank" rel="external">CakePHP 3 Pagination</a></li>
-<li><a href="https://github.com/ADmad/cakephp-jwt-auth" target="_blank" rel="external">Securing your API using JWT authentication</a></li>
+<li>Follow-up tutorial “<a href="/2015/04/how-to-prefix-route-a-cakephp-3-rest-api/">How to prefix route a CakePHP3 REST API</a>“</li>
+<li><a href="http://book.cakephp.org/3.0/en/controllers/components/pagination.html" target="_blank" rel="external">CakePHP Pagination documentation</a></li>
 </ul>
 <p><em>Hat tip to CakePHP Core Developers <a href="https://github.com/lorenzo" target="_blank" rel="external">jose_zap</a> and <a href="https://github.com/admad" target="_blank" rel="external">ADmad</a> for helping create this post.</em></p>
 ]]></content>
@@ -193,8 +281,15 @@ removed <code>description</code> from the sortWhitelist array.</p>
     <link href="http://bravo-kernel.com/2015/04/how-to-build-a-cakephp-3-rest-api-in-minutes/"/>
     <id>http://bravo-kernel.com/2015/04/how-to-build-a-cakephp-3-rest-api-in-minutes/</id>
     <published>2015-04-12T11:22:21.000Z</published>
-    <updated>2015-04-13T14:10:01.000Z</updated>
+    <updated>2015-04-15T13:09:11.000Z</updated>
     <content type="html"><![CDATA[<p>Step-by-step instructions for creating a full featured RESTful API using CakePHP 3.</p>
+<h2 id="Before_We_Begin">Before We Begin</h2><p>This is part one of the CakePHP 3 REST API tutorial series:</p>
+<ol>
+<li>How to build a CakePHP 3 REST API in minutes</li>
+<li><a href="/2015/04/how-to-use-a-cakephp-3-rest-api/">How to use a CAKEPHP 3 REST API</a></li>
+<li><a href="/2015/04/how-to-prefix-route-a-cakephp-3-rest-api/">How to prefix route a CAKEPHP 3 REST API</a></li>
+<li>How to add JWT Authentication to a CAKEPHP 3 REST API (<strong>coming soon</strong>)</li>
+</ol>
 <h2 id="1-_Create_The_Application">1. Create The Application</h2><p>For this tutorial (and the follow-up posts) we will create a fresh CakePHP 3
 application for our API:</p>
 <ul>
@@ -240,22 +335,19 @@ and be presented with your API’s first JSON (error) response looking like this
 <p>Quite impressive but in all fairness… even though you now have a (very) cool
 API that only took minutes to create it is still pretty useless without any
 meaningful data to serve so this might be a good moment to dive straight into
-this follow-up post:</p>
+the follow-up tutorial:</p>
 <blockquote>
 <p><a href="/2015/04/how-to-use-a-cakephp-3-rest-api/">How to use a CakePHP3 REST API</a></p>
 </blockquote>
 <h2 id="Additional_reading">Additional reading</h2><ul>
-<li><a href="http://crud.readthedocs.org" target="_blank" rel="external">CRUD plugin documentation</a></li>
-<li><a href="https://github.com/ADmad/cakephp-jwt-auth" target="_blank" rel="external">Securing your CakePHP 3 API using JWT authentication</a></li>
-<li><a href="http://book.cakephp.org/3.0/en/development/routing.html#prefix-routing" target="_blank" rel="external">Limiting API access to an /api prefixed route</a></li>
-<li><a href="http://book.cakephp.org/3.0/en/controllers/components/pagination.html" target="_blank" rel="external">CakePHP 3 Pagination</a></li>
+<li><a href="http://crud.readthedocs.org" target="_blank" rel="external">FriendsOfCake CRUD plugin documentation</a></li>
 </ul>
 <p><em>Hat tip to CakePHP Core Developers <a href="https://github.com/lorenzo" target="_blank" rel="external">jose_zap</a>
 and <a href="https://github.com/admad" target="_blank" rel="external">ADmad</a> for helping create this post.</em></p>
 ]]></content>
     <summary type="html">
     <![CDATA[<p>Step-by-step instructions for creating a full featured RESTful API using CakePHP 3.</p>
-<h2 id="1-_Create_The_Application">1. Create The ]]>
+<h2 id="Before_We_Begin">Before We Begin</h2><p>T]]>
     </summary>
     
       <category term="api" scheme="http://bravo-kernel.com/tags/api/"/>
@@ -948,52 +1040,6 @@ sudo chown -R <span class="variable">&lt;username&gt;</span>:<span class="variab
       <category term="git" scheme="http://bravo-kernel.com/tags/git/"/>
     
       <category term="Git" scheme="http://bravo-kernel.com/categories/git/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[How to maintain your personal Octostrap3 theme]]></title>
-    <link href="http://bravo-kernel.com/2014/08/how-to-maintain-your-personal-octostrap3-theme/"/>
-    <id>http://bravo-kernel.com/2014/08/how-to-maintain-your-personal-octostrap3-theme/</id>
-    <published>2014-08-04T09:22:47.000Z</published>
-    <updated>2015-03-27T17:53:36.000Z</updated>
-    <content type="html"><![CDATA[<p>Make sure you have created a personal fork of the <a href="https://github.com/kAworu/octostrap3" title="Octostrap3 repository" target="_blank" rel="external">Octostrap3 repository</a>.</p>
-<h2 id="Add_theme_as_a_Git_submodule">Add theme as a Git submodule</h2><p>Add personal Octostrap3 theme as a Git submodule:</p>
-<pre><code>cd &lt;path-to-repos&gt;/octopress
-git submodule add git@github<span class="class">.com</span>:bravo-kernel/octostrap3<span class="class">.git</span> .themes/octostrap3
-git add <span class="class">.gitmodules</span>
-git commit -m <span class="string">"Adding Octostrap3 as a Git submodule"</span>
-git push origin
-</code></pre><h2 id="Update_theme">Update theme</h2><pre><code><span class="built_in">cd</span> &lt;<span class="built_in">path</span>-to-repos&gt;/octopress
-<span class="built_in">cd</span> .themes/octostrap3
-git checkout master
-</code></pre><p>Edit some files (see the <a href="http://octopress.org/docs/theme" title="Octopress documentation on themes" target="_blank" rel="external">Octopress theme documentation</a>).</p>
-<h2 id="Install_updated_theme">Install updated theme</h2><p>Install updated theme (or it will not be used when when generating new pages):</p>
-<pre><code><span class="keyword">cd</span> &lt;path-<span class="keyword">to</span>-repos&gt;/octopress
-rake <span class="string">'install[octostrap3]'</span>
-</code></pre><h2 id="Generate_pages_using_updated_theme">Generate pages using updated theme</h2><p>Generate and deploy gh-pages using the updated theme:</p>
-<pre><code>  <span class="built_in">cd</span> &lt;<span class="built_in">path</span>-to-repos&gt;/octopress
-rake generate
-rake deploy
-</code></pre><h2 id="Save_updated_theme">Save updated theme</h2><pre><code><span class="keyword">cd</span> &lt;path-<span class="keyword">to</span>-repos&gt;/octopress/.themes/octostrap3
-git <span class="built_in">add</span> .
-git commit -<span class="keyword">m</span> <span class="string">"Updating Octostrap3 theme"</span>
-git push origin
-</code></pre><h2 id="Update_Git_submodule">Update Git submodule</h2><p>Point Git theme submodule to the latest version:</p>
-<pre><code><span class="keyword">cd</span> &lt;path-<span class="keyword">to</span>-repos&gt;/octopress
-git <span class="built_in">add</span> .themes/octostrap3
-git commit -<span class="keyword">m</span> <span class="string">"Updating octostrap3 submodule"</span>
-git push origin
-</code></pre>]]></content>
-    <summary type="html">
-    <![CDATA[<p>Make sure you have created a personal fork of the <a href="https://github.com/kAworu/octostrap3" title="Octostrap3 repository" target="_b]]>
-    </summary>
-    
-      <category term="octopress" scheme="http://bravo-kernel.com/tags/octopress/"/>
-    
-      <category term="octostrap3" scheme="http://bravo-kernel.com/tags/octostrap3/"/>
-    
-      <category term="web" scheme="http://bravo-kernel.com/categories/web/"/>
     
   </entry>
   
