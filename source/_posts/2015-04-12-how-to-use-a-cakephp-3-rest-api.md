@@ -386,6 +386,7 @@ removed ``description`` from the sortWhitelist array.
 ## Additional reading
 
 + Follow-up tutorial "[How to prefix route a CakePHP3 REST API](/2015/04/how-to-prefix-route-a-cakephp-3-rest-api/)"
++ [Tutorial sources](https://github.com/bravo-kernel/application-examples/tree/master/blog-how-to-use-a-cakephp3-rest-api)
 + [CakePHP pagination documentation](http://book.cakephp.org/3.0/en/controllers/components/pagination.html)
 
 <em>Hat tip to CakePHP Core Developers [jose_zap](https://github.com/lorenzo) and [ADmad](https://github.com/admad) for helping create this post.</em>

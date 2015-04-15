@@ -159,6 +159,7 @@ CakePHP index page:
 
 ## Additional reading
 
++ [Tutorial sources](https://github.com/bravo-kernel/application-examples/tree/master/blog-how-to-prefix-route-a-cakephp3-rest-api)
 + [CakePHP routing documentation](http://book.cakephp.org/3.0/en/development/routing.html)
 
 <em>Hat tip to CakePHP Core Developer [Ceeram](https://github.com/ceeram) for proofing this post.</em>
