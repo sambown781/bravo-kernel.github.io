@@ -45,7 +45,7 @@ Router::extensions(['json', 'xml']);
 $routes->resources('Cocktails');
 ```
 
-### 2. Create the route
+### 2. Create the prefix route
 
 Now create a new ``/api`` prefixed route we will use for all of our API resources by adding the
 following code directly above the / scope definition in your ``config/routes.php`` file:
@@ -69,7 +69,7 @@ which allows us to separate concern by creating dedicated controller files for (
 inside the ``src/Controller/Api`` subdirectory.
 
 Create a new controller file named ``src/Controller/Api/CocktailsController.php`` with the
-same content we used in the previous tutorial but this time using a different namespace matching
+same content we used in the previous tutorial but this time using a **different namespace** matching
 our prefix route:
 
 ```php
