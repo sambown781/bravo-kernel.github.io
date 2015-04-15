@@ -4,7 +4,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://bravo-kernel.com/"/>
-  <updated>2015-04-15T13:10:28.000Z</updated>
+  <updated>2015-04-15T13:25:44.000Z</updated>
   <id>http://bravo-kernel.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://bravo-kernel.com/2015/04/how-to-prefix-route-a-cakephp-3-rest-api/"/>
     <id>http://bravo-kernel.com/2015/04/how-to-prefix-route-a-cakephp-3-rest-api/</id>
     <published>2015-04-15T09:47:38.000Z</published>
-    <updated>2015-04-15T13:10:28.000Z</updated>
+    <updated>2015-04-15T13:25:44.000Z</updated>
     <content type="html"><![CDATA[<p>In this follow-up post to
 <a href="/2015/04/how-to-use-a-cakephp-3-rest-api/">How to use a CakePHP 3 REST API</a>
 we will implement a
@@ -29,9 +29,9 @@ to our API resources through (only) <code>/api</code> prefixed URLs.</p>
 <h2 id="Before_We_Begin">Before We Begin</h2><p>This is part three of the CakePHP 3 REST API tutorial series:</p>
 <ol>
 <li><a href="/2015/04/how-to-build-a-cakephp-3-rest-api-in-minutes/">How to build a CakePHP 3 REST API in minutes</a></li>
-<li><a href="/2015/04/how-to-use-a-cakephp-3-rest-api/">How to use a CAKEPHP 3 REST API</a></li>
-<li>How to prefix route a CAKEPHP 3 REST API</li>
-<li>How to add JWT Authentication to a CAKEPHP 3 REST API (<strong>coming soon</strong>)</li>
+<li><a href="/2015/04/how-to-use-a-cakephp-3-rest-api/">How to use a CakePHP 3 REST API</a></li>
+<li>How to prefix route a CakePHP 3 REST API</li>
+<li>How to add JWT Authentication to a CakePHP 3 REST API (<strong>coming soon</strong>)</li>
 </ol>
 <p>Before starting this tutorial either:</p>
 <ul>
@@ -69,6 +69,10 @@ If things went well it should:</p>
 <li>no longer produce a JSON/XML response</li>
 <li>respond with an HTML <code>MissingController</code> exception instead</li>
 </ul>
+<h2 id="Additional_reading">Additional reading</h2><ul>
+<li><a href="http://book.cakephp.org/3.0/en/development/routing.html" target="_blank" rel="external">CakePHP routing documentation</a></li>
+</ul>
+<p><em>Hat tip to CakePHP Core Developer <a href="https://github.com/ceeram" target="_blank" rel="external">Ceeram</a> for proofing this post.</em></p>
 ]]></content>
     <summary type="html">
     <![CDATA[<p>In this follow-up post to
@@ -94,7 +98,7 @@ we will implement a
     <link href="http://bravo-kernel.com/2015/04/how-to-use-a-cakephp-3-rest-api/"/>
     <id>http://bravo-kernel.com/2015/04/how-to-use-a-cakephp-3-rest-api/</id>
     <published>2015-04-12T13:10:24.000Z</published>
-    <updated>2015-04-15T13:15:40.000Z</updated>
+    <updated>2015-04-15T13:25:32.000Z</updated>
     <content type="html"><![CDATA[<p>In this follow-up post to
 <a href="/2015/04/how-to-build-a-cakephp-3-rest-api-in-minutes/">How to build a CakePHP 3 REST API in minutes</a>
 we explore the inner workings of our new API by:</p>
@@ -115,9 +119,9 @@ we explore the inner workings of our new API by:</p>
 <h2 id="Before_We_Begin">Before We Begin</h2><p>This is part two of the CakePHP 3 REST API tutorial series:</p>
 <ol>
 <li><a href="/2015/04/how-to-build-a-cakephp-3-rest-api-in-minutes/">How to build a CakePHP 3 REST API in minutes</a></li>
-<li>How to use a CAKEPHP 3 REST API</li>
-<li><a href="/2015/04/how-to-prefix-route-a-cakephp-3-rest-api/">How to prefix route a CAKEPHP 3 REST API</a></li>
-<li>How to add JWT Authentication to a CAKEPHP 3 REST API (<strong>coming soon</strong>)</li>
+<li>How to use a CakePHP 3 REST API</li>
+<li><a href="/2015/04/how-to-prefix-route-a-cakephp-3-rest-api/">How to prefix route a CakePHP 3 REST API</a></li>
+<li>How to add JWT Authentication to a CakePHP 3 REST API (<strong>coming soon</strong>)</li>
 </ol>
 <p>Before starting this tutorial either:</p>
 <ul>
@@ -255,7 +259,7 @@ query <code>http://cake3api.app/cocktails.json?sort=description</code>.</p>
 removed <code>description</code> from the sortWhitelist array.</p>
 <h2 id="Additional_reading">Additional reading</h2><ul>
 <li>Follow-up tutorial “<a href="/2015/04/how-to-prefix-route-a-cakephp-3-rest-api/">How to prefix route a CakePHP3 REST API</a>“</li>
-<li><a href="http://book.cakephp.org/3.0/en/controllers/components/pagination.html" target="_blank" rel="external">CakePHP Pagination documentation</a></li>
+<li><a href="http://book.cakephp.org/3.0/en/controllers/components/pagination.html" target="_blank" rel="external">CakePHP pagination documentation</a></li>
 </ul>
 <p><em>Hat tip to CakePHP Core Developers <a href="https://github.com/lorenzo" target="_blank" rel="external">jose_zap</a> and <a href="https://github.com/admad" target="_blank" rel="external">ADmad</a> for helping create this post.</em></p>
 ]]></content>
@@ -281,14 +285,14 @@ removed <code>description</code> from the sortWhitelist array.</p>
     <link href="http://bravo-kernel.com/2015/04/how-to-build-a-cakephp-3-rest-api-in-minutes/"/>
     <id>http://bravo-kernel.com/2015/04/how-to-build-a-cakephp-3-rest-api-in-minutes/</id>
     <published>2015-04-12T11:22:21.000Z</published>
-    <updated>2015-04-15T13:09:11.000Z</updated>
+    <updated>2015-04-15T13:25:00.000Z</updated>
     <content type="html"><![CDATA[<p>Step-by-step instructions for creating a full featured RESTful API using CakePHP 3.</p>
 <h2 id="Before_We_Begin">Before We Begin</h2><p>This is part one of the CakePHP 3 REST API tutorial series:</p>
 <ol>
 <li>How to build a CakePHP 3 REST API in minutes</li>
-<li><a href="/2015/04/how-to-use-a-cakephp-3-rest-api/">How to use a CAKEPHP 3 REST API</a></li>
-<li><a href="/2015/04/how-to-prefix-route-a-cakephp-3-rest-api/">How to prefix route a CAKEPHP 3 REST API</a></li>
-<li>How to add JWT Authentication to a CAKEPHP 3 REST API (<strong>coming soon</strong>)</li>
+<li><a href="/2015/04/how-to-use-a-cakephp-3-rest-api/">How to use a CakePHP 3 REST API</a></li>
+<li><a href="/2015/04/how-to-prefix-route-a-cakephp-3-rest-api/">How to prefix route a CakePHP 3 REST API</a></li>
+<li>How to add JWT Authentication to a CakePHP 3 REST API (<strong>coming soon</strong>)</li>
 </ol>
 <h2 id="1-_Create_The_Application">1. Create The Application</h2><p>For this tutorial (and the follow-up posts) we will create a fresh CakePHP 3
 application for our API:</p>
