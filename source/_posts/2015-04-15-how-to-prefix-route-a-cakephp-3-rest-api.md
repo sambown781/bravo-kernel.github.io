@@ -27,8 +27,9 @@ This is part three of the CakePHP 3 REST API tutorial series:
 Before starting this tutorial either:
 
 + complete the previous posts
-+ start fresh by using these end-state [application sources](http://todo.com) and running the
-database migration
++ start fresh by using these
+[end-state application sources](https://github.com/bravo-kernel/application-examples/tree/master/blog-how-to-use-a-cakephp3-rest-api),
+composer installing and running the database migration
 
 ## Creating the Prefix Route
 

@@ -63,12 +63,11 @@ bin/cake plugin load Crud
 Only controllers **explicitly enabled** for API use will be accessible
 through your API.
 
-Enable controllers using the ``resources()`` method inside the / scope
-definition in your ``config/routes.php`` file like this:
+To prepare for the follow-up tutorial we will enable the ``CocktailsController`` by using the
+``resources()`` method inside the / scope definition of your ``config/routes.php`` file like this:
 
 ```php
 Router::scope('/', function ($routes) {
-	$routes->resources('Users');
 	$routes->resources('Cocktails');
 ...
 }
@@ -115,9 +114,9 @@ class AppController extends Controller {
 Exposing your API resources **requires no additional configuration**, they are
 already fully accessible using Request Headers.
 
-However... if you want to additionally allow access to your API resources using
+However... we will assume you want to additionally allow access to your API resources using
 the [.json and .xml extensions](http://book.cakephp.org/3.0/en/development/routing.html#routing-file-extensions)
-open your ``config/routes.php`` file and add the following line directly above
+so open your ``config/routes.php`` file and add the following line directly above
 the / scope definition:
 
 ```php
@@ -146,6 +145,7 @@ the follow-up tutorial:
 
 ## Additional reading
 
++ Follow-up tutorial "[How to use a CakePHP3 REST API](/2015/04/how-to-use-a-cakephp-3-rest-api/)"
 + [FriendsOfCake CRUD plugin documentation](http://crud.readthedocs.org)
 
 <em>Hat tip to CakePHP Core Developers [jose_zap](https://github.com/lorenzo)

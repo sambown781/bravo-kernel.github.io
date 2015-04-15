@@ -36,15 +36,15 @@ Before starting this tutorial either:
 
 + complete the previous post
 + start fresh by using these
-[end-state application sources](http://todo.com)
-and running the database migration
+[end-state application sources](https://github.com/bravo-kernel/application-examples/tree/master/blog-how-to-build-a-cakephp3-rest-api),
+composer installing and running the database migration
 
 ## 1. Adding The Cocktails
 
 ### Populate the database
 
 Download this CakePHP
-[database migration file](https://github.com/bravo-kernel/examples/blob/master/blog-how-to-use-a-cakephp3-rest-api/config/Migrations/20150411161731_initial.php)
+[database migration file](https://github.com/bravo-kernel/application-examples/blob/master/blog-how-to-use-a-cakephp3-rest-api/config/Migrations/20150411161731_initial.php)
 to your ``config/Migrations`` directory.
 
 Now run the following command inside your application's root directory to
@@ -278,7 +278,7 @@ below in preparation for querystring parameter testing.
 
 ### Show all cocktail details/fields
 
-To show all record details **remove** the ``fields`` array (used earlier to
+To show all record details **completely remove** the ``fields`` array (used earlier to
 keep the JSON output examples readable).
 
 Querying ``http://cake3api.app/cocktails.json?limit=2`` should now produce
