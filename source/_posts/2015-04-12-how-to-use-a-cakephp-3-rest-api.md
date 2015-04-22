@@ -81,7 +81,7 @@ class CocktailsController extends AppController
 }
 ```
 
-### Create the entity and table
+### Generate the entity and table
 
 Generate the required entity and model by running the following command inside
 your application's root directory:

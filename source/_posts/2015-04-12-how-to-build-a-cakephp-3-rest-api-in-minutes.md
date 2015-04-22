@@ -44,7 +44,7 @@ application so your API will benefit of additional functionality like
 pagination, thin controllers and DRY best practices.
 
 Run the following command inside your application's root directory to
-Composer install the plugin:
+composer install the plugin:
 
 ```bash
 composer require friendsofcake/crud:dev-cake3
