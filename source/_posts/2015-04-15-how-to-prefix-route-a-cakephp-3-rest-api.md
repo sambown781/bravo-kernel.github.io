@@ -63,21 +63,63 @@ Please note that once again:
 + enabling extensions is optional
 + only explicitely specified controllers will be accessible through your API
 
-### 3. Create the controller(s)
+### 3. Create the prefix AppController
 
-One of the great things about CakePHP 3 prefix routing is the automatic mapping to sub-namespaces 
+One of the great things about CakePHP 3 prefix routing is the **automatic mapping to sub-namespaces** 
 which allows us to separate concern by creating dedicated controller files for (just) our API logic
 inside the ``src/Controller/Api`` subdirectory.
 
-Create a new controller file named ``src/Controller/Api/CocktailsController.php`` with the
-same content we used in the previous tutorial but this time using a **different namespace** matching
-our prefix route:
+To optimize separation even further we will create an ``AppController`` dedicated to the ``Api``
+namespace that all controllers in the ``Api`` namespace will extend (instead of extending the
+application's AppController).
+
+Create a new file named ``src/Controller/Api/AppController.php`` with the following content:
 
 ```php
 <?php
 namespace App\Controller\Api;
 
-use App\Controller\AppController;
+use Cake\Controller\Controller;
+use Cake\Event\Event;
+
+class AppController extends Controller
+{
+    use \Crud\Controller\ControllerTrait;
+
+    public $components = [
+        'RequestHandler',
+        'Crud.Crud' => [
+            'actions' => [
+                'Crud.Index',
+                'Crud.View',
+                'Crud.Add',
+                'Crud.Edit',
+                'Crud.Delete'
+            ],
+            'listeners' => [
+                'Crud.Api',
+                'Crud.ApiPagination',
+                'Crud.ApiQueryLog'
+            ]
+        ]
+    ];
+}
+```
+
+### 4. Create the CocktailsController
+
+Now create a new controller file for your cocktail resources named
+``src/Controller/Api/CocktailsController.php`` with the same content as used in the previous
+tutorial but this time:
+
++ using the ``Api`` sub-namespace matching our prefix route
++ extending ``App\Controller\Api\AppController``
+
+```php
+<?php
+namespace App\Controller\Api;
+
+use App\Controller\Api\AppController;
 
 class CocktailsController extends AppController
 {
@@ -87,6 +129,36 @@ class CocktailsController extends AppController
         'maxLimit' => 15,
         'sortWhitelist' => [
             'id', 'name'
+        ]
+    ];
+}
+```
+
+### 5. Cleanup
+
+Even though this is optional we will remove all CRUD Api configuration from 
+``src/Controller/AppController.php`` to prove that only controller logic in the ``Api`` namespace
+is being used when we test the prefix.
+
+```php
+<?php
+namespace App\Controller;
+
+use Cake\Controller\Controller;
+
+class AppController extends Controller {
+
+    use \Crud\Controller\ControllerTrait;
+
+    public $components = [
+        'Crud.Crud' => [
+            'actions' => [
+                'Crud.Index',
+                'Crud.View',
+                'Crud.Add',
+                'Crud.Edit',
+                'Crud.Delete'
+            ]
         ]
     ];
 }
@@ -139,11 +211,15 @@ response:
 
 If things went well your API resources should no longer be accessible using the default routes.
 
-To verify query ``http://cake3api.app/cocktails.json`` as used in the previous tutorial which 
-should:
+To verify query ``http://cake3api.app/cocktails.json`` as used in the previous tutorial. If things
+went will it: 
 
-+ no longer produce a JSON/XML response
-+ respond with an HTML ``MissingController`` exception instead
++ should no longer produce a JSON/XML response
++ should instead show an HTML ``MissingController`` exception similar to the one below
+
+<br />
+
+{% asset_img browser-missing-controller.png 'Cocktails index after prefixing route' %}
 
 ### 3. Test non-API access
 
