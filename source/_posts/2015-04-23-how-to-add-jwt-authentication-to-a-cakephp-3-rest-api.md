@@ -3,6 +3,13 @@ date: 2015-04-20 07:22:32
 tags:
 categories:
   - CakePHP
+tags:
+- cakephp
+- cakephp3
+- rest
+- api
+- security
+- jwt
 ---
 
 In this follow-up post to
@@ -15,6 +22,9 @@ instructions:
 - describing a full blown, real world implementation
 - usable as drop-in code for (almost) any CakePHP 3 application requiring API authentication
 - spiced up with background information to help you understand the JWT concept
+
+> **Important**: please remember to use SSL/TLS encrypted connections for ALL API traffic 
+> to prevent man in the middle attackers from seeing and stealing the tokens.
 
 During this tutorial you will:
 
@@ -52,19 +62,11 @@ The web is already filled with information about JSON Web Token (JWT) Authentica
 duplicate it here but in a nutshell it allows authenticating users against a single token instead
 of the more commonly used username/password. 
 
-As a side effect implementing JWT will also add some (very cool) additional functionality to our API like:	
+As a side effect our API will benefit from some (very cool) additional JWT functionality like:	
 
 + No more need for sessions
 + No more need to protect our API against Cross-Site Request Forgery (CSRF)
-+ No more challenges handling Cross-Origin-Resource-Sharing (CORS)
-+ Ready for granular security using JWT scopes
-
-**Discess:** SSL for all requests is best practice to mitigate session hijacking but...
-do we really need to use SSL for the complete API and not just the ``/register`` and ``/token`` actions?
-In other words: is the jwt token encrpyted and protected enough for plain HTTP usage?
-
-**Discuss:** JWT Plugin tokens are valid for ???
-
++ Support for granular security through the use of JWT scopes
 
 ## 2. Adding Users To The Application
 
@@ -122,7 +124,7 @@ Run the following command inside your application's root directory to
 composer install the [JwtAuth plugin](https://github.com/ADmad/cakephp-jwt-auth):
 
 ```bash
-composer require admad/cakephp-jwt-auth:dev-master
+composer require admad/cakephp-jwt-auth:1.0.x-dev
 ```
 
 Now run the following command to make your application use the plugin:
@@ -260,13 +262,16 @@ and [serialize](http://crud.readthedocs.org/en/latest/actions/add.html#serialize
 To implement user registration add the following ``add()`` method to ``src/Controller/Api/UsersController.php``:
 
 ```php
-    public function add()
-    {
         $this->Crud->on('afterSave', function(\Cake\Event\Event $event) {
             if ($event->subject->created) {
                 $this->set('data', [
                     'id' => $event->subject->entity->id,
-                    'token' => $token = \JWT::encode(['id' => $event->subject->entity->id], Security::salt())
+                    'token' => $token = \JWT::encode(
+                        [
+                            'id' => $event->subject->entity->id,
+                            'exp' =>  time() + 604800
+                        ],
+                    Security::salt())
                 ]);
                 $this->Crud->action()->config('serialize.data', 'data');
             }
@@ -274,6 +279,10 @@ To implement user registration add the following ``add()`` method to ``src/Contr
         return $this->Crud->execute();
     }
 ```
+
+**Note:** even though this is not required we are adding the [JWT exp claim](http://self-issued.info/docs/draft-ietf-oauth-json-web-token.html#expDef)
+to the token payload so the token will expire after one week, effectively forcing the user to request
+a new unique token using the ``/token`` action.
 
 ### Verify User Registration
 
@@ -309,7 +318,8 @@ is valid by:
 + pasting your token in the ``Encoded`` field
 + replacing the secret value with the ``Salt`` value found in your ``config/app.php``
 
-If things went well you should be rewarded with a **green** success message and matching user id similar to:
+If things went well you should see a **green** success message along with the user id and JWT exp
+claim as stored in the token:
 
 <br />
 
@@ -339,17 +349,21 @@ To implement token requests add the following ``token()`` method to ``src/Contro
     public function token()
     {
         $user = $this->Auth->identify();
-        if ($user) {
-            $this->set([
-                'success' => true,
-                'data' => [
-                    'token' => $token = \JWT::encode(['id' => $user['id']], Security::salt())
-                ],
-                '_serialize' => ['success', 'data']
-            ]);
-            return;
+        if (!$user) {
+            throw new UnauthorizedException('Invalid username or password');
         }
-        throw new UnauthorizedException('Invalid username or password');
+
+        $this->set([
+            'success' => true,
+            'data' => [
+                'token' => $token = \JWT::encode([
+                    'id' => $user['id'],
+                    'exp' =>  time() + 604800
+                ],
+                Security::salt())
+            ],
+            '_serialize' => ['success', 'data']
+        ]);
     }
 ```
 
@@ -459,6 +473,7 @@ Should instantly return Status Code 401 (Unauthorized) with a JSON response body
 
 + [End-state application sources](https://github.com/bravo-kernel/application-examples/tree/master/blog-how-to-prefix-route-a-cakephp3-rest-api) for this tutorial
 + The [CakePHP JWT Plugin](https://github.com/ADmad/cakephp-jwt-auth) on Github
++ The [PHP JWT Library](https://github.com/firebase/php-jwt) on Github
 + The [CakePHP 3 Book](http://book.cakephp.org/3.0/en/index.html) and [CakePHP 3 API](http://api.cakephp.org/3.0/) documentation
 
 <em>Hat tip to CakePHP Core Developer and JWT Plugin creator [ADmad](https://github.com/ADmad/) for
