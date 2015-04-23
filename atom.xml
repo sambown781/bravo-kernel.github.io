@@ -4,7 +4,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://bravo-kernel.com/"/>
-  <updated>2015-04-23T12:59:18.000Z</updated>
+  <updated>2015-04-23T13:19:38.000Z</updated>
   <id>http://bravo-kernel.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://bravo-kernel.com/2015/04/how-to-add-jwt-authentication-to-a-cakephp-3-rest-api/"/>
     <id>http://bravo-kernel.com/2015/04/how-to-add-jwt-authentication-to-a-cakephp-3-rest-api/</id>
     <published>2015-04-20T07:22:32.000Z</published>
-    <updated>2015-04-23T12:59:18.000Z</updated>
+    <updated>2015-04-23T13:19:38.000Z</updated>
     <content type="html"><![CDATA[<p>In this follow-up post to
 <a href="/2015/04/how-to-prefix-route-a-cakephp-3-rest-api/">How to prefix route a CakePHP 3 REST API</a>
 we will implement <a href="http://jwt.io/" target="_blank" rel="external">JSON Web Token</a> (JWT) authentication.</p>
@@ -64,10 +64,9 @@ of the more commonly used username/password. </p>
 <ul>
 <li>No more need for sessions</li>
 <li>No more need to protect our API against Cross-Site Request Forgery (CSRF)</li>
-<li>No more challenges handling Cross-Origin-Resource-Sharing (CORS)</li>
 <li>Ready for granular security using JWT scopes</li>
 </ul>
-<p><strong>Discess:</strong> SSL for all requests is best practice to mitigate session hijacking but…
+<p><strong>Discuss:</strong> SSL for all requests is best practice to mitigate session hijacking but…
 do we really need to use SSL for the complete API and not just the <code>/register</code> and <code>/token</code> actions?
 In other words: is the jwt token encrpyted and protected enough for plain HTTP usage?</p>
 <p><strong>Discuss:</strong> JWT Plugin tokens are valid for ???</p>
