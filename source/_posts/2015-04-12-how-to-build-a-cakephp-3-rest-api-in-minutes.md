@@ -146,8 +146,9 @@ the follow-up tutorial:
 ## Additional reading
 
 + Follow-up tutorial "[How to use a CakePHP3 REST API](/2015/04/how-to-use-a-cakephp-3-rest-api/)"
-+ [Tutorial sources](https://github.com/bravo-kernel/application-examples/tree/master/blog-how-to-build-a-cakephp3-rest-api)
++ [End-state application sources](https://github.com/bravo-kernel/application-examples/tree/master/blog-how-to-build-a-cakephp3-rest-api) for this tutorial
 + [FriendsOfCake CRUD plugin documentation](http://crud.readthedocs.org)
++ The [CakePHP 3 Book](http://book.cakephp.org/3.0/en/index.html) and [CakePHP 3 API](http://api.cakephp.org/3.0/) documentation
 
 <em>Hat tip to CakePHP Core Developers [jose_zap](https://github.com/lorenzo)
 and [ADmad](https://github.com/admad) for helping create this post.</em>

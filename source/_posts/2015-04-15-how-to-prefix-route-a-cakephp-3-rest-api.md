@@ -159,7 +159,8 @@ class AppController extends Controller {
                 'Crud.Edit',
                 'Crud.Delete'
             ]
-        ]
+        ],
+        'Flash'
     ];
 }
 ```
@@ -235,7 +236,9 @@ CakePHP index page:
 
 ## Additional reading
 
-+ [Tutorial sources](https://github.com/bravo-kernel/application-examples/tree/master/blog-how-to-prefix-route-a-cakephp3-rest-api)
++ Follow-up tutorial [How to add JWT Authentication to a CakePHP 3 REST API](/2015/04/how-to-add-jwt-authentication-to-a-cakephp-3-rest-api/)
++ [End-state application sources](https://github.com/bravo-kernel/application-examples/tree/master/blog-how-to-prefix-route-a-cakephp3-rest-api) for this tutorial
 + [CakePHP routing documentation](http://book.cakephp.org/3.0/en/development/routing.html)
++ The [CakePHP 3 Book](http://book.cakephp.org/3.0/en/index.html) and [CakePHP 3 API](http://api.cakephp.org/3.0/) documentation
 
 <em>Hat tip to CakePHP Core Developer [Ceeram](https://github.com/ceeram) for proofing this post.</em>
