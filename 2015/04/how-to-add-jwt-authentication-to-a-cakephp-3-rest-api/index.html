@@ -88,6 +88,10 @@ instructions:</p>
 <li>usable as drop-in code for (almost) any CakePHP 3 application requiring API authentication</li>
 <li>spiced up with background information to help you understand the JWT concept</li>
 </ul>
+<blockquote>
+<p><strong>Important</strong>: please remember to use SSL/TLS encrypted connections for ALL API traffic 
+to prevent man in the middle attackers from seeing and stealing the tokens.</p>
+</blockquote>
 <p>During this tutorial you will:</p>
 <ul>
 <li>add some basic user data to the application</li>
@@ -118,15 +122,12 @@ composer installing and running the database migration</li>
 <h2 id="1-_Introduction">1. Introduction</h2><p>The web is already filled with information about JSON Web Token (JWT) Authentication so we will not
 duplicate it here but in a nutshell it allows authenticating users against a single token instead
 of the more commonly used username/password. </p>
-<p>As a side effect implementing JWT will also add some (very cool) additional functionality to our API like:    </p>
+<p>As a side effect our API will be able to benefit from some (very cool) additional JWT functionality like:    </p>
 <ul>
 <li>No more need for sessions</li>
 <li>No more need to protect our API against Cross-Site Request Forgery (CSRF)</li>
-<li>Ready for granular security using JWT scopes</li>
+<li>Support for granular security through the use of JWT scopes</li>
 </ul>
-<p><strong>Discuss:</strong> SSL for all requests is best practice to mitigate session hijacking but…
-do we really need to use SSL for the complete API and not just the <code>/register</code> and <code>/token</code> actions?
-In other words: is the jwt token encrpyted and protected enough for plain HTTP usage?</p>
 <p><strong>Discuss:</strong> JWT Plugin tokens are valid for ???</p>
 <h2 id="2-_Adding_Users_To_The_Application">2. Adding Users To The Application</h2><h3 id="Populate_the_database">Populate the database</h3><p>Download this CakePHP
 <a href="https://github.com/bravo-kernel/application-examples/blob/master/blog-how-to-add-jwt-authentication-to-a-cakephp-3-rest-api/config/Migrations/20150420112310_users.php" target="_blank" rel="external">database migration file</a>
