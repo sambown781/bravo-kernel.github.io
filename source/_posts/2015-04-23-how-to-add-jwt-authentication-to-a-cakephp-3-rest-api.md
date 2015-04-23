@@ -252,7 +252,7 @@ body containing:
 {% asset_img jwt-primer-registration.png 'JWT primer: user registration' %}
 
 
-### Create the action
+### Create the add() action
 
 Because the CRUD plugin normally only returns the id of the new record we will add the JWT token
 to the JSON response body by extending the ``add()`` method with some custom CRUD
@@ -262,6 +262,8 @@ and [serialize](http://crud.readthedocs.org/en/latest/actions/add.html#serialize
 To implement user registration add the following ``add()`` method to ``src/Controller/Api/UsersController.php``:
 
 ```php
+    public function add()
+    {
         $this->Crud->on('afterSave', function(\Cake\Event\Event $event) {
             if ($event->subject->created) {
                 $this->set('data', [
@@ -341,7 +343,7 @@ body containing the JWT token.
 
 {% asset_img jwt-primer-token.png 'JWT primer: token request' %}
 
-### Create the action
+### Create the token() action
 
 To implement token requests add the following ``token()`` method to ``src/Controller/Api/UsersController.php``:
 
