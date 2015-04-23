@@ -30,7 +30,7 @@ This is part two of the CakePHP 3 REST API tutorial series:
 1. [How to build a CakePHP 3 REST API in minutes](/2015/04/how-to-build-a-cakephp-3-rest-api-in-minutes/)
 2. How to use a CakePHP 3 REST API
 3. [How to prefix route a CakePHP 3 REST API](/2015/04/how-to-prefix-route-a-cakephp-3-rest-api/)
-4. How to add JWT Authentication to a CakePHP 3 REST API (**coming soon**)
+4. [How to add JWT Authentication to a CakePHP 3 REST API](/2015/04/how-to-add-jwt-authentication-to-a-cakephp-3-rest-api/)
 
 Before starting this tutorial either:
 
