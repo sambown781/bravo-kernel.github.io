@@ -252,7 +252,7 @@ body containing:
 {% asset_img jwt-primer-registration.png 'JWT primer: user registration' %}
 
 
-### Create the add() action
+### Create the /register  action
 
 Because the CRUD plugin normally only returns the id of the new record we will add the JWT token
 to the JSON response body by extending the ``add()`` method with some custom CRUD
@@ -343,7 +343,7 @@ body containing the JWT token.
 
 {% asset_img jwt-primer-token.png 'JWT primer: token request' %}
 
-### Create the token() action
+### Create the /token action
 
 To implement token requests add the following ``token()`` method to ``src/Controller/Api/UsersController.php``:
 
