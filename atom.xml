@@ -4,7 +4,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://bravo-kernel.com/"/>
-  <updated>2015-04-23T14:30:59.000Z</updated>
+  <updated>2015-04-23T14:33:28.000Z</updated>
   <id>http://bravo-kernel.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://bravo-kernel.com/2015/04/how-to-add-jwt-authentication-to-a-cakephp-3-rest-api/"/>
     <id>http://bravo-kernel.com/2015/04/how-to-add-jwt-authentication-to-a-cakephp-3-rest-api/</id>
     <published>2015-04-20T07:22:32.000Z</published>
-    <updated>2015-04-23T14:30:59.000Z</updated>
+    <updated>2015-04-23T14:33:28.000Z</updated>
     <content type="html"><![CDATA[<p>In this follow-up post to
 <a href="/2015/04/how-to-prefix-route-a-cakephp-3-rest-api/">How to prefix route a CakePHP 3 REST API</a>
 we will implement <a href="http://jwt.io/" target="_blank" rel="external">JSON Web Token</a> (JWT) authentication.</p>
@@ -136,7 +136,7 @@ body containing:</p>
 </ul>
 <p><br></p>
 <img src="/2015/04/how-to-add-jwt-authentication-to-a-cakephp-3-rest-api/jwt-primer-registration.png">
-<h3 id="Create_the_action">Create the action</h3><p>Because the CRUD plugin normally only returns the id of the new record we will add the JWT token
+<h3 id="Create_the_add()_action">Create the add() action</h3><p>Because the CRUD plugin normally only returns the id of the new record we will add the JWT token
 to the JSON response body by extending the <code>add()</code> method with some custom CRUD
 <a href="http://crud.readthedocs.org/en/latest/actions/add.html#crud-aftersave" target="_blank" rel="external">afterSave</a>
 and <a href="http://crud.readthedocs.org/en/latest/actions/add.html#serialize" target="_blank" rel="external">serialize</a> logic.</p>
@@ -175,7 +175,7 @@ validate the credentials.</p>
 body containing the JWT token.</p>
 <p><br></p>
 <img src="/2015/04/how-to-add-jwt-authentication-to-a-cakephp-3-rest-api/jwt-primer-token.png">
-<h3 id="Create_the_action-1">Create the action</h3><p>To implement token requests add the following <code>token()</code> method to <code>src/Controller/Api/UsersController.php</code>:</p>
+<h3 id="Create_the_token()_action">Create the token() action</h3><p>To implement token requests add the following <code>token()</code> method to <code>src/Controller/Api/UsersController.php</code>:</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">token</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="variable">$user</span> = <span class="variable">$this</span>-&gt;Auth-&gt;identify();</span><br><span class="line">    <span class="keyword">if</span> (!<span class="variable">$user</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> UnauthorizedException(<span class="string">'Invalid username or password'</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="variable">$this</span>-&gt;set([</span><br><span class="line">        <span class="string">'success'</span> =&gt; <span class="keyword">true</span>,</span><br><span class="line">        <span class="string">'data'</span> =&gt; [</span><br><span class="line">            <span class="string">'token'</span> =&gt; <span class="variable">$token</span> = \JWT::encode([</span><br><span class="line">                <span class="string">'id'</span> =&gt; <span class="variable">$user</span>[<span class="string">'id'</span>],</span><br><span class="line">                <span class="string">'exp'</span> =&gt;  time() + <span class="number">604800</span></span><br><span class="line">            ],</span><br><span class="line">            Security::salt())</span><br><span class="line">        ],</span><br><span class="line">        <span class="string">'_serialize'</span> =&gt; [<span class="string">'success'</span>, <span class="string">'data'</span>]</span><br><span class="line">    ]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="Verify_Token_Request">Verify Token Request</h3><p>To verify your setup request a token for the newly created user by posting JSON data to your API using:</p>
 <ul>
