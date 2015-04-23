@@ -4,7 +4,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://bravo-kernel.com/"/>
-  <updated>2015-04-23T13:36:20.000Z</updated>
+  <updated>2015-04-23T13:40:00.000Z</updated>
   <id>http://bravo-kernel.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://bravo-kernel.com/2015/04/how-to-add-jwt-authentication-to-a-cakephp-3-rest-api/"/>
     <id>http://bravo-kernel.com/2015/04/how-to-add-jwt-authentication-to-a-cakephp-3-rest-api/</id>
     <published>2015-04-20T07:22:32.000Z</published>
-    <updated>2015-04-23T13:36:20.000Z</updated>
+    <updated>2015-04-23T13:40:00.000Z</updated>
     <content type="html"><![CDATA[<p>In this follow-up post to
 <a href="/2015/04/how-to-prefix-route-a-cakephp-3-rest-api/">How to prefix route a CakePHP 3 REST API</a>
 we will implement <a href="http://jwt.io/" target="_blank" rel="external">JSON Web Token</a> (JWT) authentication.</p>
@@ -225,6 +225,18 @@ helping improve this tutorial.</em></p>
 <a href="/2015/04/how-to-prefix-route-a-cakephp-3-rest-api/">How to prefix route a CakePHP 3 REST API</a>
 we wi]]>
     </summary>
+    
+      <category term="api" scheme="http://bravo-kernel.com/tags/api/"/>
+    
+      <category term="cakephp" scheme="http://bravo-kernel.com/tags/cakephp/"/>
+    
+      <category term="cakephp3" scheme="http://bravo-kernel.com/tags/cakephp3/"/>
+    
+      <category term="jwt" scheme="http://bravo-kernel.com/tags/jwt/"/>
+    
+      <category term="rest" scheme="http://bravo-kernel.com/tags/rest/"/>
+    
+      <category term="security" scheme="http://bravo-kernel.com/tags/security/"/>
     
       <category term="CakePHP" scheme="http://bravo-kernel.com/categories/cakephp/"/>
     

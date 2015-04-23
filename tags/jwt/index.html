@@ -3,18 +3,13 @@
 <head>
   <meta charset="utf-8">
   
-  <title>How to create a new CakePHP application using FriendsOfCake app-template | Bravo Kernel</title>
+  <title>jwt | Bravo Kernel</title>
   <meta name="author" content="bravo-kernel">
-  
-  <meta name="description" content="This will create a new CakePHP application using the awesome FriendsOfCake app-template.
-Make sure you have:
-
-installed Composer (see “How to install ">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="How to create a new CakePHP application using FriendsOfCake app-template"/>
+  
   <meta property="og:site_name" content="Bravo Kernel"/>
 
   
@@ -62,44 +57,26 @@ installed Composer (see “How to install ">
 </nav>
 <div class="clearfix"></div></header>
   <div id="content" class="inner">
-    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+    <div id="main-col" class="alignleft"><div id="wrapper">
+<h2 class="archive-title tag">jwt</h2>
+
+
   
+    <article class="post">
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-08-10T07:31:56.000Z"><a href="/2014/08/how-to-create-a-new-cakephp-application-using-friendsofcake-app-template/">Aug 10 2014</a></time>
+        <time datetime="2015-04-20T07:22:32.000Z"><a href="/2015/04/how-to-add-jwt-authentication-to-a-cakephp-3-rest-api/">Apr 20 2015</a></time>
       
       
   
-    <h1 class="title">How to create a new CakePHP application using FriendsOfCake app-template</h1>
+    <h1 class="title"><a href="/2015/04/how-to-add-jwt-authentication-to-a-cakephp-3-rest-api/">How to add JWT Authentication to a CakePHP 3 REST API</a></h1>
   
 
     </header>
-    <div class="entry">
-      
-        <p>This will create a new CakePHP application using the awesome <a href="https://github.com/FriendsOfCake/app-template" title="FriendsOfCake app-template" target="_blank" rel="external">FriendsOfCake app-template</a>.</p>
-<p>Make sure you have:</p>
-<ul>
-<li>installed Composer (see <a href="/blog/2014/08/how-to-install-composer-on-debian/" title="How to install Composer on Debian">“How to install Composer on Debian”</a>)</li>
-<li>created an empty Github repository (we’ll call it Debby)</li>
-</ul>
-<h3 id="Install_app-template">Install app-template</h3><pre><code>$ cd [path-to-repos]
-$ sudo apt-get install php5-mcrypt
-$ git clone https://github.com/<span class="type">FriendsOfCake</span>/app-<span class="keyword">template</span>.git friendsofcake/app-<span class="keyword">template</span>
-</code></pre><h3 id="Generate_app">Generate app</h3><pre><code>$ composer -sdev create-project friendsofcake/app-<span class="keyword">template</span> debby
-</code></pre><h3 id="Save_app">Save app</h3><pre><code><span class="char">$ </span>cd debby
-<span class="char">$ </span>git init
-<span class="char">$ </span>git add .
-<span class="char">$ </span>git add tmp/ -f
-<span class="char">$ </span>git commit -m <span class="comment">"Initial FriendsOfCake app-template"</span>
-<span class="char">$ </span>git remote add origin git@github.<span class="method">com:</span>&lt;gh-username&gt;/debby.git
-<span class="char">$ </span>git push -u origin master
-</code></pre>
-      
-    </div>
     <footer>
-      
+		
         
   
   <div class="categories">
@@ -109,27 +86,24 @@ $ git clone https://github.com/<span class="type">FriendsOfCake</span>/app-<span
         
   
   <div class="tags">
-    <a href="/tags/cakephp/">cakephp</a>, <a href="/tags/composer/">composer</a>, <a href="/tags/foc/">foc</a>
+    <a href="/tags/api/">api</a>, <a href="/tags/cakephp/">cakephp</a>, <a href="/tags/cakephp3/">cakephp3</a>, <a href="/tags/jwt/">jwt</a>, <a href="/tags/rest/">rest</a>, <a href="/tags/security/">security</a>
   </div>
 
         
-      
-      <div class="clearfix"></div>
+		<div class="clearfix"></div>
     </footer>
   </div>
 </article>
 
 
-<section id="comment">
-  <h1 class="title">Comments</h1>
 
   
-  <div id="disqus_thread">
-    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-  </div>
-  
-</section>
 
+  <nav id="pagination">
+  
+  
+  <div class="clearfix"></div>
+</nav>
 </div></div>
     <aside id="sidebar" class="alignright">
   <div class="search">
@@ -181,7 +155,7 @@ var disqus_shortname = 'bravo-kernel';
   var dsq = document.createElement('script');
   dsq.type = 'text/javascript';
   dsq.async = true;
-  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
 }());
 </script>
