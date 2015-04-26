@@ -4,7 +4,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://bravo-kernel.com/"/>
-  <updated>2015-04-23T14:38:21.000Z</updated>
+  <updated>2015-04-26T10:58:03.000Z</updated>
   <id>http://bravo-kernel.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://bravo-kernel.com/2015/04/how-to-add-jwt-authentication-to-a-cakephp-3-rest-api/"/>
     <id>http://bravo-kernel.com/2015/04/how-to-add-jwt-authentication-to-a-cakephp-3-rest-api/</id>
     <published>2015-04-20T07:22:32.000Z</published>
-    <updated>2015-04-23T14:38:21.000Z</updated>
+    <updated>2015-04-26T10:58:03.000Z</updated>
     <content type="html"><![CDATA[<p>In this follow-up post to
 <a href="/2015/04/how-to-prefix-route-a-cakephp-3-rest-api/">How to prefix route a CakePHP 3 REST API</a>
 we will implement <a href="http://jwt.io/" target="_blank" rel="external">JSON Web Token</a> (JWT) authentication.</p>
@@ -216,7 +216,7 @@ by using the exact same query but <strong>this time removing</strong> the <code>
 <p>Should instantly return Status Code 401 (Unauthorized) with a JSON response body similar to:</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    "<span class="attribute">success</span>": <span class="value"><span class="literal">false</span></span>,</span><br><span class="line">    "<span class="attribute">data</span>": <span class="value">&#123;</span><br><span class="line">        "<span class="attribute">message</span>": <span class="value"><span class="string">"You are not authorized to access that location."</span></span>,</span><br><span class="line">        "<span class="attribute">url</span>": <span class="value"><span class="string">"\/api\/cocktails.json"</span></span>,</span><br><span class="line">        "<span class="attribute">code</span>": <span class="value"><span class="number">401</span></span><br><span class="line">    </span>&#125;</span><br><span class="line"></span>&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="Additional_reading">Additional reading</h2><ul>
-<li><a href="https://github.com/bravo-kernel/application-examples/tree/master/blog-how-to-prefix-route-a-cakephp3-rest-api" target="_blank" rel="external">End-state application sources</a> for this tutorial</li>
+<li><a href="https://github.com/bravo-kernel/application-examples/tree/master/blog-how-to-add-jwt-authentication-to-a-cakephp-3-rest-api" target="_blank" rel="external">End-state application sources</a> for this tutorial</li>
 <li>The <a href="https://github.com/ADmad/cakephp-jwt-auth" target="_blank" rel="external">CakePHP JWT Plugin</a> on Github</li>
 <li>The <a href="https://github.com/firebase/php-jwt" target="_blank" rel="external">PHP JWT Library</a> on Github</li>
 <li>The <a href="http://book.cakephp.org/3.0/en/index.html" target="_blank" rel="external">CakePHP 3 Book</a> and <a href="http://api.cakephp.org/3.0/" target="_blank" rel="external">CakePHP 3 API</a> documentation</li>
