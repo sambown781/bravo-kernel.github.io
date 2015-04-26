@@ -159,27 +159,56 @@ Router::prefix('api', function ($routes) {
 
 ## 5. Enabling JWT Authentication
 
-To enable JWT Authentication for all API resources add the following ``beforeFilter()`` method 
-to ``src/Controller/Api/AppController`` and make sure to add the ``use`` statement as well.
+To enable JWT Authentication for all API resources extend the 
+``src/Controller/Api/AppController.php`` file created during the previous tutorial with the following 
+``beforeFilter`` method so the file looks similar to:
 
 ```php
+<?php
+namespace App\Controller\Api;
+
+use Cake\Controller\Controller;
 use Cake\Event\Event;
 
-public function beforeFilter(Event $event)
+class AppController extends Controller
 {
-        $this->loadComponent('Auth', [
-        'authenticate' => [
-            'Form',
-            'ADmad/JwtAuth.Jwt' => [
-                'parameter' => '_token',
-                'userModel' => 'Users',
-                'scope' => ['Users.active' => 1],
-                'fields' => [
-                    'id' => 'id'
-                ]
+
+    use \Crud\Controller\ControllerTrait;
+
+    public $components = [
+        'RequestHandler',
+        'Crud.Crud' => [
+            'actions' => [
+                'Crud.Index',
+                'Crud.View',
+                'Crud.Add',
+                'Crud.Edit',
+                'Crud.Delete'
+            ],
+            'listeners' => [
+                'Crud.Api',
+                'Crud.ApiPagination',
+                'Crud.ApiQueryLog'
             ]
         ]
-    ]);
+    ];
+
+    public function beforeFilter(Event $event)
+    {
+        $this->loadComponent('Auth', [
+            'authenticate' => [
+                'Form',
+                'ADmad/JwtAuth.Jwt' => [
+                    'parameter' => '_token',
+                    'userModel' => 'Users',
+                    'scope' => ['Users.active' => 1],
+                    'fields' => [
+                        'id' => 'id'
+                    ]
+                ]
+            ]
+        ]);
+    }
 }
 ```
 
