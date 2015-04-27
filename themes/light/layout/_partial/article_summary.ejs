@@ -3,7 +3,10 @@
     <header>
       <% if (item.layout != 'page'){ %>
         <div class="icon"></div>
-        <time datetime="<%= item.date.toDate().toISOString() %>"><a href="<%- config.root %><%- item.path %>"><%= item.date.format(config.date_format) %></a></time>
+		<time datetime="<%= item.date.toDate().toISOString() %>"><a href="<%- config.root %><%- item.path %>" title="Post Created"><%= item.date.format(config.date_format) %></a></time>
+		<% if (item.updated){ %>
+			<span class="updated" title="Post Updated"><span><%= item.updated.format(config.date_format) %></span></span>
+        <% } %>
       <% } %>
       <%- partial('post/title') %>
     </header>
