@@ -450,7 +450,7 @@ Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6Mn0.q2chPMiKR
 
 To verify successful authentication is processed as expected retrieve the list of protected cocktails from your API by using:
 
-+ URL ``http://cake3api.app/api/users/token``
++ URL ``http://cake3api.app/api/cocktails``
 + **HTTP Method** ``GET``
 + **Accept Header** ``application/json``
 + **Authorization Header** containing ``Bearer {YOUR-JWT-TOKEN}``
