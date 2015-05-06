@@ -4,7 +4,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://bravo-kernel.com/"/>
-  <updated>2015-04-26T11:13:21.000Z</updated>
+  <updated>2015-05-06T15:17:12.000Z</updated>
   <id>http://bravo-kernel.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://bravo-kernel.com/2015/04/how-to-add-jwt-authentication-to-a-cakephp-3-rest-api/"/>
     <id>http://bravo-kernel.com/2015/04/how-to-add-jwt-authentication-to-a-cakephp-3-rest-api/</id>
     <published>2015-04-20T07:22:32.000Z</published>
-    <updated>2015-04-26T11:13:21.000Z</updated>
+    <updated>2015-05-06T15:17:12.000Z</updated>
     <content type="html"><![CDATA[<p>In this follow-up post to
 <a href="/2015/04/how-to-prefix-route-a-cakephp-3-rest-api/">How to prefix route a CakePHP 3 REST API</a>
 we will implement <a href="http://jwt.io/" target="_blank" rel="external">JSON Web Token</a> (JWT) authentication.</p>
@@ -204,7 +204,7 @@ in the <code>Authorization</code> header and will validate it using the <code>Sa
 <figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9<span class="class">.eyJpZCI6Mn0</span><span class="class">.q2chPMiKRzwrO3v48fi90HyJPHDLOXtwEKr7EcU3GPk</span></span><br></pre></td></tr></table></figure>
 <h3 id="Verify_Authenticated_Access">Verify Authenticated Access</h3><p>To verify successful authentication is processed as expected retrieve the list of protected cocktails from your API by using:</p>
 <ul>
-<li>URL <code>http://cake3api.app/api/users/token</code></li>
+<li>URL <code>http://cake3api.app/api/cocktails</code></li>
 <li><strong>HTTP Method</strong> <code>GET</code></li>
 <li><strong>Accept Header</strong> <code>application/json</code></li>
 <li><strong>Authorization Header</strong> containing <code>Bearer {YOUR-JWT-TOKEN}</code></li>

@@ -70,7 +70,7 @@ To prevent (yet another) par">
         <div class="icon"></div>
         <time datetime="2015-04-20T07:22:32.000Z"><a href="/2015/04/how-to-add-jwt-authentication-to-a-cakephp-3-rest-api/">Apr 20 2015</a></time>
 		
-			<span class="updated" title="Post Updated"><span>Apr 26 2015</span></span>
+			<span class="updated" title="Post Updated"><span>May 6 2015</span></span>
         
 		<div class="github-improve"><a href="https://github.com/bravo-kernel/bravo-kernel.github.io/tree/source/source/_posts/2015-04-23-how-to-add-jwt-authentication-to-a-cakephp-3-rest-api.md">Improve on Github</a></div>
       
@@ -266,7 +266,7 @@ in the <code>Authorization</code> header and will validate it using the <code>Sa
 <figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9<span class="class">.eyJpZCI6Mn0</span><span class="class">.q2chPMiKRzwrO3v48fi90HyJPHDLOXtwEKr7EcU3GPk</span></span><br></pre></td></tr></table></figure>
 <h3 id="Verify_Authenticated_Access">Verify Authenticated Access</h3><p>To verify successful authentication is processed as expected retrieve the list of protected cocktails from your API by using:</p>
 <ul>
-<li>URL <code>http://cake3api.app/api/users/token</code></li>
+<li>URL <code>http://cake3api.app/api/cocktails</code></li>
 <li><strong>HTTP Method</strong> <code>GET</code></li>
 <li><strong>Accept Header</strong> <code>application/json</code></li>
 <li><strong>Authorization Header</strong> containing <code>Bearer {YOUR-JWT-TOKEN}</code></li>
