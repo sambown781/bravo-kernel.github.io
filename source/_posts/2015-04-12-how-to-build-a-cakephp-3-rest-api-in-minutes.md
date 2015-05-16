@@ -46,7 +46,7 @@ Run the following command inside your application's root directory to
 composer install the plugin:
 
 ```bash
-composer require friendsofcake/crud:dev-cake3
+composer require friendsofcake/crud:~4.0
 ```
 
 Now run the following command to make your application use the plugin:
