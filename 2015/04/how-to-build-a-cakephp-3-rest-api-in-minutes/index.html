@@ -68,7 +68,7 @@ Before We BeginThis is part one of the CakePHP 3 REST API tutorial">
         <div class="icon"></div>
         <time datetime="2015-04-12T11:22:21.000Z"><a href="/2015/04/how-to-build-a-cakephp-3-rest-api-in-minutes/">Apr 12 2015</a></time>
 		
-			<span class="updated" title="Post Updated"><span>Apr 23 2015</span></span>
+			<span class="updated" title="Post Updated"><span>May 16 2015</span></span>
         
 		<div class="github-improve"><a href="https://github.com/bravo-kernel/bravo-kernel.github.io/tree/source/source/_posts/2015-04-12-how-to-build-a-cakephp-3-rest-api-in-minutes.md">Improve on Github</a></div>
       
@@ -108,7 +108,7 @@ application so your API will benefit of additional functionality like
 pagination, thin controllers and DRY best practices.</p>
 <p>Run the following command inside your application’s root directory to
 composer install the plugin:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer require friendsofcake/crud:dev-cake3</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer require friendsofcake/crud:~<span class="number">4.0</span></span><br></pre></td></tr></table></figure>
 <p>Now run the following command to make your application use the plugin:</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/cake plugin load Crud</span><br></pre></td></tr></table></figure>
 <h2 id="3-_Enable_the_API">3. Enable the API</h2><h3 id="a)_Expose_one_or_more_controllers">a) Expose one or more controllers</h3><p>Only controllers <strong>explicitly enabled</strong> for API use will be accessible
