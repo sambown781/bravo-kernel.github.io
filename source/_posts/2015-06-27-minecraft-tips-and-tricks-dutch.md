@@ -1,10 +1,11 @@
 title: "Handige Minecraft weetjes (Dutch)"
 date: 2015-06-27 10:38:10
-tags:
 categories:
   - Minecraft
+tags:
+  - minecraft
+  - dutch
 ---
-
 
 ## Multiverse
 
