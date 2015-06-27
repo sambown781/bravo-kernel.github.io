@@ -834,3 +834,18 @@ article header .updated:before {
 time {
   display: inline !important;
 }
+#sponsor {
+  padding: 20px;
+  padding-bottom: 30px;
+  background: #fff;
+  -webkit-box-shadow: 1px 2px 3px #ddd;
+  -webkit-box-shadow: 1px 2px 3px #ddd;
+  box-shadow: 1px 2px 3px #ddd;
+  margin-top: -25px;
+  margin-bottom: 25px;
+}
+#sponsor .title {
+  font-weight: normal;
+  padding-top: 0;
+  padding-bottom: 15px;
+}
