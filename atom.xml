@@ -4,7 +4,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://bravo-kernel.com/"/>
-  <updated>2015-06-27T10:38:10.000Z</updated>
+  <updated>2015-06-27T19:23:24.000Z</updated>
   <id>http://bravo-kernel.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://bravo-kernel.com/2015/06/minecraft-tips-and-tricks-dutch/"/>
     <id>http://bravo-kernel.com/2015/06/minecraft-tips-and-tricks-dutch/</id>
     <published>2015-06-27T10:38:10.000Z</published>
-    <updated>2015-06-27T10:38:10.000Z</updated>
+    <updated>2015-06-27T19:23:24.000Z</updated>
     <content type="html"><![CDATA[<h2 id="Multiverse">Multiverse</h2><ul>
 <li><a href="http://dev.bukkit.org/bukkit-plugins/multiverse-core/" target="_blank" rel="external">Multiverse website</a></li>
 <li><a href="https://github.com/Multiverse/Multiverse-Core/wiki/Command-Reference" target="_blank" rel="external">Alle Multiverse commando’s</a></li>
@@ -245,6 +245,10 @@ snapt Minecraft het niet)</p>
     <![CDATA[<h2 id="Multiverse">Multiverse</h2><ul>
 <li><a href="http://dev.bukkit.org/bukkit-plugins/multiverse-core/" target="_blank" rel="external">M]]>
     </summary>
+    
+      <category term="dutch" scheme="http://bravo-kernel.com/tags/dutch/"/>
+    
+      <category term="minecraft" scheme="http://bravo-kernel.com/tags/minecraft/"/>
     
       <category term="Minecraft" scheme="http://bravo-kernel.com/categories/minecraft/"/>
     
