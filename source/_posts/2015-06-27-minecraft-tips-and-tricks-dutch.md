@@ -94,13 +94,24 @@ Je kunt de moeilijkheid (difficulty) voor je wereld instellen door één van dez
 /mvm set diff hard <naam-van-je-wereld>
 ```
 
-### Monsters uitschakelen
+### Monsters en dieren uitschakelen
 
-Met het volgende commando kun je monsters uitschakelen voor je wereld (bijvoorbeeld handig als je je
-wereld als hub wilt gebruiken):
+Als je niet wilt dat er monsters of dieren in je wereld spawnen gebruik je één van de volgende
+commando's:
 
 ```bash
 /mvm set monsters false <naam-van-je-wereld>
+/mvm set animals false <naam-van-je-wereld>
+```
+
+### Bestaande monsters en dieren verwijderen
+
+Soms zijn er al monsters of dieren gespawned in je wereld. Gebruik één van de volgende commando's
+om ze uit je wereld te verwijderen:
+
+```bash
+/mv purge <naam-van-je-wereld> monsters
+/mv purge <naam-van-je-wereld> animals
 ```
 
 ### Weer instellen
@@ -180,15 +191,6 @@ gewoon irritant. Schakel het uit met het volgende commando:
 
 ```bash
 /mv conf prefixchat false
-```
-
-### Monsters verwijderen
-
-Als je alle monsters wilt verwijderen die al in je wereld zijn gespawned gebruik je 
-het volgende commando:
-
-```bash
-/mv purge <naam-van-je-wereld> monsters
 ```
 
 ## OPs
