@@ -145,7 +145,7 @@ The API prefix route created during the previous tutorial needs updating:
 method and benefit of already available logic like validation and response codes instead of having to
 reinvent the wheel.
 
-Make sure to update the ``api`` prefix route in ``config/bootstrap.php`` to resemble:
+Make sure to update the ``api`` prefix route in ``config/routes.php`` to resemble:
 
 ```php
 Router::prefix('api', function ($routes) {
