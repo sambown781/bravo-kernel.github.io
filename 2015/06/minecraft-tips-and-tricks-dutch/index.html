@@ -72,7 +72,7 @@ Multiverse spawnsOm als speler naar de spawn te gaan v">
         <div class="icon"></div>
         <time datetime="2015-06-27T10:38:10.000Z"><a href="/2015/06/minecraft-tips-and-tricks-dutch/">Jun 27 2015</a></time>
 		
-			<span class="updated" title="Post Updated"><span>Jun 27 2015</span></span>
+			<span class="updated" title="Post Updated"><span>Jun 28 2015</span></span>
         
 		<div class="github-improve"><a href="https://github.com/bravo-kernel/bravo-kernel.github.io/tree/source/source/_posts/2015-06-27-minecraft-tips-and-tricks-dutch.md">Improve on Github</a></div>
       
@@ -119,9 +119,12 @@ werelden!</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/mvm <span class="built_in">set</span> gamemode creative &lt;naam-van-je-wereld&gt;</span><br><span class="line">/mvm <span class="built_in">set</span> gamemode survival &lt;naam-van-je-wereld&gt;</span><br></pre></td></tr></table></figure>
 <h3 id="Moeilijkheid_instellen">Moeilijkheid instellen</h3><p>Je kunt de moeilijkheid (difficulty) voor je wereld instellen door één van deze commando’s te kiezen:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/mvm <span class="built_in">set</span> diff peaceful &lt;naam-van-je-wereld&gt;</span><br><span class="line">/mvm <span class="built_in">set</span> diff easy &lt;naam-van-je-wereld&gt;</span><br><span class="line">/mvm <span class="built_in">set</span> diff normal &lt;naam-van-je-wereld&gt;</span><br><span class="line">/mvm <span class="built_in">set</span> diff hard &lt;naam-van-je-wereld&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="Monsters_uitschakelen">Monsters uitschakelen</h3><p>Met het volgende commando kun je monsters uitschakelen voor je wereld (bijvoorbeeld handig als je je
-wereld als hub wilt gebruiken):</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/mvm <span class="built_in">set</span> monsters <span class="literal">false</span> &lt;naam-van-je-wereld&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="Monsters_en_dieren_uitschakelen">Monsters en dieren uitschakelen</h3><p>Als je niet wilt dat er monsters of dieren in je wereld spawnen gebruik je één van de volgende
+commando’s:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/mvm <span class="built_in">set</span> monsters <span class="literal">false</span> &lt;naam-van-je-wereld&gt;</span><br><span class="line">/mvm <span class="built_in">set</span> animals <span class="literal">false</span> &lt;naam-van-je-wereld&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="Bestaande_monsters_en_dieren_verwijderen">Bestaande monsters en dieren verwijderen</h3><p>Soms zijn er al monsters of dieren gespawned in je wereld. Gebruik één van de volgende commando’s
+om ze uit je wereld te verwijderen:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/mv purge &lt;naam-van-je-wereld&gt; monsters</span><br><span class="line">/mv purge &lt;naam-van-je-wereld&gt; animals</span><br></pre></td></tr></table></figure>
 <h3 id="Weer_instellen">Weer instellen</h3><p>Met het volgende commando kun je het weer voor je wereld uitschakelen:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/mvm <span class="built_in">set</span> weather <span class="literal">false</span> &lt;naam-van-je-wereld&gt;</span><br></pre></td></tr></table></figure>
 <h3 id="Wereld_verwijderen">Wereld verwijderen</h3><p>Denk altijd goed na voordat je een wereld weggooit en maak het liefst eerst een backup zodat je
@@ -153,9 +156,6 @@ deze twee commando’s uit:</p>
 <h2 id="Multiverse_tweaks">Multiverse tweaks</h2><h3 id="Chat_prefix_uitschakelen">Chat prefix uitschakelen</h3><p>Multiverse zet de naam van de wereld van waaruit gechat wordt voor het chatbericht en dat is….
 gewoon irritant. Schakel het uit met het volgende commando:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/mv conf prefixchat <span class="literal">false</span></span><br></pre></td></tr></table></figure>
-<h3 id="Monsters_verwijderen">Monsters verwijderen</h3><p>Als je alle monsters wilt verwijderen die al in je wereld zijn gespawned gebruik je 
-het volgende commando:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/mv purge &lt;naam-van-je-wereld&gt; monsters</span><br></pre></td></tr></table></figure>
 <h2 id="OPs">OPs</h2><p>Om te zien wie er allemaal OP zijn op je server:</p>
 <ol>
 <li>log in op de website</li>
